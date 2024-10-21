@@ -1,9 +1,9 @@
-# magia (nome a mudar)
+# unimancer
 
 ## Alunos
 |Matrícula | Aluno | Usuário |
 | -- | -- | -- |
-| 22/1022604  |  João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic) |
+| 22/1022604  |  João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic) |d
 | 22/1022604  |  Millena de Abreu Queiroz | [@MillenaQueiroz](https://github.com/MillenaQueiroz) |
 | 22/2006169  |  Natan da Cruz Almeida | [@natanalmeida03](https://github.com/R-enanVieira) |
 | 22/1022408  |  Paulo Henrique Lamounier Dantas | [@Nanashii76](https://github.com/@Nanashii76) |
