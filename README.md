@@ -5,7 +5,7 @@
 | -- | -- | -- |
 | 22/1022604  |  João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic) |d
 | 20/2046283  |  Millena de Abreu Queiroz | [@MillenaQueiroz](https://github.com/MillenaQueiroz) |
-| 22/2006169  |  Natan da Cruz Almeida | [@natanalmeida03](https://github.com/R-enanVieira) |
+| 22/2006169  |  Natan da Cruz Almeida | [@natanalmeida03](https://github.com/natanalmeida03) |
 | 22/1022408  |  Paulo Henrique Lamounier Dantas | [@Nanashii76](https://github.com/@Nanashii76) |
 | 22/1031363  |  Renan Vieira Guedes | [@R-enanVieira](https://github.com/R-enanVieira) |
 
