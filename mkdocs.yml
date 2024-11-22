@@ -1,0 +1,25 @@
+site_name: Unimancer
+repo_url: https://github.com/SBD1/2024.2-unimancer
+repo_name: Unimancer
+
+theme:
+  name: material
+  logo: img/animation.gif
+  palette:
+    - schema: default
+      primary: amber
+      accent: orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - schema: dark
+      primary: amber
+      accent: orange       
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Modelagem:
+    - Diagrama Entidade-Relacionamento: modelagem/der.md

@@ -1,4 +1,6 @@
-# ![unimancer-mage](./docs/img/animation.gif)
+# Unimancer
+
+## ![unimancer-mage](/img/animation.gif)
 
 ## Alunos
 | Matrícula  | Aluno                                  | Usuário                                              |
@@ -84,3 +86,8 @@ Explique como usar seu projeto caso haja algum passo a passo após o comando de 
 #### **Salvar e Continuar**
 
 - Progresso salvo automaticamente ao descansar em áreas seguras ou concluir tarefas importantes.
+  
+
+| Versão |     Data   | Descrição | Autor |
+| :----: | :--------: | :-------: | :---: |
+| `1.0`  | XX/11/2024 | Criação   | XXXXX |
