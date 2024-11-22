@@ -4,7 +4,8 @@ repo_name: Unimancer
 
 theme:
   name: material
-  logo: img/animation.gif
+  logo: img/blackmace.png
+  favicon: img/blackmace.png
   palette:
     - schema: default
       primary: amber
