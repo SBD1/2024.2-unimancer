@@ -14,4 +14,6 @@ O Diagrama Entidade-Relacionamento (DER) é formado por elementos gráficos que 
 
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
-| `1.0`  | 22/11/2024 | Criação   | Grupo |
+| `1.0`  | 28/10/2024 | Criação   | Grupo |
+| `2.0`  | 22/11/2024 | Adicionado na documentação   | Grupo |
+| `2.1`  | 25/11/2024 | Atualiação   | Grupo |
