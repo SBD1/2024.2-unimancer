@@ -55,7 +55,7 @@ O Modelo Entidade-Relacionamento (MER) é uma ferramenta utilizada para represen
 - INSTÂNCIA DE QUEST:{ <u>id</u>, recompensa_moedas, status }
 - FEITIÇO:{ <u>nome</u>, elemento, energia_arcana_necessaria }
     - Dano:{ dano_total }
-    - Dano_em_area:{ qtd_inimigos_afetados }
+    - Dano_em_area:{ qtd_inimigos_afetados, dano_total }
     - Cura:{ qtd_cura }
 - REGIÃO:{ <u>id</u>, nome, descricao, elemento_regiao }
 - LOCAL:{ <u>id</u>, nome, descricao }
@@ -63,7 +63,7 @@ O Modelo Entidade-Relacionamento (MER) é uma ferramenta utilizada para represen
 ## Relacionamentos
 - Criatura **Habita** Local
 - Personagem **Contém** Inventário
-- Personagem **Transaciona** com Mercador uma Instância de Item??????
+- Personagem **Transaciona** com Mercador uma Instância de Item
 - Personagem **Confronta** Instância de Inimigo
 - Inimigo **Tem** Instância de Inimigo
 - Inimigo **Fornece** Item
@@ -85,4 +85,4 @@ O Modelo Entidade-Relacionamento (MER) é uma ferramenta utilizada para represen
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 24/11/2024 | Criação do MER  | Grupo |
- 
+| `1.1`  | 25/11/2024 | Atualização do MER  | Grupo |
