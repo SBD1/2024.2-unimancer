@@ -7,54 +7,58 @@ O Modelo Entidade-Relacionamento (MER) é uma ferramenta utilizada para represen
 ## Entidades 
 
 - CRIATURA
-  - Personagem
-  - Instância de Inimigo
+    - Personagem
+    - Instância de Inimigo
 - NPC
-  - Inimigo 
-  - Civil
-    - Quester 
-    - Mercador 
+    - Inimigo 
+    - Civil
+        - Quester 
+        - Mercador 
 - ITEM
-  - Consumível
-    - Poção
-    - Pergaminho
-  - Não-Consumível
+    - Consumível
+        - Poção
+        - Pergaminho
+    - Não-Consumível
+- INSTÂNCIA DE ITEM
 - INVENTARIO
-  - Grimório
-  - Mochila
+    - Grimório
+    - Mochila
 - QUEST
+- INSTANCIA DE QUEST
 - FEITIÇO
-  - Dano
-  - Dano_em_area
-  - Cura
+    - Dano
+    - Dano_em_area
+    - Cura
 - REGIÃO
 - LOCAL
 
 ## Atributos
 
-- CRIATURA:{<u>id</u>, moedas, pontos_de_vida, *nivel*:{xp, pontos_vida_maximo, energia_arcana_maxima} }
-  - Personagem:{<u>nome</u>, elemento, conhecimento_arcano, pontos_vida_atual, energia_arcana_atual, inteligencia, *progresso*:{quests_realizadas, nr_inimigos_derrotados}}
-  - Instância de Inimigo
-- NPC:{<u>id</u>, nome, dialogo}
-  - Inimigo:{<u>id</u>, nome, elemento, pontos_vida_total, inteligencia}
-  - Civil
-    - Quester 
-    - Mercador:{<u>vendas</u>, elemento}
-- ITEM:{<u>id</u>, chance_drop, nome, peso, preco}
-  - Consumível
-    - Poção:{efeito, duracao}
-    - Pergaminho:{cor, descricao}
-  - Não-Consumível:{buff, debuff}
-- INVENTARIO:{<u>id</u>}
-  - Grimório:{nr_paginas}
-  - Mochila:{peso_maximo, peso_atual}
-- QUEST:{<u>id</u>, titulo, descricao, recompensa, dificuldade}
-- FEITIÇO:{<u>nome</u>, elemento, energia_arcana_necessaria}
-  - Dano:{dano_total}
-  - Dano_em_area:{qtd_inimigos_afetados}
-  - Cura:{qtd_cura}
-- REGIÃO:{<u>id</u>, nome, descricao, elemento_regiao}
-- LOCAL:{<u>id</u>, nome, descricao}
+- CRIATURA:{ <u>id</u>, moedas, pontos_de_vida, *nivel*:{ xp, pontos_vida_maximo, energia_arcana_maxima } }
+    - Personagem:{ <u>nome</u>, elemento, conhecimento_arcano, pontos_vida_atual, energia_arcana_atual, inteligencia, *progresso*:{ quests_realizadas, nr_inimigos_derrotados } }
+    - Instância de Inimigo
+- NPC:{ <u>id</u>, nome, dialogo }
+    - Inimigo:{ <u>id</u>, nome, elemento, pontos_vida_total, inteligencia }
+    - Civil
+        - Quester 
+        - Mercador:{ <u>id</u>, vendas, elemento }
+- ITEM:{ <u>id</u>, chance_drop, nome, peso, preco }
+    - Consumível
+        - Poção:{ efeito, duracao }
+        - Pergaminho:{ cor, descricao }
+    - Não-Consumível:{ buff, debuff }
+- INSTÂNCIA DE ITEM:{ <u>id</u> }
+- INVENTARIO:{ <u>id</u> }
+    - Grimório:{ nr_paginas }
+    - Mochila:{ peso_maximo, peso_atual }
+- QUEST:{ <u>id</u>, titulo, descricao, recompensa, dificuldade }
+- INSTÂNCIA DE QUEST:{ <u>id</u>, recompensa_moedas, status }
+- FEITIÇO:{ <u>nome</u>, elemento, energia_arcana_necessaria }
+    - Dano:{ dano_total }
+    - Dano_em_area:{ qtd_inimigos_afetados }
+    - Cura:{ qtd_cura }
+- REGIÃO:{ <u>id</u>, nome, descricao, elemento_regiao }
+- LOCAL:{ <u>id</u>, nome, descricao }
 
 ## Relacionamentos
 - Criatura **Habita** Local
