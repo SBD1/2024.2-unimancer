@@ -1,6 +1,6 @@
 # Unimancer
 
-## ![unimancer-mage](/img/animation.gif)
+## ![unimancer-mage](img/animation.gif)
 
 ## Alunos
 | Matrícula  | Aluno                                  | Usuário                                              |
@@ -90,4 +90,4 @@ Explique como usar seu projeto caso haja algum passo a passo após o comando de 
 
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
-| `1.0`  | XX/11/2024 | Criação   | XXXXX |
+| `1.0`  | 24/11/2024 | Criação   | Grupo |

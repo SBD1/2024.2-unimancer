@@ -1,13 +1,14 @@
-# ![unimancer-mage](./docs/img/animation.gif)
+![unimancer-mage](/img/animation.gif)
 
 ## Alunos
-| Matrícula  | Aluno                                  | Usuário                                              |
-| ---------- | -------------------------------------- | ---------------------------------------------------- |
-| 22/1022604 | João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic)       |
-| 20/2046283 | Millena de Abreu Queiroz               | [@MillenaQueiroz](https://github.com/MillenaQueiroz) |
-| 22/2006169 | Natan da Cruz Almeida                  | [@natanalmeida03](https://github.com/natanalmeida03) |
-| 22/1022408 | Paulo Henrique Lamounier Dantas        | [@Nanashii76](https://github.com/@Nanashii76)        |
-| 22/1031363 | Renan Vieira Guedes                    | [@R-enanVieira](https://github.com/R-enanVieira)     |
+
+| Matrícula  | Aluno                                  | Usuário                                               | Foto de Perfil                                      |
+| ---------- | -------------------------------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| 22/1022604 | João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic)       | ![João](https://github.com/beyondmagic.png?size=50) |
+| 20/2046283 | Millena de Abreu Queiroz               | [@MillenaQueiroz](https://github.com/MillenaQueiroz) | ![Millena](https://github.com/MillenaQueiroz.png?size=50) |
+| 22/2006169 | Natan da Cruz Almeida                  | [@natanalmeida03](https://github.com/natanalmeida03) | ![Natan](https://github.com/natanalmeida03.png?size=50) |
+| 22/1022408 | Paulo Henrique Lamounier Dantas        | [@Nanashii76](https://github.com/Nanashii76)         | ![Paulo](https://github.com/Nanashii76.png?size=50) |
+| 22/1031363 | Renan Vieira Guedes                    | [@R-enanVieira](https://github.com/R-enanVieira)     | ![Renan](https://github.com/R-enanVieira.png?size=50) |
 
 ## Sobre 
 
