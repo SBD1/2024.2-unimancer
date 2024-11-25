@@ -7,20 +7,24 @@ theme:
   logo: img/blackmace.png
   favicon: img/blackmace.png
   palette:
-    - schema: default
+    - scheme: default
+      primary: amber
+      accent: orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
       primary: amber
       accent: orange
       toggle:
         icon: material/weather-sunny
-        name: Switch to dark mode
-    - schema: dark
-      primary: amber
-      accent: orange       
-      toggle:
-        icon: material/weather-night
         name: Switch to light mode
+
 
 nav:
   - Home: index.md
   - Modelagem:
-    - Diagrama Entidade-Relacionamento: modelagem/der.md
+      - Diagrama Entidade-Relacionamento: modelagem/der.md
+      - Modelo Entidade-Relacionamento: modelagem/mer.md
+      - Modelo Relacional: modelagem/mr.md
+      - Dicionário de Dados: modelagem/dd.md

@@ -118,9 +118,7 @@
 | nome                | Nome do NPC                       | VARCHAR      | 100      | NOT NULL                                     |
 | dialogo             | Texto de diálogo do NPC           | TEXT         | -        | -                                            |
 
----
-
-xxxxxxxxxxxxxxxxxxxxxx
+## Histórico de Versão
 
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
