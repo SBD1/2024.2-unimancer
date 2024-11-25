@@ -1,4 +1,4 @@
-![unimancer-mage](./img/animation.gif)
+![unimancer-mage](docs/img/animation.gif)
 
 ## Alunos
 
