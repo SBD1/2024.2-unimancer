@@ -1,15 +1,14 @@
-# Unimancer
-
-## ![unimancer-mage](img/animation.gif)
+![unimancer-mage](docs/img/animation.gif)
 
 ## Alunos
-| Matrícula  | Aluno                                  | Usuário                                              |
-| ---------- | -------------------------------------- | ---------------------------------------------------- |
-| 22/1022604 | João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic)       |
-| 20/2046283 | Millena de Abreu Queiroz               | [@MillenaQueiroz](https://github.com/MillenaQueiroz) |
-| 22/2006169 | Natan da Cruz Almeida                  | [@natanalmeida03](https://github.com/natanalmeida03) |
-| 22/1022408 | Paulo Henrique Lamounier Dantas        | [@Nanashii76](https://github.com/@Nanashii76)        |
-| 22/1031363 | Renan Vieira Guedes                    | [@R-enanVieira](https://github.com/R-enanVieira)     |
+
+| Matrícula  | Aluno                                  | Usuário                                               | Foto de Perfil                                      |
+| ---------- | -------------------------------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| 22/1022604 | João Victor da Silva Batista de Farias | [@beyondmagic](https://github.com/beyondmagic)       | ![João](https://github.com/beyondmagic.png?size=50) |
+| 20/2046283 | Millena de Abreu Queiroz               | [@MillenaQueiroz](https://github.com/MillenaQueiroz) | ![Millena](https://github.com/MillenaQueiroz.png?size=50) |
+| 22/2006169 | Natan da Cruz Almeida                  | [@natanalmeida03](https://github.com/natanalmeida03) | ![Natan](https://github.com/natanalmeida03.png?size=50) |
+| 22/1022408 | Paulo Henrique Lamounier Dantas        | [@Nanashii76](https://github.com/Nanashii76)         | ![Paulo](https://github.com/Nanashii76.png?size=50) |
+| 22/1031363 | Renan Vieira Guedes                    | [@R-enanVieira](https://github.com/R-enanVieira)     | ![Renan](https://github.com/R-enanVieira.png?size=50) |
 
 ## Sobre 
 
@@ -19,9 +18,20 @@ Há eras, o equilíbrio entre os elementos sustentava o mundo de **Arcanae**. Os
 
 Magos especializados em um único elemento caminham pelo mundo. Sua missão é simples, mas perigosa: recuperar a sabedoria perdida, conquistar sua própria árvore de habilidades e restaurar ~~(ou corromper)~~ o equilíbrio dos elementos.
 
+[**Dicionário de dados**](https://sbd1.github.io/2024.2-unimancer/modelagem/dd/)
+
+## Apresentações
+
+1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo).
+
 ## Screenshots
 
-- [ ] Três ou mais screenshots.
+**Diagrama de Entidade-Relacionamento**
+![Diagrama de Entidade-Relacionamento](./docs/modulo 1/v2_der.drawio.png)
+
+**Modelo Relacionamento**
+![Modelo Relacionamento](./docs/modulo 1/v1_mr.drawio.png)
+
 
 ## Instalação
 
@@ -86,8 +96,3 @@ Explique como usar seu projeto caso haja algum passo a passo após o comando de 
 #### **Salvar e Continuar**
 
 - Progresso salvo automaticamente ao descansar em áreas seguras ou concluir tarefas importantes.
-  
-
-| Versão |     Data   | Descrição | Autor |
-| :----: | :--------: | :-------: | :---: |
-| `1.0`  | 24/11/2024 | Criação   | Grupo |
