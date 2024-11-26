@@ -202,7 +202,7 @@
 ---
 ### **17. Inimigo**
 
-**Descrição:** Representa uma criatura hostil no jogo derivada de `Criatura`.
+**Descrição:** Representa um NPC hostil no jogo derivada de `Criatura`.
 
 |Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
 |---|---|---|---|---|
@@ -223,20 +223,7 @@
 |idMercador|Identificador único do mercador|INT|-|PRIMARY KEY, IDENTITY|
 |idNPC|Relacionamento com a tabela `NPC`|INT|-|FOREIGN KEY REFERENCES `NPC`|
 |elemento|Elemento principal do mercador|VARCHAR|50|CHECK (elemento IN ('Fogo', 'Água', etc.))|
-
----
-
-### **19. Poção**
-
-**Descrição:** Representa um item consumível que fornece efeitos temporários ao ser usado.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idPocao|Identificador único da poção|INT|-|PRIMARY KEY, IDENTITY|
-|idItemConsumivel|Relacionamento com `item_nao_consumivel`|INT|-|FOREIGN KEY REFERENCES `item_nao_consumivel`|
-|efeito|Efeito da poção|TEXT|-|NOT NULL|
-|duracao|Duração do efeito (em segundos)|INT|-|NOT NULL, CHECK (duracao > 0)|
-
+| Vendas | Quantidade de Itens disponíveis | INT | - | -
 
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
