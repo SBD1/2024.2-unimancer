@@ -20,6 +20,10 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 
 [**Dicionário de dados**](https://sbd1.github.io/2024.2-unimancer/modelagem/dd/)
 
+## Apresentações
+
+1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo).
+
 ## Screenshots
 
 **Diagrama de Entidade-Relacionamento**
