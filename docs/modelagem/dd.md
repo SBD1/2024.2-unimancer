@@ -22,18 +22,7 @@
 
 ---
 
-### **2. Instancia_Criatura**
-
-**Descrição:** Relaciona uma criatura a um personagem com base em atributos e estatísticas.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idInstanciaCriatura|Identificador único da instância|INT|-|PRIMARY KEY, IDENTITY|
-|idCriatura|Identificador da criatura|INT|-|FOREIGN KEY REFERENCES `Criatura`|
-
----
-
-### **3. Criatura**
+### **2. Criatura**
 
 **Descrição:** Define as criaturas do jogo, incluindo seus atributos principais.
 
@@ -49,7 +38,7 @@
 
 ---
 
-### **4. Inventário**
+### **3. Inventário**
 
 **Descrição:** Representa o inventário de itens associados a um personagem.
 
@@ -60,7 +49,7 @@
 
 ---
 
-### **5. Item**
+### **4. Item**
 
 **Descrição:** Representa itens que podem ser armazenados no inventário.
 
@@ -75,7 +64,7 @@
 
 ---
 
-### **6. Mochila**
+### **5. Mochila**
 
 **Descrição:** Representa mochilas que armazenam itens e possuem limite de peso.
 
@@ -88,7 +77,7 @@
 
 ---
 
-### **7. Região**
+### **6. Região**
 
 **Descrição:** Representa regiões do mapa onde locais podem ser encontrados.
 
@@ -101,7 +90,7 @@
 
 ---
 
-### **8. Local**
+### **7. Local**
 
 **Descrição:** Representa locais onde os jogadores podem interagir.
 
@@ -115,7 +104,7 @@
 
 ---
 
-### **9. NPC**
+### **8. NPC**
 
 **Descrição:** Representa personagens não jogáveis.
 
@@ -126,7 +115,7 @@
 |nome|Nome do NPC|VARCHAR|100|NOT NULL|
 |dialogo|Texto de diálogo do NPC|TEXT|-|-|
 
-### **10. Grimório**
+### **9. Grimório**
 
 **Descrição:** Representa grimórios que podem ser encontrados e usados para adquirir novas habilidades.
 
@@ -138,7 +127,7 @@
 
 ---
 
-### **11. Poção**
+### **10. Poção**
 
 **Descrição:** Representa itens consumíveis do tipo poção.
 
@@ -151,7 +140,7 @@
 
 ---
 
-### **12. Pergaminho**
+### **11. Pergaminho**
 
 **Descrição:** Representa pergaminhos mágicos com feitiços.
 
@@ -164,7 +153,7 @@
 
 ---
 
-### **13. Feitiço**
+### **12. Feitiço**
 
 **Descrição:** Representa feitiços disponíveis no jogo, vinculados a pergaminhos.
 
@@ -177,7 +166,7 @@
 
 ---
 
-### **14. Instância de Item**
+### **13. Instância de Item**
 
 **Descrição:** Representa uma instância de item, que pode ser vinculada a um inventário.
 
@@ -188,7 +177,7 @@
 
 ---
 
-### **15. Item Não-Consumível**
+### **14. Item Não-Consumível**
 
 **Descrição:** Representa itens que possuem atributos específicos, como bônus e penalidades, mas não podem ser consumidos.
 
@@ -200,7 +189,7 @@
 |debuff|Valor de penalidade do item|INT|-|DEFAULT 0, CHECK (debuff >= 0)|
 
 ---
-### **17. Inimigo**
+### **15. Inimigo**
 
 **Descrição:** Representa um NPC hostil no jogo derivada de `Criatura`.
 
@@ -214,7 +203,7 @@
 |inteligencia|Inteligência do inimigo|INT|-|DEFAULT 0, CHECK (inteligencia >= 0)|
 
 ---
-### **18. Mercador**
+### **16. Mercador**
 
 **Descrição:** Representa um NPC que atua como comerciante no jogo.
 
