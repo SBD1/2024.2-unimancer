@@ -18,9 +18,16 @@ Há eras, o equilíbrio entre os elementos sustentava o mundo de **Arcanae**. Os
 
 Magos especializados em um único elemento caminham pelo mundo. Sua missão é simples, mas perigosa: recuperar a sabedoria perdida, conquistar sua própria árvore de habilidades e restaurar ~~(ou corromper)~~ o equilíbrio dos elementos.
 
+[**Dicionário de dados**](https://sbd1.github.io/2024.2-unimancer/modelagem/dd/)
+
 ## Screenshots
 
-- [ ] Três ou mais screenshots.
+**Diagrama de Entidade-Relacionamento**
+![Diagrama de Entidade-Relacionamento](./docs/modulo 1/v2_der.drawio.png)
+
+**Modelo Relacionamento**
+![Modelo Relacionamento](./docs/modulo 1/v1_mr.drawio.png)
+
 
 ## Instalação
 
