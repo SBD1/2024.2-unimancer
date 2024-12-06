@@ -46,6 +46,8 @@ Explique como usar seu projeto caso haja algum passo a passo após o comando de 
 
 ## Outros
 ### **Mecânicas do Jogo**
+- Atacar inimigo;
+- Comprar e/ou vender itens;
 
 #### **Criação de Personagem**
 
