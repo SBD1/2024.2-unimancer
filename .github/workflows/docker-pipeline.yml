@@ -1,0 +1,32 @@
+name: CI Pipeline for Database
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar variáveis de ambiente
+        run: cp .env.template .env
+
+      - name: Subir banco com Docker Compose
+        run: docker compose up -d
+
+      - name: Aguardar PostgreSQL estar pronto
+        run: |
+          until docker exec unimancer_postgres pg_isready -U postgres; do
+            echo "Aguardando PostgreSQL iniciar..."
+            sleep 2
+          done
+
+      - name: Testar conexão com banco
+        run: docker exec unimancer_postgres psql -U postgres -d postgres -c '\l'
