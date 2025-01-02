@@ -12,3 +12,6 @@ stop:
 
 rmv:
 	@sudo docker compose down -v
+
+interface:
+	@python source/main.py
