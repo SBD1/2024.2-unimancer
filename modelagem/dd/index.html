@@ -1,0 +1,1703 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../mr/">
+      
+      
+        <link rel="next" href="../../apresentacoes/1a-entrega/">
+      
+      
+      <link rel="icon" href="../../img/blackmace.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Dicionário de dados - Unimancer</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dicionario-de-dados" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Unimancer" class="md-header__button md-logo" aria-label="Unimancer" data-md-component="logo">
+      
+  <img src="../../img/blackmace.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Unimancer
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dicionário de dados
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SBD1/2024.2-unimancer" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unimancer
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Unimancer" class="md-nav__button md-logo" aria-label="Unimancer" data-md-component="logo">
+      
+  <img src="../../img/blackmace.png" alt="logo">
+
+    </a>
+    Unimancer
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SBD1/2024.2-unimancer" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unimancer
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Modelagem
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Modelagem
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../der/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Diagrama Entidade-Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Entidade-Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Relacional
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Dicionário de dados
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Dicionário de dados
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entidades-e-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entidades e Atributos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Entidades e Atributos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-criatura" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Criatura
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Inventário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-mochila" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Mochila
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Região
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-npc" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. NPC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-grimorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Grimório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-pocao" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Poção
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-pergaminho" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Pergaminho
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-feitico" class="md-nav__link">
+    <span class="md-ellipsis">
+      12. Feitiço
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-instancia-de-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      13. Instância de Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-item-nao-consumivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      14. Item Não-Consumível
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      15. Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-mercador" class="md-nav__link">
+    <span class="md-ellipsis">
+      16. Mercador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Apresentações
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Apresentações
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apresentacoes/1a-entrega/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Primeira entrega
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entidades-e-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entidades e Atributos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Entidades e Atributos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-criatura" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Criatura
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Inventário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-mochila" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Mochila
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Região
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-npc" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. NPC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-grimorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Grimório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-pocao" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Poção
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-pergaminho" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Pergaminho
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-feitico" class="md-nav__link">
+    <span class="md-ellipsis">
+      12. Feitiço
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-instancia-de-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      13. Instância de Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-item-nao-consumivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      14. Item Não-Consumível
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      15. Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-mercador" class="md-nav__link">
+    <span class="md-ellipsis">
+      16. Mercador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="dicionario-de-dados">Dicionário de Dados</h1>
+<h2 id="entidades-e-atributos">Entidades e Atributos</h2>
+<h3 id="1-personagem"><strong>1. Personagem</strong></h3>
+<p><strong>Descrição:</strong> Representa os personagens do jogo, contendo atributos básicos e progressos.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idPersonagem</td>
+<td>Identificador único do personagem</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idInstanciaCriatura</td>
+<td>Relacionamento com uma criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Instancia_Criatura</code></td>
+</tr>
+<tr>
+<td>idProgresso</td>
+<td>Relacionamento com progresso</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Progresso_personagem</code></td>
+</tr>
+<tr>
+<td>nome</td>
+<td>Nome do personagem</td>
+<td>VARCHAR</td>
+<td>100</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>elemento</td>
+<td>Elemento associado ao personagem</td>
+<td>VARCHAR</td>
+<td>50</td>
+<td>CHECK (elemento IN ('Fogo', 'Água', etc.))</td>
+</tr>
+<tr>
+<td>nivel</td>
+<td>Nível atual do personagem</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (nivel &gt;= 1)</td>
+</tr>
+<tr>
+<td>pontosDeVidaAtual</td>
+<td>Pontos de vida restantes</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (pontosDeVidaAtual &gt;= 0)</td>
+</tr>
+<tr>
+<td>energiaArcanaAtual</td>
+<td>Energia mágica disponível</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (energiaArcanaAtual &gt;= 0)</td>
+</tr>
+<tr>
+<td>conhecimentoArcano</td>
+<td>Conhecimento arcano disponível</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (conhecimentoArcano &gt;= 0)</td>
+</tr>
+<tr>
+<td>inteligencia</td>
+<td>Inteligência do personagem</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (inteligencia &gt;= 0)</td>
+</tr>
+<tr>
+<td>moedas</td>
+<td>Quantidade de moedas disponíveis</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (moedas &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="2-criatura"><strong>2. Criatura</strong></h3>
+<p><strong>Descrição:</strong> Define as criaturas do jogo, incluindo seus atributos principais.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idCriatura</td>
+<td>Identificador único da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>pontosDeVidaMaximos</td>
+<td>Pontos de vida máximos da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (pontosDeVidaMaximos &gt;= 0)</td>
+</tr>
+<tr>
+<td>nivel</td>
+<td>Nível da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (nivel &gt;= 0)</td>
+</tr>
+<tr>
+<td>energiaArcanaMaxima</td>
+<td>Energia mágica máxima da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (energiaArcanaMaxima &gt;= 0)</td>
+</tr>
+<tr>
+<td>XP</td>
+<td>XP da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (XP &gt;= 0)</td>
+</tr>
+<tr>
+<td>pontosDeVida</td>
+<td>Energia pontos de vida da criatura</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (pontosDeVida &gt;= 0)</td>
+</tr>
+<tr>
+<td>moedas</td>
+<td>Quantidade de moedas disponíveis</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (moedas &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="3-inventario"><strong>3. Inventário</strong></h3>
+<p><strong>Descrição:</strong> Representa o inventário de itens associados a um personagem.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idInventario</td>
+<td>Identificador único do inventário</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idPersonagem</td>
+<td>Identificador do personagem</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Personagem</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="4-item"><strong>4. Item</strong></h3>
+<p><strong>Descrição:</strong> Representa itens que podem ser armazenados no inventário.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idItem</td>
+<td>Identificador único do item</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idInventario</td>
+<td>Identificador do inventário</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Inventário</code></td>
+</tr>
+<tr>
+<td>nome</td>
+<td>Nome do item</td>
+<td>VARCHAR</td>
+<td>100</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>peso</td>
+<td>Peso do item</td>
+<td>FLOAT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (peso &gt;= 0)</td>
+</tr>
+<tr>
+<td>preco</td>
+<td>Preço do item</td>
+<td>FLOAT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (preco &gt;= 0)</td>
+</tr>
+<tr>
+<td>chanceDrop</td>
+<td>chance de drop do item</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (chanceDrop &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="5-mochila"><strong>5. Mochila</strong></h3>
+<p><strong>Descrição:</strong> Representa mochilas que armazenam itens e possuem limite de peso.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idMochila</td>
+<td>Identificador único da mochila</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idInventario</td>
+<td>Relacionamento com inventário</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Inventário</code></td>
+</tr>
+<tr>
+<td>pesoMaximo</td>
+<td>Peso máximo suportado pela mochila</td>
+<td>FLOAT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (pesoMaximo &gt;= 0)</td>
+</tr>
+<tr>
+<td>pesoAtual</td>
+<td>Peso atual da mochila</td>
+<td>FLOAT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (pesoAtual &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="6-regiao"><strong>6. Região</strong></h3>
+<p><strong>Descrição:</strong> Representa regiões do mapa onde locais podem ser encontrados.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idRegiao</td>
+<td>Identificador único da região</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>nome</td>
+<td>Nome da região</td>
+<td>VARCHAR</td>
+<td>100</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>descricao</td>
+<td>Descrição da região</td>
+<td>TEXT</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>elementoRegiao</td>
+<td>Elemento da região</td>
+<td>TEXT</td>
+<td>-</td>
+<td>CHECK (elemento IN ('Fogo', 'Água', etc.))</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="7-local"><strong>7. Local</strong></h3>
+<p><strong>Descrição:</strong> Representa locais onde os jogadores podem interagir.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idLocal</td>
+<td>Identificador único do local</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idRegiao</td>
+<td>Identificador da região</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Regiao</code></td>
+</tr>
+<tr>
+<td>idInstanciaItem</td>
+<td>Identificador da instancia de item</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Instancia_item</code></td>
+</tr>
+<tr>
+<td>nome</td>
+<td>Nome do local</td>
+<td>VARCHAR</td>
+<td>100</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>descricao</td>
+<td>Descrição do local</td>
+<td>TEXT</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="8-npc"><strong>8. NPC</strong></h3>
+<p><strong>Descrição:</strong> Representa personagens não jogáveis.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idNPC</td>
+<td>Identificador único do NPC</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idLocal</td>
+<td>Relacionamento com local</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Local</code></td>
+</tr>
+<tr>
+<td>nome</td>
+<td>Nome do NPC</td>
+<td>VARCHAR</td>
+<td>100</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>dialogo</td>
+<td>Texto de diálogo do NPC</td>
+<td>TEXT</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-grimorio"><strong>9. Grimório</strong></h3>
+<p><strong>Descrição:</strong> Representa grimórios que podem ser encontrados e usados para adquirir novas habilidades.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idGrimorio</td>
+<td>Identificador único do grimório</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idInventario</td>
+<td>Relacionamento com inventário</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Inventário</code></td>
+</tr>
+<tr>
+<td>numPaginas</td>
+<td>Número de páginas do grimório</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (numPaginas &gt; 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="10-pocao"><strong>10. Poção</strong></h3>
+<p><strong>Descrição:</strong> Representa itens consumíveis do tipo poção.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idPocao</td>
+<td>Identificador único da poção</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idItemConsumivel</td>
+<td>Relacionamento com item consumível</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>item_nao_consumivel</code></td>
+</tr>
+<tr>
+<td>efeito</td>
+<td>Efeito da poção</td>
+<td>TEXT</td>
+<td>-</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>duracao</td>
+<td>Duração do efeito (em segundos)</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (duracao &gt; 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="11-pergaminho"><strong>11. Pergaminho</strong></h3>
+<p><strong>Descrição:</strong> Representa pergaminhos mágicos com feitiços.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idPergaminho</td>
+<td>Identificador único do pergaminho</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idItemConsumivel</td>
+<td>Relacionamento com item consumível</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>item_nao_consumivel</code></td>
+</tr>
+<tr>
+<td>cor</td>
+<td>Cor do pergaminho</td>
+<td>VARCHAR</td>
+<td>50</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td>descricao</td>
+<td>Descrição do pergaminho</td>
+<td>TEXT</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="12-feitico"><strong>12. Feitiço</strong></h3>
+<p><strong>Descrição:</strong> Representa feitiços disponíveis no jogo, vinculados a pergaminhos.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idFeitico</td>
+<td>Identificador único do feitiço</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idPergaminho</td>
+<td>Relacionamento com pergaminho</td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Pergaminho</code></td>
+</tr>
+<tr>
+<td>elemento</td>
+<td>Elemento do feitiço</td>
+<td>VARCHAR</td>
+<td>50</td>
+<td>CHECK (elemento IN ('Fogo', 'Água', etc.))</td>
+</tr>
+<tr>
+<td>energiaArcanaNecessaria</td>
+<td>Energia arcana necessária</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (energiaArcanaNecessaria &gt; 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="13-instancia-de-item"><strong>13. Instância de Item</strong></h3>
+<p><strong>Descrição:</strong> Representa uma instância de item, que pode ser vinculada a um inventário.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idInstanciaItem</td>
+<td>Identificador único da instância</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idItem</td>
+<td>Relacionamento com a tabela <code>Item</code></td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Item</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="14-item-nao-consumivel"><strong>14. Item Não-Consumível</strong></h3>
+<p><strong>Descrição:</strong> Representa itens que possuem atributos específicos, como bônus e penalidades, mas não podem ser consumidos.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idItemNaoConsumivel</td>
+<td>Identificador único do item</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idItem</td>
+<td>Relacionamento com a tabela <code>Item</code></td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Item</code></td>
+</tr>
+<tr>
+<td>buff</td>
+<td>Valor de bônus do item</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (buff &gt;= 0)</td>
+</tr>
+<tr>
+<td>debuff</td>
+<td>Valor de penalidade do item</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (debuff &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="15-inimigo"><strong>15. Inimigo</strong></h3>
+<p><strong>Descrição:</strong> Representa um NPC hostil no jogo derivada de <code>Criatura</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idInimigo</td>
+<td>Identificador único do inimigo</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idNPC</td>
+<td>Relacionamento com a tabela <code>NPC</code></td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>NPC</code></td>
+</tr>
+<tr>
+<td>idInstanciaCriatura</td>
+<td>Relacionamento com <code>Instancia_Criatura</code></td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>Instancia_Criatura</code></td>
+</tr>
+<tr>
+<td>elemento</td>
+<td>Elemento principal do inimigo</td>
+<td>VARCHAR</td>
+<td>50</td>
+<td>CHECK (elemento IN ('Fogo', 'Água', etc.))</td>
+</tr>
+<tr>
+<td>pontosDeVidaTotal</td>
+<td>Pontos de vida totais do inimigo</td>
+<td>INT</td>
+<td>-</td>
+<td>NOT NULL, CHECK (pontosDeVidaTotal &gt;= 0)</td>
+</tr>
+<tr>
+<td>inteligencia</td>
+<td>Inteligência do inimigo</td>
+<td>INT</td>
+<td>-</td>
+<td>DEFAULT 0, CHECK (inteligencia &gt;= 0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="16-mercador"><strong>16. Mercador</strong></h3>
+<p><strong>Descrição:</strong> Representa um NPC que atua como comerciante no jogo.</p>
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Descrição</th>
+<th>Tipo de Dado</th>
+<th>Tamanho</th>
+<th>Restrição de Domínio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>idMercador</td>
+<td>Identificador único do mercador</td>
+<td>INT</td>
+<td>-</td>
+<td>PRIMARY KEY, IDENTITY</td>
+</tr>
+<tr>
+<td>idNPC</td>
+<td>Relacionamento com a tabela <code>NPC</code></td>
+<td>INT</td>
+<td>-</td>
+<td>FOREIGN KEY REFERENCES <code>NPC</code></td>
+</tr>
+<tr>
+<td>elemento</td>
+<td>Elemento principal do mercador</td>
+<td>VARCHAR</td>
+<td>50</td>
+<td>CHECK (elemento IN ('Fogo', 'Água', etc.))</td>
+</tr>
+<tr>
+<td>Vendas</td>
+<td>Quantidade de Itens disponíveis</td>
+<td>INT</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Versão</th>
+<th style="text-align: center;">Data</th>
+<th style="text-align: center;">Descrição</th>
+<th style="text-align: center;">Autor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>1.0</code></td>
+<td style="text-align: center;">25/11/2024</td>
+<td style="text-align: center;">Criação</td>
+<td style="text-align: center;">Grupo</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
