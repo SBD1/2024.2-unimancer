@@ -2,218 +2,516 @@
 
 ## Entidades e Atributos
 
-### **1. Personagem**
+### **Tipo Item**
 
-**Descrição:** Representa os personagens do jogo, contendo atributos básicos e progressos.
+**Descrição:** Informações referente ao item.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idPersonagem|Identificador único do personagem|INT|-|PRIMARY KEY, IDENTITY|
-|idInstanciaCriatura|Relacionamento com uma criatura|INT|-|FOREIGN KEY REFERENCES `Instancia_Criatura`|
-|idProgresso|Relacionamento com progresso|INT|-|FOREIGN KEY REFERENCES `Progresso_personagem`|
-|nome|Nome do personagem|VARCHAR|100|NOT NULL|
-|elemento|Elemento associado ao personagem|VARCHAR|50|CHECK (elemento IN ('Fogo', 'Água', etc.))|
-|nivel|Nível atual do personagem|INT|-|NOT NULL, CHECK (nivel >= 1)|
-|pontosDeVidaAtual|Pontos de vida restantes|INT|-|DEFAULT 0, CHECK (pontosDeVidaAtual >= 0)|
-|energiaArcanaAtual|Energia mágica disponível|INT|-|DEFAULT 0, CHECK (energiaArcanaAtual >= 0)|
-|conhecimentoArcano|Conhecimento arcano disponível|INT|-|DEFAULT 0, CHECK (conhecimentoArcano >= 0)|
-|inteligencia|Inteligência do personagem|INT|-|DEFAULT 0, CHECK (inteligencia >= 0)|
-|moedas|Quantidade de moedas disponíveis|INT|-|DEFAULT 0, CHECK (moedas >= 0)|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item | SERIAL | PRIMARY KEY |
+| descricao | TEXT | NOT NULL |
+| chande_drop | INT | NOT NULL |
+| nome | VARCHAR(20) | NOT NULL |
+| peso | INT | NOT NULL |
+| preco | INT | NOT NULL |
 
 ---
 
-### **2. Criatura**
+### **Armazenamento**
 
-**Descrição:** Define as criaturas do jogo, incluindo seus atributos principais.
+**Descrição:** Itens guardados que podem acessados por um local ou NPC.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idCriatura|Identificador único da criatura|INT|-|PRIMARY KEY, IDENTITY|
-|pontosDeVidaMaximos|Pontos de vida máximos da criatura|INT|-|NOT NULL, CHECK (pontosDeVidaMaximos >= 0)|
-|nivel|Nível da criatura|INT|-|NOT NULL, CHECK (nivel >= 0)|
-|energiaArcanaMaxima|Energia mágica máxima da criatura|INT|-|DEFAULT 0, CHECK (energiaArcanaMaxima >= 0)|
-|XP|XP da criatura|INT|-|DEFAULT 0, CHECK (XP >= 0)|
-|pontosDeVida|Energia pontos de vida da criatura|INT|-|DEFAULT 0, CHECK (pontosDeVida >= 0)|
-|moedas|Quantidade de moedas disponíveis|INT|-|DEFAULT 0, CHECK (moedas >= 0)|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_armazenamento | SERIAL | PRIMARY KEY |
+| tipo_item | INT | NOT NULL UNIQUE REFERENCES tipo_item(id_item) |
+| quantity | INT | NOT NULL CHECK (quantity >= 0) |
 
----
+**Chaves Estrangeiras:**
 
-### **3. Inventário**
-
-**Descrição:** Representa o inventário de itens associados a um personagem.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idInventario|Identificador único do inventário|INT|-|PRIMARY KEY, IDENTITY|
-|idPersonagem|Identificador do personagem|INT|-|FOREIGN KEY REFERENCES `Personagem`|
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| tipo_item | tipo_item | id_item |
 
 ---
 
-### **4. Item**
 
-**Descrição:** Representa itens que podem ser armazenados no inventário.
+### **Regiao**
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idItem|Identificador único do item|INT|-|PRIMARY KEY, IDENTITY|
-|idInventario|Identificador do inventário|INT|-|FOREIGN KEY REFERENCES `Inventário`|
-|nome|Nome do item|VARCHAR|100|NOT NULL|
-|peso|Peso do item|FLOAT|-|DEFAULT 0, CHECK (peso >= 0)|
-|preco|Preço do item|FLOAT|-|DEFAULT 0, CHECK (preco >= 0)|
-|chanceDrop|chance de drop do item|INT|-|DEFAULT 0, CHECK (chanceDrop >= 0)|
+**Descrição:** Representa as regiões acessíveis no jogo.
 
----
-
-### **5. Mochila**
-
-**Descrição:** Representa mochilas que armazenam itens e possuem limite de peso.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idMochila|Identificador único da mochila|INT|-|PRIMARY KEY, IDENTITY|
-|idInventario|Relacionamento com inventário|INT|-|FOREIGN KEY REFERENCES `Inventário`|
-|pesoMaximo|Peso máximo suportado pela mochila|FLOAT|-|NOT NULL, CHECK (pesoMaximo >= 0)|
-|pesoAtual|Peso atual da mochila|FLOAT|-|NOT NULL, CHECK (pesoAtual >= 0)|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_regiao | SERIAL | PRIMARY KEY |
+| nome | VARCHAR(20) | NOT NULL |
+| descricao | TEXT | NOT NULL |
+| elemento | VARCHAR(5) | NOT NULL |
 
 ---
 
-### **6. Região**
+### **Sub Regiao**
 
-**Descrição:** Representa regiões do mapa onde locais podem ser encontrados.
+**Descrição:** Subconjunto de localidades de cada região.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idRegiao|Identificador único da região|INT|-|PRIMARY KEY, IDENTITY|
-|nome|Nome da região|VARCHAR|100|NOT NULL|
-|descricao|Descrição da região|TEXT|-|-|
-|elementoRegiao|Elemento da região|TEXT|-|CHECK (elemento IN ('Fogo', 'Água', etc.))|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_subregiao | SERIAL | PRIMARY KEY |
+| id_regiao | INT | NOT NULL |
+| id_armazenamento | INT | NOT NULL REFERENCES armazenamento(id_armazenamento) |
+| nome | VARCHAR(20) | NOT NULL |
+| descricao | TEXT | NOT NULL |
 
----
+**Chaves Estrangeiras:**
 
-### **7. Local**
-
-**Descrição:** Representa locais onde os jogadores podem interagir.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idLocal|Identificador único do local|INT|-|PRIMARY KEY, IDENTITY|
-|idRegiao|Identificador da região|INT|-|FOREIGN KEY REFERENCES `Regiao`|
-|idInstanciaItem|Identificador da instancia de item|INT|-|FOREIGN KEY REFERENCES `Instancia_item`|
-|nome|Nome do local|VARCHAR|100|NOT NULL|
-|descricao|Descrição do local|TEXT|-|-|
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_regiao | regiao | id_regiao |
 
 ---
 
-### **8. NPC**
+### **Personagem**
 
-**Descrição:** Representa personagens não jogáveis.
+**Descrição:** Representa os dados armazenados em cada personagem.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idNPC|Identificador único do NPC|INT|-|PRIMARY KEY, IDENTITY|
-|idLocal|Relacionamento com local|INT|-|FOREIGN KEY REFERENCES `Local`|
-|nome|Nome do NPC|VARCHAR|100|NOT NULL|
-|dialogo|Texto de diálogo do NPC|TEXT|-|-|
-
-### **9. Grimório**
-
-**Descrição:** Representa grimórios que podem ser encontrados e usados para adquirir novas habilidades.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idGrimorio|Identificador único do grimório|INT|-|PRIMARY KEY, IDENTITY|
-|idInventario|Relacionamento com inventário|INT|-|FOREIGN KEY REFERENCES `Inventário`|
-|numPaginas|Número de páginas do grimório|INT|-|NOT NULL, CHECK (numPaginas > 0)|
-
----
-
-### **10. Poção**
-
-**Descrição:** Representa itens consumíveis do tipo poção.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idPocao|Identificador único da poção|INT|-|PRIMARY KEY, IDENTITY|
-|idItemConsumivel|Relacionamento com item consumível|INT|-|FOREIGN KEY REFERENCES `item_nao_consumivel`|
-|efeito|Efeito da poção|TEXT|-|NOT NULL|
-|duracao|Duração do efeito (em segundos)|INT|-|NOT NULL, CHECK (duracao > 0)|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_personagem | SERIAL | PRIMARY KEY |
+| id_subregiao | INT | NOT NULL REFERENCES sub_regiao(id_subregiao) |
+| nome | VARCHAR(20) | NOT NULL |
+| elemento | VARCHAR(5) | NOT NULL |
+| conhecimento_arcano | INT | NOT NULL CHECK (conhecimento_arcano >=0) |
+| vida_atual | INT | NOT NULL |
+| vida_maxima | INT | NOT NULL |
+| xp_atual | INT | NOT NULL CHECK (xp_atual >= 0) |
+| xp_total | INT | NOT NULL CHECK (xp_total >= 0) |
+| energia_arcana_maxima | INT | NOT NULL CHECK (energia_arcana_maxima >= 0) |
+| energia_arcana_atual | INT | NOT NULL CHECK (energia_arcana_atual >= 0) |
+| inteligencia | INT | NOT NULL CHECK (inteligencia >= 0) |
+| moedas | INT | NOT NULL CHECK (moedas >= 0) |
+| nivel | INT | NOT NULL CHECK (nivel >= 0) |
 
 ---
 
-### **11. Pergaminho**
+### **Inventario**
 
-**Descrição:** Representa pergaminhos mágicos com feitiços.
+**Descrição:** Tabela de inventário e seu respectivo tipo.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idPergaminho|Identificador único do pergaminho|INT|-|PRIMARY KEY, IDENTITY|
-|idItemConsumivel|Relacionamento com item consumível|INT|-|FOREIGN KEY REFERENCES `item_nao_consumivel`|
-|cor|Cor do pergaminho|VARCHAR|50|NOT NULL|
-|descricao|Descrição do pergaminho|TEXT|-|-|
-
----
-
-### **12. Feitiço**
-
-**Descrição:** Representa feitiços disponíveis no jogo, vinculados a pergaminhos.
-
-| Nome                    | Descrição                      | Tipo de Dado | Tamanho | Restrição de Domínio                          |
-| ----------------------- | ------------------------------ | ------------ | ------- | --------------------------------------------- |
-| idFeitico               | Identificador único do feitiço | INT          | -       | PRIMARY KEY, IDENTITY                         |
-| idPergaminho            | Relacionamento com pergaminho  | INT          | -       | FOREIGN KEY REFERENCES `Pergaminho`           |
-| elemento                | Elemento do feitiço            | VARCHAR      | 50      | CHECK (elemento IN ('Fogo', 'Água', etc.))    |
-| energiaArcanaNecessaria | Energia arcana necessária      | INT          | -       | NOT NULL, CHECK (energiaArcanaNecessaria > 0) |
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_inventario | SERIAL | PRIMARY KEY |
+| id_personagem | INT | NOT NULL REFERENCES personagem(id_personagem) |
+| tipo_inventario | VARCHAR(20) | NOT NULL |
 
 ---
 
-### **13. Instância de Item**
+### **Tipo Npc**
 
-**Descrição:** Representa uma instância de item, que pode ser vinculada a um inventário.
+**Descrição:** Representa os dados armazenados na tabela.
 
-| Nome            | Descrição                          | Tipo de Dado | Tamanho | Restrição de Domínio          |
-| --------------- | ---------------------------------- | ------------ | ------- | ----------------------------- |
-| idInstanciaItem | Identificador único da instância   | INT          | -       | PRIMARY KEY, IDENTITY         |
-| idItem          | Relacionamento com a tabela `Item` | INT          | -       | FOREIGN KEY REFERENCES `Item` |
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_npc | SERIAL | PRIMARY KEY |
+| nome | VARCHAR(20) | NOT NULL |
+| tipo_npc | VARCHAR(20) | NOT NULL |
+
+---
+
+### **Quester**
+
+**Descrição:** Tipo de NPC que oferece quest aos personagens.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_quester | INT | PRIMARY KEY |
+| dialogo | TEXT | NOT NULL |
+| num_quests | INT | NOT NULL CHECK (num_quests >= 0) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_quester | tipo_npc | id_npc |
 
 ---
 
-### **14. Item Não-Consumível**
+### **Quest**
 
-**Descrição:** Representa itens que possuem atributos específicos, como bônus e penalidades, mas não podem ser consumidos.
+**Descrição:** Representa cada missão ofertada pelos questers.
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idItemNaoConsumivel|Identificador único do item|INT|-|PRIMARY KEY, IDENTITY|
-|idItem|Relacionamento com a tabela `Item`|INT|-|FOREIGN KEY REFERENCES `Item`|
-|buff|Valor de bônus do item|INT|-|DEFAULT 0, CHECK (buff >= 0)|
-|debuff|Valor de penalidade do item|INT|-|DEFAULT 0, CHECK (debuff >= 0)|
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_quest | SERIAL | PRIMARY KEY |
+| quester | INT | NOT NULL |
+| id_armazenamento | INT | NOT NULL REFERENCES armazenamento(id_armazenamento) |
+| titulo | VARCHAR(20) | NOT NULL |
+| descricao | TEXT | NOT NULL |
+| recompensa | TEXT | NOT NULL |
+| dificuldade | VARCHAR(2) | NOT NULL |
 
----
-### **15. Inimigo**
+**Chaves Estrangeiras:**
 
-**Descrição:** Representa um NPC hostil no jogo derivada de `Criatura`.
-
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idInimigo|Identificador único do inimigo|INT|-|PRIMARY KEY, IDENTITY|
-|idNPC|Relacionamento com a tabela `NPC`|INT|-|FOREIGN KEY REFERENCES `NPC`|
-|idInstanciaCriatura|Relacionamento com `Instancia_Criatura`|INT|-|FOREIGN KEY REFERENCES `Instancia_Criatura`|
-|elemento|Elemento principal do inimigo|VARCHAR|50|CHECK (elemento IN ('Fogo', 'Água', etc.))|
-|pontosDeVidaTotal|Pontos de vida totais do inimigo|INT|-|NOT NULL, CHECK (pontosDeVidaTotal >= 0)|
-|inteligencia|Inteligência do inimigo|INT|-|DEFAULT 0, CHECK (inteligencia >= 0)|
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| quester | quester | id_quester |
 
 ---
-### **16. Mercador**
 
-**Descrição:** Representa um NPC que atua como comerciante no jogo.
+### **Quest Instancia**
 
-|Nome|Descrição|Tipo de Dado|Tamanho|Restrição de Domínio|
-|---|---|---|---|---|
-|idMercador|Identificador único do mercador|INT|-|PRIMARY KEY, IDENTITY|
-|idNPC|Relacionamento com a tabela `NPC`|INT|-|FOREIGN KEY REFERENCES `NPC`|
-|elemento|Elemento principal do mercador|VARCHAR|50|CHECK (elemento IN ('Fogo', 'Água', etc.))|
-| Vendas | Quantidade de Itens disponíveis | INT | - | -
+**Descrição:** Instância de cada quest aceita ou armazenada pelo personagem e quester.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_quest_instancia | SERIAL | PRIMARY KEY |
+| id_quest | INT | NOT NULL |
+| personagem | INT | NOT NULL |
+| status | BIT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_quest | quest | id_quest |
+| personagem | personagem | id_personagem |
+
+---
+
+### **Item Instancia**
+
+**Descrição:** Instancia de cada item.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item_instancia | SERIAL | PRIMARY KEY |
+| id_item | INT | NOT NULL |
+| id_inventario | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_item | tipo_item | id_item |
+| id_inventario | inventario | id_inventario |
+
+---
+
+### **Mercador**
+
+**Descrição:** Tipo de NPC que vende itens ao personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_mercador | INT | UNIQUE NOT NULL |
+| id_armazenamento | INT | NOT NULL REFERENCES armazenamento(id_armazenamento) |
+| dialogo | TEXT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_mercador | tipo_npc | id_npc |
+
+---
+
+### **Transacao**
+
+**Descrição:** Representa cada compra feita pelo personagem com o mercador.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_transacao | SERIAL | PRIMARY KEY |
+| personagem | INT | NOT NULL |
+| id_mercador | INT | NOT NULL REFERENCES mercador(id_mercador) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| personagem | personagem | id_personagem |
+
+---
+
+### **Civil**
+
+**Descrição:** Tipo de NPC iteragível, pertecente às cidades.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_civil | INT | NOT NULL |
+| id_subregiao | INT | NOT NULL REFERENCES sub_regiao(id_subregiao) |
+| descricao | TEXT | - |
+| tipo_civil | VARCHAR(20) | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_civil | tipo_npc | id_npc |
+
+---
+
+### **Mochila**
+
+**Descrição:** Tipo de inventário do personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_mochila | SERIAL | PRIMARY KEY |
+| id_personagem | INT | NOT NULL REFERENCES personagem(id_personagem) |
+| id_instancia_item | INT | NOT NULL REFERENCES item_instancia(id_item_instancia) |
+| peso_atual | INT | NOT NULL CHECK (peso_atual <= peso_total AND peso_atual >= 0) |
+| peso_total | INT | NOT NULL CHECK (peso_total >= 0) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_personagem | personagem | id_personagem |
+| id_instancia_item | instancia_item | id_instancia_item |
+
+---
+
+### **Feitico**
+
+**Descrição:** Dados do feitico, sendo ele seus requerimentos, energia arcana necessária, elemento e descrição.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_feitico | SERIAL | PRIMARY KEY |
+| descricao | TEXT | NOT NULL |
+| elemento | VARCHAR(5) | NOT NULL |
+| feitico_requerido | VARCHAR(20) | NOT NULL |
+| energia_arcana_necessaria | INT | NOT NULL CHECK (energia_arcana_necessaria >= 0) |
+
+---
+
+### **Grimorio**
+
+**Descrição:** Tipo de inventário dod personagem que contêm seus feitiços.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_grimorio | INT | PRIMARY KEY |
+| id_personagem | INT | NOT NULL REFERENCES personagem(id_personagem) |
+| id_feitico | INT | NOT NULL REFERENCES feitico(id_feitico) |
+| num_pag_atual | INT | NOT NULL |
+| num_pag_maximo | INT | NOT NULL |
+
+---
+
+### **Feitico Dano**
+
+**Descrição:** Tipo de feitiço que concede dano a um inimigo específico.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_feitico | INT | PRIMARY KEY |
+| dano_total | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_feitico | feitico | id_feitico |
+
+---
+
+### **Feitico Dano Area**
+
+**Descrição:** Tipo de feitiço que concede dano em área em N inimigos.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_feitico | INT | PRIMARY KEY |
+| qtd_inimigos_afetados | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_feitico | feitico | id_feitico |
+
+---
+
+### **Feitico Cura**
+
+**Descrição:** Tipo de feitiço que concede cura ao personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_feitico | INT | PRIMARY KEY |
+| qtd_cura | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_feitico | feitico | id_feitico |
+
+---
+
+### **Pergaminho**
+
+**Descrição:** Item do tipo consumível que ensina um feitiço para o personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item | INT | PRIMARY KEY |
+| id_feitico | INT | NOT NULL |
+| chance_drop | DECIMAL | NOT NULL CHECK (chance_drop >= 0) |
+| nome | VARCHAR(20) | NOT NULL |
+| peso | INT | NOT NULL |
+| preco | INT | NOT NULL CHECK (preco >= 0) |
+| cor | VARCHAR(10) | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_item | tipo_item | id_item |
+| id_feitico | feitico | id_feitico |
+
+---
+
+### **Acessorio**
+
+**Descrição:** Tipo de item equipável que concede algum debuff ao inimigo.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item | INT | PRIMARY KEY |
+| efeito | DECIMAL(1,3) | NOT NULL |
+| debuff | DECIMAL(1,3) | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_item | tipo_item | id_item |
+
+---
+
+### **Pocao**
+
+**Descrição:** Tipo de item consumível que causa algum efeito ao personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item | INT | PRIMARY KEY |
+| efeito | DECIMAL(1,3) | NOT NULL |
+| duracao | INT | NOT NULL CHECK (duracao >= 0) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_item | tipo_item | id_item |
+
+---
+
+### **Inimigo**
+
+**Descrição:** Representa os dados armazenados do NPC do tipo Inimigo.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_inimigo | INT | NOT NULL UNIQUE |
+| id_armazenamento | INT | NOT NULL REFERENCES armazenamento(id_armazenamento) |
+| elemento | VARCHAR(5) | NOT NULL |
+| descricao | TEXT | NOT NULL |
+| vida_maxima | INT | NOT NULL |
+| xp_obtido | INT | NOT NULL |
+| inteligencia | INT | NOT NULL |
+| dialogo | TEXT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_inimigo | tipo_npc | id_npc |
+
+---
+
+### **Inimigo Instancia**
+
+**Descrição:** Instancia de um Inimigo.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_inimigo_instancia | SERIAL | PRIMARY KEY |
+| id_npc | INT | NOT NULL |
+| id_subregiao | INT | NOT NULL REFERENCES sub_regiao(id_subregiao) |
+| vida_atual | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_npc | inimigo | id_inimigo |
+
+---
+
+### **Combate**
+
+**Descrição:** Representa o combate entre um inimigo e o personagem.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_inimigo_instancia | INT | NOT NULL |
+| id_personagem | INT | NOT NULL |
+| dano_causado | INT | NOT NULL |
+| dano_recebido | INT | NOT NULL |
+| PRIMARY | KEY | (id_inimigo_instancia, id_personagem) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_inimigo_instancia | inimigo_instancia | id_inimigo_instancia |
+| id_personagem | personagem | id_personagem |
+
+---
+
+### **Feitiço escrito**
+
+**Descrição:** Representa o tipo de feitico presente em algum item.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_item | INT | NOT NULL REFERENCES tipo_item(id_item) |
+| id_feitico | INT | NOT NULL |
+| dano_causado | INT | NOT NULL REFERENCES feitico(id_feitico) |
+| PRIMARY | KEY | (id_item, id_feitico) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_item | tipo_item | id_item |
+| id_feitico | feitico | id_feitico |
+
+---
+
+### **Feitico Aprendido**
+
+**Descrição:** Representa o feitiço aprendido pelo personagem, armazenado em seu grimório.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_inventario | INT | NOT NULL |
+| id_feitico | INT | NOT NULL |
+| PRIMARY | KEY | (id_inventario, id_feitico) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_inventario | inventario | id_inventario |
+| id_feitico | feitico | id_feitico |
+
+---
 
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 25/11/2024 | Criação   | Grupo |
+| `1.1`  | 04/01/2025 | Arrumando entidades e restrições   | Grupo |
