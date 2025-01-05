@@ -57,7 +57,9 @@
 |------|--------------|------------|
 | id_subregiao | SERIAL | PRIMARY KEY |
 | id_regiao | INT | NOT NULL |
-| id_armazenamento | INT | NOT NULL REFERENCES armazenamento(id_armazenamento) |
+| id_armazenamento | INT | NOT NULL REFERENCES armazenamento
+(id_armazenamento) |
+| id_caminhos |INT | NOT NULL REFERENCES caminhos_subregiao(id_caminhos) |
 | nome | VARCHAR(20) | NOT NULL |
 | descricao | TEXT | NOT NULL |
 
@@ -66,6 +68,29 @@
 | Coluna | Referencia Tabela | Referencia Coluna |
 |--------|--------------------|-------------------|
 | id_regiao | regiao | id_regiao |
+
+---
+
+### **Caminhos Sub Regiao**
+
+**Descrição:** Conjunto de caminhos possíveis dentro de uma subregião.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| id_caminhos | SERIAL | PRIMARY KEY |
+| id_norte | INT | REFERENCES sub_reigao(id_subregiao) |
+| id_leste | INT | REFERENCES sub_reigao(id_subregiao) |
+| id_oeste | INT | REFERENCES sub_reigao(id_subregiao) |
+| id_sul | INT | REFERENCES sub_reigao(id_subregiao) |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| id_norte | sub_regiao | id_subregiao |
+| id_leste | sub_regiao | id_subregiao |
+| id_oeste | sub_regiao | id_subregiao |
+| id_sul | sub_regiao | id_subregiao |
 
 ---
 

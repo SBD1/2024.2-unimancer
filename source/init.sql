@@ -28,9 +28,19 @@ CREATE TABLE sub_regiao (
     id_subregiao SERIAL PRIMARY KEY,
     id_regiao INT NOT NULL,
     id_armazenamento INT NOT NULL REFERENCES armazenamento(id_armazenamento),
+    id_caminhos INT NOT NULL REFERENCES caminhos_subregiao(id_caminhos),
     nome VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
     FOREIGN KEY (id_regiao) REFERENCES regiao(id_regiao)
+);
+
+-- Tabela caminhos subregiao
+CREATE TABLE caminhos_subregiao (
+    id_caminhos SERIAL PRIMARY KEY,
+    id_norte INT REFERENCES sub_regiao(id_subregiao),
+    id_leste INT REFERENCES sub_regiao(id_subregiao),
+    id_oeste INT REFERENCES sub_regiao(id_subregiao),
+    id_sul INT REFERENCES sub_regiao(id_subregiao),
 );
 
 -- Tabela personagem
