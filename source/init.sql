@@ -1,10 +1,10 @@
-CREATE TYPE TIPO_INVENTARIO AS ENUM ('mochila', 'grimorio');
-CREATE TYPE TIPO_ELEMENTO AS ENUM ('fogo', 'agua', 'terra', 'ar', 'trevas', 'luz');
-CREATE TYPE TIPO_DIFICULDADE AS ENUM ('iniciante', 'facil', 'medio', 'dificil', 'legendario');
-CREATE TYPE TIPO_ITEM AS ENUM ('pocao', 'acessorio');
-CREATE TYPE TIPO_FEITICO AS ENUM ('dano', 'dano_area', 'cura');
-CREATE TYPE TIPO_NPC AS ENUM ('civil', 'inimigo');
-CREATE TYPE TIPO_CIVIL AS ENUM ('mercador', 'quester');
+CREATE TYPE TIPO_INVENTARIO AS ENUM ('Mochila', 'Grimório');
+CREATE TYPE TIPO_ELEMENTO AS ENUM ('Fogo', 'Água', 'Terra', 'Ar', 'Trevas', 'Luz');
+CREATE TYPE TIPO_DIFICULDADE AS ENUM ('Iniciante', 'Fácil', 'Médio', 'Difícil', 'Legendário');
+CREATE TYPE TIPO_ITEM AS ENUM ('Poção', 'Acessório');
+CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
+CREATE TYPE TIPO_NPC AS ENUM ('Civil', 'Inimigo');
+CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
