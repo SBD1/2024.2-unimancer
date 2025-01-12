@@ -8,6 +8,7 @@ CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
+    tipo TIPO_ITEM NOT NULL,
     descricao TEXT NOT NULL,
 	chance_drop INT NOT NULL CHECK (chance_drop >= 0),
 	nome VARCHAR(20) NOT NULL,
@@ -23,9 +24,9 @@ CREATE TABLE armazenamento (
 
 CREATE TABLE regiao (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(20) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
     descricao TEXT NOT NULL,
-    elemento VARCHAR(5) NOT NULL
+    elemento TIPO_ELEMENTO NOT NULL
 );
 
 CREATE TABLE sub_regiao (
@@ -40,7 +41,7 @@ CREATE TABLE sub_regiao (
     CHECK (oeste_id != sul_id AND oeste_id != leste_id AND oeste_id != norte_id AND oeste_id != id),
     sul_id INT REFERENCES sub_regiao(id)
     CHECK (sul_id != norte_id AND sul_id != leste_id AND sul_id != oeste_id AND sul_id != id),
-    nome VARCHAR(20) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
     descricao TEXT NOT NULL
 );
 
@@ -93,7 +94,7 @@ CREATE TABLE quest (
     titulo VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
-    dificuldade VARCHAR(2) NOT NULL
+    dificuldade TIPO_DIFICULDADE NOT NULL
 );
 
 CREATE TABLE quest_instancia (
@@ -135,7 +136,8 @@ CREATE TABLE feitico (
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
-    energia_arcana_necessaria INT NOT NULL CHECK (energia_arcana_necessaria >= 0)
+    energia_arcana_necessaria INT NOT NULL CHECK (energia_arcana_necessaria >= 0),
+    tipo TIPO_FEITICO NOT NULL
 );
 
 CREATE TABLE feitico_dano (
@@ -196,7 +198,7 @@ CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
     descricao TEXT NOT NULL,
-    elemento VARCHAR(5) NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),
     xp_obtido INT NOT NULL CHECK (xp_obtido >= 0),
     inteligencia INT NOT NULL CHECK (inteligencia >= 0),
