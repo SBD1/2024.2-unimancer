@@ -32,10 +32,14 @@ CREATE TABLE sub_regiao (
     id SERIAL PRIMARY KEY,
     regiao_id INT NOT NULL REFERENCES regiao(id),
     armazenamento_id INT REFERENCES armazenamento(id),
-    norte_id INT REFERENCES sub_regiao(id),
-    leste_id INT REFERENCES sub_regiao(id),
-    oeste_id INT REFERENCES sub_regiao(id),
-    sul_id INT REFERENCES sub_regiao(id),
+    norte_id INT REFERENCES sub_regiao(id)
+    CHECK (norte_id != sul_id AND norte_id != leste_id AND norte_id != oeste_id AND norte_id != id),
+    leste_id INT REFERENCES sub_regiao(id)
+    CHECK (leste_id != sul_id AND leste_id != norte_id AND leste_id != oeste_id AND leste_id != id),
+    oeste_id INT REFERENCES sub_regiao(id)
+    CHECK (oeste_id != sul_id AND oeste_id != leste_id AND oeste_id != norte_id AND oeste_id != id),
+    sul_id INT REFERENCES sub_regiao(id)
+    CHECK (sul_id != norte_id AND sul_id != leste_id AND sul_id != oeste_id AND sul_id != id),
     nome VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL
 );
