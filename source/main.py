@@ -4,6 +4,7 @@
 import psycopg2
 import sys
 from default_values import populate_database
+from create_character import show_menu, create_character, add_character
 
 # For debugging purposes, force delete every single table of the database and it's dependencies.
 # So that we can create the default lines of the database again.
@@ -164,3 +165,5 @@ with conn.cursor() as cur:
         add_defaults(conn, cur)
         
     print(get_table_names(cur))
+
+
