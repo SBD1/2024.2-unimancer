@@ -248,8 +248,6 @@ CREATE TABLE combate (
     FOREIGN KEY (id_personagem) REFERENCES personagem(id_personagem)
 );
 
-
-
 --Tabela feitico escrito
 CREATE TABLE feitico_escrito(
 	id_item INT NOT NULL REFERENCES tipo_item(id_item),

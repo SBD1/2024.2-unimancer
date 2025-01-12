@@ -35,14 +35,35 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 
 ## Instalação
 
-**Tecnologia:** PostgreSQL;
+**Tecnologia:** PostgreSQL, python;
 
 **Modelo do Banco:** [draw.io](https://drive.google.com/file/d/14wc0GC0F9QGjhKfZOi1-kghpwYJfIDvr/view?usp=drive_link);
 
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+
+Para executar o projeto, inicialmente clone o repositório usando
+
+    > git clone https://github.com/SBD1/2024.2-unimancer
+
+Após clonar seu repositório, certifique-se de estar com o docker e o python instalado, para verificar basta utilizar
+
+    > python --version
+
+    > docker --version
+
+Caso não tenha, acesse a documentação para instalar [docker](https://docs.docker.com/) [python](https://www.python.org/)
+
+Entrando no diretório do projeto, primeiro precisamos configurar o ambiente do docker. Existe um arquivo chamado `.env_.template`, renomeie para `.env`, após isso, basta utilizar
+
+    > docker-compose up -d
+
+para gerar o docker, o arquivo está configurado para utilizar a porta 5432 para o banco de dados e a porta 5050 para a interface do pg admin, certifique-se de estar com essas portas livres ou edite-as no arquivo `docker-compose.yml`
+
+Agora para definitivamente embarcar nessa jornada, basta executar o programa em seu terminal utilizando
+
+    > python source/main.py
 
 ## Outros
 ### **Mecânicas do Jogo**

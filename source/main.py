@@ -3,6 +3,7 @@
 
 import psycopg2
 import sys
+from default_values import populate_database
 
 # For debugging purposes, force delete every single table of the database and it's dependencies.
 # So that we can create the default lines of the database again.
