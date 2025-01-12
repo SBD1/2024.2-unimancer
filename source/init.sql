@@ -6,6 +6,20 @@ CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
 CREATE TYPE TIPO_NPC AS ENUM ('Civil', 'Inimigo');
 CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
 CREATE TYPE TIPO_DIRECAO AS ENUM ('Norte', 'Sul', 'Leste', 'Oeste');
+CREATE TYPE TIPO_SITUACAO AS ENUM ('Passável', 'Não Passável');
+CREATE TYPE TIPO_ACESSORIO AS ENUM (
+    'Anel',
+    'Chapéu',
+    'Colar',
+    'Bracelete',
+    'Fivela',
+    'Luvas',
+    'Botas',
+    'Calça',
+    'Meias',
+    'Bengala',
+    'Manto'
+ );
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
@@ -41,7 +55,8 @@ CREATE TABLE sub_regiao (
 CREATE TABLE sub_regiao_conexao (
     sub_regiao_1 INT NOT NULL REFERENCES sub_regiao(id),
     sub_regiao_2 INT NOT NULL REFERENCES sub_regiao(id),
-    direcao TIPO_DIRECAO NOT NULL
+    direcao TIPO_DIRECAO NOT NULL,
+    situacao TIPO_SITUACAO NOT NULL
 );
 
 CREATE TABLE personagem (
@@ -115,6 +130,11 @@ CREATE TABLE mercador (
     dialogo TEXT NOT NULL
 );
 
+CREATE TABLE armazenamento_mercador (
+    mercador_id INT NOT NULL REFERENCES mercador(id),
+    armazenamento_id INT NOT NULL REFERENCES armazenamento(id)
+);
+
 CREATE TABLE transacao (
     id SERIAL PRIMARY KEY,
     mercador_id INT NOT NULL REFERENCES mercador(id),
@@ -124,7 +144,6 @@ CREATE TABLE transacao (
 
 CREATE TABLE mochila (
 	id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
-	personagem_id INT NOT NULL REFERENCES personagem(id),
 	peso INT NOT NULL CHECK (peso <= peso_total AND peso >= 0),
 	peso_total INT NOT NULL CHECK (peso_total >= 0)
 );
@@ -161,7 +180,6 @@ CREATE TABLE feitico_cura (
 
 CREATE TABLE grimorio (
     id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
-	personagem_id INT NOT NULL REFERENCES personagem(id),
 	num_pag INT NOT NULL CHECK (num_pag <= num_pag_maximo AND num_pag >= 0),
     num_pag_maximo INT NOT NULL CHECK (num_pag_maximo >= 0)
 );
@@ -190,18 +208,19 @@ CREATE TABLE efeito (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
-    defesa INT NOT NULL,
-    inteligencia INT NOT NULL,
-    critico INT NOT NULL,
-    vida INT NOT NULL,
-    energia_arcana INT NOT NULL,
-    sorte INT NOT NULL,
-    xp INT NOT NULL,
-    moedas INT NOT NULL
+    defesa DECIMAL(1, 3) NOT NULL CHECK (defesa >= 0),
+    inteligencia DECIMAL(1, 3) NOT NULL CHECK (inteligencia >= 0),
+    critico DECIMAL(1, 3) NOT NULL CHECK (critico >= 0),
+    vida DECIMAL(1, 3) NOT NULL CHECK (vida >= 0),
+    energia_arcana DECIMAL(1, 3) NOT NULL CHECK (energia_arcana >= 0),
+    sorte DECIMAL(1, 3) NOT NULL CHECK (sorte >= 0),
+    xp DECIMAL(1, 3) NOT NULL CHECK (xp >= 0),
+    moedas DECIMAL(1, 3) NOT NULL CHECK (moedas >= 0)
 );
 
 CREATE TABLE acessorio (
-    id INT PRIMARY KEY REFERENCES item(id)
+    id INT PRIMARY KEY REFERENCES item(id),
+    tipo TIPO_ACESSORIO NOT NULL
 );
 
 CREATE TABLE acessorio_efeito (
@@ -211,7 +230,8 @@ CREATE TABLE acessorio_efeito (
 
 CREATE TABLE pocao (
     id INT PRIMARY KEY REFERENCES item(id),
-    duracao INT NOT NULL CHECK (duracao >= 0)
+    turnos INT NOT NULL CHECK (turnos >= 0),
+    usado BOOLEAN NOT NULL
 );
 
 CREATE TABLE pocao_efeito (
@@ -233,6 +253,11 @@ CREATE TABLE inimigo (
     dialogo TEXT NOT NULL
 );
 
+CREATE TABLE armazenamento_inimigo (
+    inimigo_id INT NOT NULL REFERENCES inimigo(id),
+    armazenamento_id INT NOT NULL REFERENCES armazenamento(id)
+);
+
 CREATE TABLE feitico_inimigo (
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
     feitico_id INT NOT NULL REFERENCES feitico(id)
@@ -242,8 +267,7 @@ CREATE TABLE inimigo_instancia (
     id SERIAL PRIMARY KEY,
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-    vida INT NOT NULL CHECK (vida >= 0),
-    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
+    vida INT NOT NULL CHECK (vida >= 0)
 );
 
 CREATE TABLE combate (

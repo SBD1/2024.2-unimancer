@@ -17,6 +17,7 @@ def delete_tables(cur) -> None:
         cur.execute("DROP TYPE IF EXISTS tipo_npc CASCADE")
         cur.execute("DROP TYPE IF EXISTS tipo_civil CASCADE")
         cur.execute("DROP TYPE IF EXISTS tipo_direcao CASCADE")
+        cur.execute("DROP TYPE IF EXISTS tipo_situacao CASCADE")
 
         # Drop tables.
         cur.execute("DROP TABLE IF EXISTS item CASCADE")
@@ -32,6 +33,7 @@ def delete_tables(cur) -> None:
         cur.execute("DROP TABLE IF EXISTS quest_instancia CASCADE")
         cur.execute("DROP TABLE IF EXISTS item_instancia CASCADE")
         cur.execute("DROP TABLE IF EXISTS mercador CASCADE")
+        cur.execute("DROP TABLE IF EXISTS armazenamento_mercador CASCADE")
         cur.execute("DROP TABLE IF EXISTS transacao CASCADE")
         cur.execute("DROP TABLE IF EXISTS civil CASCADE")
         cur.execute("DROP TABLE IF EXISTS mochila CASCADE")
@@ -43,6 +45,7 @@ def delete_tables(cur) -> None:
         cur.execute("DROP TABLE IF EXISTS feitico_escrito CASCADE")
         cur.execute("DROP TABLE IF EXISTS feitico_aprendido CASCADE")
         cur.execute("DROP TABLE IF EXISTS feitico_inimigo CASCADE")
+        cur.execute("DROP TABLE IF EXISTS feitico_requerimento CASCADE")
         cur.execute("DROP TABLE IF EXISTS pergaminho CASCADE")
         cur.execute("DROP TABLE IF EXISTS efeito CASCADE")
         cur.execute("DROP TABLE IF EXISTS regiao_efeito CASCADE")
@@ -51,6 +54,7 @@ def delete_tables(cur) -> None:
         cur.execute("DROP TABLE IF EXISTS pocao CASCADE")
         cur.execute("DROP TABLE IF EXISTS pocao_efeito CASCADE")
         cur.execute("DROP TABLE IF EXISTS inimigo CASCADE")
+        cur.execute("DROP TABLE IF EXISTS armazenamento_inimigo CASCADE")
         cur.execute("DROP TABLE IF EXISTS inimigo_instancia CASCADE")
         cur.execute("DROP TABLE IF EXISTS combate CASCADE")
         conn.commit()
@@ -61,9 +65,9 @@ def delete_tables(cur) -> None:
     print("delete_tables: Deleted all tables.")
 
 # Execute a SQL file in the database.
-def execute_file(name: str, conn, cur) -> None:
+def execute_file(path: str, conn, cur) -> None:
     print("execute_file: Reading file...")
-    with open("./source/init.sql", "r") as file:
+    with open(path, "r") as file:
         sql = file.read()
         cur.execute(sql)
         conn.commit()

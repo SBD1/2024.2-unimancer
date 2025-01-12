@@ -54,6 +54,25 @@
 - 'Cima';
 - 'Baixo'.
 
+### **TIPO_SITUACAO**
+
+- 'Passável';
+- 'Não Passável'.
+
+### **TIPO_ACESSORIO**
+
+- 'Anel';
+- 'Chapéu';
+- 'Colar';
+- 'Bracelete';
+- 'Fivela';
+- 'Luvas';
+- 'Botas';
+- 'Calça';
+- 'Meias';
+- 'Bengala';
+- 'Manto'.
+
 ## Entidades e Atributos
 
 ### **Item**
@@ -77,8 +96,8 @@
 
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
-| id | SERIAL | PRIMARY KEY |
 | item_id | INT | NOT NULL |
+| id | INT | NOT NULL |
 | quantidade | INT | NOT NULL |
 
 **Chaves Estrangeiras:**
@@ -129,6 +148,7 @@
 | sub_regiao_1 | INT | NOT NULL |
 | sub_regiao_2 | INT | NOT NULL |
 | descricao | TIPO_DIRECAO | NOT NULL |
+| situacao | TIPO_SITUACAO | NOT NULL |
 
 **Chaves Estrangeiras:**
 
@@ -318,6 +338,23 @@ ___
 
 ---
 
+### Armazenamento Mercador
+
+**Descrição:** Tabela para armazenar a quantidade de itens do mercador.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| mercador_id | INT | NOT NULL |
+| armazenamento_id | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| mercador_id | mercador | id |
+| armazenamento_id | armazenamento | id |
+
+
 ### **Transacao**
 
 **Descrição:** Representa cada compra/venda feita pelo personagem com o mercador.
@@ -346,15 +383,8 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | id | SERIAL | PRIMARY KEY |
-| personagem_id | INT | NOT NULL |
 | peso | INT | NOT NULL CHECK (peso <= peso AND peso >= 0) |
 | peso_total | INT | NOT NULL CHECK (peso_total >= 0) |
-
-**Chaves Estrangeiras:**
-
-| Coluna | Referencia Tabela | Referencia Coluna |
-|--------|--------------------|-------------------|
-| personagem_id | personagem | id |
 
 ---
 
@@ -450,7 +480,6 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | id | INT | PRIMARY KEY |
-| personagem_id | INT | NOT NULL |
 | num_pag | INT | NOT NULL CHECK (num_pag <= num_pag_maximo AND num_pag >= 0) |
 | num_pag_maximo | INT | NOT NULL CHECK (num_pag_maximo >= 0) |
 
@@ -460,7 +489,6 @@ ___
 | Coluna | Referencia Tabela | Referencia Coluna |
 |--------|--------------------|-------------------|
 | id | inventario | id |
-| personagem_id | personagem | id |
 
 ___
 
@@ -531,15 +559,14 @@ ___
 | id | SERIAL | PRIMARY KEY |
 | nome | VARCHAR(20) | NOT NULL |
 | descricao | TEXT | NOT NULL |
-| ataque | INT | NOT NULL |
-| critico_multiplicador | INT | NOT NULL |
-| defesa | INT | NOT NULL |
-| inteligencia | INT | NOT NULL 
-| vida | INT | NOT NULL |
-| energia_arcana | INT | NOT NULL |
-| sorte | INT | NOT NULL |
-| xp | INT | NOT NULL |
-| moedas | INT | NOT NULL |
+| critico | DECIMAL(1, 3) | NOT NULL |
+| defesa | DECIMAL(1, 3) | NOT NULL |
+| inteligencia | DECIMAL(1, 3) | NOT NULL 
+| vida | DECIMAL(1, 3) | NOT NULL |
+| energia_arcana | DECIMAL(1, 3) | NOT NULL |
+| sorte | DECIMAL(1, 3) | NOT NULL |
+| xp | DECIMAL(1, 3) | NOT NULL |
+| moedas | DECIMAL(1, 3) | NOT NULL |
 
 ---
 
@@ -550,6 +577,7 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | id | INT | PRIMARY KEY |
+| tipo | TIPO_ACESSORIO | NOT NULL |
 
 **Chaves Estrangeiras:**
 
@@ -584,7 +612,8 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | id | INT | PRIMARY KEY |
-| duracao | INT | NOT NULL CHECK (duracao >= 0) |
+| turnos | INT | NOT NULL CHECK (duracao >= 0) |
+| usado | BOOL | NOT NULL |
 
 **Chaves Estrangeiras:**
 
@@ -601,7 +630,7 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | pocao_id | INT | NOT NULL |
-| efeito_id | INT | NOT NULL |
+| efeito_id | DECIMAL(1,3) | NOT NULL |
 
 **Chaves Estrangeiras:**
 
@@ -639,6 +668,24 @@ ___
 
 ---
 
+### Armazenamento Inimigo
+
+**Descrição:** Armanezamento de itens do inimigo.
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| inimigo_id | INT | NOT NULL |
+| armazenamento_id | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| inimigo_id | inimigo | id |
+| armazenamento_id | armazenamento | id |
+
+---
+
 ### **Feitico Inimigo**
 
 **Descrição:** Feitiços que inimigo possui.
@@ -667,7 +714,6 @@ ___
 | inimigo_id | INT | NOT NULL |
 | sub_regiao_id | INT | NOT NULL |
 | vida | INT | NOT NULL CHECK (vida >=0 ) |
-| energia_arcana | INT | NOT NULL CHECK (energia_arcana >=0 ) |
 
 **Chaves Estrangeiras:**
 
@@ -701,6 +747,5 @@ ___
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 25/11/2024 | Criação   | Grupo |
-| `1.1`  | 04/01/2025 | Arrumando entidades e 
-restrições   | Grupo |
+| `1.1`  | 04/01/2025 | Arrumando entidades e restrições   | Grupo |
 | `3.0`  | 12/01/2025 | Arrumando entidades e restrições   | Grupo |
