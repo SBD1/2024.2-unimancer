@@ -5,6 +5,7 @@ CREATE TYPE TIPO_ITEM AS ENUM ('Poção', 'Acessório');
 CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
 CREATE TYPE TIPO_NPC AS ENUM ('Civil', 'Inimigo');
 CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
+CREATE TYPE TIPO_DIRECAO AS ENUM ('Norte', 'Sul', 'Leste', 'Oeste');
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
@@ -19,7 +20,7 @@ CREATE TABLE item (
 CREATE TABLE armazenamento (
     id SERIAL PRIMARY KEY,
     item_id INT NOT NULL REFERENCES item(id),
-    quantity INT NOT NULL CHECK (quantity >= 0)    
+    quantidade INT NOT NULL
 );
 
 CREATE TABLE regiao (
@@ -33,16 +34,14 @@ CREATE TABLE sub_regiao (
     id SERIAL PRIMARY KEY,
     regiao_id INT NOT NULL REFERENCES regiao(id),
     armazenamento_id INT REFERENCES armazenamento(id),
-    norte_id INT REFERENCES sub_regiao(id)
-    CHECK (norte_id != sul_id AND norte_id != leste_id AND norte_id != oeste_id AND norte_id != id),
-    leste_id INT REFERENCES sub_regiao(id)
-    CHECK (leste_id != sul_id AND leste_id != norte_id AND leste_id != oeste_id AND leste_id != id),
-    oeste_id INT REFERENCES sub_regiao(id)
-    CHECK (oeste_id != sul_id AND oeste_id != leste_id AND oeste_id != norte_id AND oeste_id != id),
-    sul_id INT REFERENCES sub_regiao(id)
-    CHECK (sul_id != norte_id AND sul_id != leste_id AND sul_id != oeste_id AND sul_id != id),
     nome VARCHAR(50) NOT NULL,
     descricao TEXT NOT NULL
+);
+
+CREATE TABLE sub_regiao_conexao (
+    sub_regiao_1 INT NOT NULL REFERENCES sub_regiao(id),
+    sub_regiao_2 INT NOT NULL REFERENCES sub_regiao(id),
+    direcao TIPO_DIRECAO NOT NULL
 );
 
 CREATE TABLE personagem (
@@ -51,12 +50,12 @@ CREATE TABLE personagem (
 	nome VARCHAR(20) NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
-    vida_atual INT NOT NULL CHECK (vida_atual >= 0),
+    vida INT NOT NULL CHECK (vida >= 0),
 	vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),
-	xp_atual INT NOT NULL CHECK (xp_atual >= 0),
+	xp INT NOT NULL CHECK (xp >= 0),
     xp_total INT NOT NULL CHECK (xp_total >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
     energia_arcana_maxima INT NOT NULL CHECK (energia_arcana_maxima >= 0),
-    energia_arcana_atual INT NOT NULL CHECK (energia_arcana_atual >= 0),
     inteligencia INT NOT NULL CHECK (inteligencia >= 0),
     moedas INT NOT NULL CHECK (moedas >= 0),
     nivel INT NOT NULL CHECK (nivel >= 0)
@@ -83,13 +82,13 @@ CREATE TABLE civil (
 
 CREATE TABLE quester (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    dialogo TEXT,
+    dialogo TEXT NOT NULL,
     num_quests INT NOT NULL CHECK (num_quests >= 0)
 );
 
 CREATE TABLE quest (
     id SERIAL PRIMARY KEY,
-    quester INT NOT NULL REFERENCES quester(id),
+    quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
     titulo VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
@@ -99,8 +98,8 @@ CREATE TABLE quest (
 
 CREATE TABLE quest_instancia (
     id SERIAL PRIMARY KEY,
-    personagem_id INT NOT NULL REFERENCES personagem(id),
     quest_id INT NOT NULL REFERENCES quest(id),
+    personagem_id INT NOT NULL REFERENCES personagem(id),
     completed BOOLEAN NOT NULL
 );
 
@@ -126,18 +125,23 @@ CREATE TABLE transacao (
 CREATE TABLE mochila (
 	id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
 	personagem_id INT NOT NULL REFERENCES personagem(id),
-	peso_atual INT NOT NULL CHECK (peso_atual <= peso_total AND peso_atual >= 0),
+	peso INT NOT NULL CHECK (peso <= peso_total AND peso >= 0),
 	peso_total INT NOT NULL CHECK (peso_total >= 0)
 );
 
 CREATE TABLE feitico (
     id SERIAL PRIMARY KEY,
-    feitico_requerido INT NOT NULL REFERENCES feitico(id),
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
-    energia_arcana_necessaria INT NOT NULL CHECK (energia_arcana_necessaria >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
     tipo TIPO_FEITICO NOT NULL
+);
+
+CREATE TABLE feitico_requerimento (
+    de_id INT NOT NULL REFERENCES feitico(id),
+    para_id INT NOT NULL REFERENCES feitico(id)
 );
 
 CREATE TABLE feitico_dano (
@@ -158,7 +162,7 @@ CREATE TABLE feitico_cura (
 CREATE TABLE grimorio (
     id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
 	personagem_id INT NOT NULL REFERENCES personagem(id),
-	num_pag_atual INT NOT NULL CHECK (num_pag_atual <= num_pag_maximo AND num_pag_atual >= 0),
+	num_pag INT NOT NULL CHECK (num_pag <= num_pag_maximo AND num_pag >= 0),
     num_pag_maximo INT NOT NULL CHECK (num_pag_maximo >= 0)
 );
 
@@ -177,21 +181,42 @@ CREATE TABLE pergaminho (
     cor VARCHAR(10) NOT NULL
 );
 
-CREATE TABLE feitico_escrito(
+CREATE TABLE feitico_escrito (
 	item_id INT NOT NULL REFERENCES item(id),
 	feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 
+CREATE TABLE efeito (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(20) NOT NULL,
+    descricao TEXT NOT NULL,
+    defesa INT NOT NULL,
+    inteligencia INT NOT NULL,
+    critico INT NOT NULL,
+    vida INT NOT NULL,
+    energia_arcana INT NOT NULL,
+    sorte INT NOT NULL,
+    xp INT NOT NULL,
+    moedas INT NOT NULL
+);
+
 CREATE TABLE acessorio (
-    id INT PRIMARY KEY REFERENCES item(id),
-    efeito VARCHAR(10) NOT NULL,
-    debuff VARCHAR(10) NOT NULL
+    id INT PRIMARY KEY REFERENCES item(id)
+);
+
+CREATE TABLE acessorio_efeito (
+    acessorio_id INT NOT NULL REFERENCES acessorio(id),
+    efeito_id INT NOT NULL REFERENCES efeito(id)
 );
 
 CREATE TABLE pocao (
     id INT PRIMARY KEY REFERENCES item(id),
-    efeito VARCHAR(10) NOT NULL,
     duracao INT NOT NULL CHECK (duracao >= 0)
+);
+
+CREATE TABLE pocao_efeito (
+    pocao_id INT NOT NULL REFERENCES pocao(id),
+    efeito_id INT NOT NULL REFERENCES efeito(id)
 );
 
 CREATE TABLE inimigo (
@@ -203,14 +228,22 @@ CREATE TABLE inimigo (
     xp_obtido INT NOT NULL CHECK (xp_obtido >= 0),
     inteligencia INT NOT NULL CHECK (inteligencia >= 0),
     moedas_obtidas INT NOT NULL CHECK (moedas_obtidas >= 0),
+    conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
+    energia_arcana_maxima INT NOT NULL CHECK (energia_arcana_maxima >= 0),
     dialogo TEXT NOT NULL
+);
+
+CREATE TABLE feitico_inimigo (
+    inimigo_id INT NOT NULL REFERENCES inimigo(id),
+    feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 
 CREATE TABLE inimigo_instancia (
     id SERIAL PRIMARY KEY,
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-    vida_atual INT NOT NULL CHECK (vida_atual >= 0)
+    vida INT NOT NULL CHECK (vida >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
 );
 
 CREATE TABLE combate (
