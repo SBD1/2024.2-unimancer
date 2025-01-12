@@ -1,13 +1,14 @@
-# Modelo Relacional - MREL
+# Modelo Relacional - MR
 
 ## Introdução
-O modelo relacional (MREL) é uma forma de organizar dados em bancos de dados, que armazena e fornece acesso a dados relacionados entre si.
+O Modelo Relacional (MR) é uma forma de organizar dados em bancos de dados, que armazena e fornece acesso a dados relacionados entre si.
 
 ## MREL
 
 <center>
-<figcaption>Modelo Relacional </figcaption>
-<iframe frameborder="0" style="width:100%;height:600px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C%C3%B3pia%20do%20SBD.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D181H7I_zokpwSxUxudSI4zEpVyPjdrXr0%26export%3Ddownload"></iframe>
+<figcaption>Modelo Relacional</figcaption>
+<!--<iframe frameborder="0" style="width:100%;height:600px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C%C3%B3pia%20do%20SBD.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D181H7I_zokpwSxUxudSI4zEpVyPjdrXr0%26export%3Ddownload"></iframe> -->
+<iframe frameborder="0" style="width:100%;height:1191px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=MER%203.0.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1MMESJaBbnvHBPD98ipvpOgKT2eiZ-Qj-%26export%3Ddownload"></iframe>
 </center>
 
 ## Histórico de Versão
@@ -15,3 +16,6 @@ O modelo relacional (MREL) é uma forma de organizar dados em bancos de dados, q
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 24/11/2024 | Criação   | Grupo |
+| `2.0`  | 27/12/2024 | Criação   | Grupo |
+| `2.1`  | 05/01/2025 | Criação   | Grupo |
+| `3.0`  | 12/01/2025 | Criação   | Grupo |
