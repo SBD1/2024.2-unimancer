@@ -1,44 +1,77 @@
-# just an idea to create character and show in menu of the game
+from utils import debug
 
-# show main menu
-def show_menu():
-    print("\n=== Bem-vindo ao Unimancer! ===")
-    print("1. Criar um novo personagem")
-    print("2. Sair")
-    escolha = input("Escolha uma opção: ")
-    return escolha
+elements = ["Fogo", "Água", "Terra", "Ar", "Trevas", "Luz"]
 
-# create a new character
-def create_character(conn):
-    print("\n === Criação de Personagem === ")
-    nome = input("Digite o nome do personagem: ")
-    elemento = input("Escolha o elemento (Fogo, Água, Terra, Ar, Trevas, Luz): ")
-    sub_regiao_id = 1 # define start up region
-    conhecimento_arcano = 10
-    vida = 100
-    vida_maxima = 100
-    xp = 0
-    xp_total = 0
-    energia_arcana = 50
-    energia_arcana_maxima = 50
-    inteligencia = 1
-    moedas = 15
-    nivel = 1
-
-# add to db a new character
-def add_character(conn, sub_regiao_id, nome, elemento, conhecimento_arcano, vida, vida_maxima, xp, xp_total, energia_arcana, energia_arcana_maxima, inteligencia, moedas, nivel):
-    try:
-        with conn.cursor() as cur:
+class Character:
+    
+    def __init__(self, conn):
+        self.conn = conn
+        self.nome = None
+        self.elemento = None
+        self.sub_regiao_id = 1
+        self.conhecimento_arcano = 10
+        self.vida = 100
+        self.vida_maxima = 100
+        self.xp = 0
+        self.xp_total = 10
+        self.energia_arcana = 50
+        self.energia_arcana_maxima = 50
+        self.inteligencia = 1
+        self.moedas = 15
+        self.nivel = 1
+        self.get_information()
+        
+    def get_information(self):
+        print("\n === Criação de Personagem === ")
+        self.nome = input("Digite o nome do personagem: ")
+        elemento = ""
+        while elemento not in elements:
+            print("Elemento inválido!")
+            elemento = input(f"Escolha o elemento ({', '.join(elements)}): ")
+        
+    def add_database(self):
+        try:
+            with self.conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO personagem (
+                        sub_regiao_id,
+                        nome,
+                        elemento,
+                        conhecimento_arcano,
+                        vida,
+                        vida_maxima,
+                        xp,
+                        xp_total,
+                        energia_arcana,
+                        energia_arcana_maxima,
+                        inteligencia,
+                        moedas,
+                        nivel
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (
+                    self.sub_regiao_id,
+                    self.nome,
+                    self.elemento,
+                    self.conhecimento_arcano,
+                    self.vida,
+                    self.vida_maxima,
+                    self.xp,
+                    self.xp_total,
+                    self.energia_arcana,
+                    self.energia_arcana_maxima,
+                    self.inteligencia,
+                    self.moedas,
+                    self.nivel
+                ))
+                self.conn.commit()
+                debug(f"Character: Personagem '{self.nome}' adicionado com sucesso!")
+        except Exception as e:
+            debug(f"Character: Erro ao adicionar personagem: {e}")
+    
+    def get_character_info(self, id):
+        with self.conn.cursor() as cur:
             cur.execute("""
-                INSERT INTO personagem (
-                    sub_regiao_id, nome, elemento, conhecimento_arcano, vida, vida_maxima, xp, xp_total,
-                    energia_arcana, energia_arcana_maxima, inteligencia, moedas, nivel
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (
-                sub_regiao_id, nome, elemento, conhecimento_arcano, vida, vida_maxima, xp, xp_total,
-                energia_arcana, energia_arcana_maxima, inteligencia, moedas, nivel
-            ))
-            conn.commit()
-            print(f"Personagem '{nome}' adicionado com sucesso!")
-    except Exception as e:
-        print(f"Erro ao adicionar personagem: {e}")
+                SELECT * FROM personagem
+                WHERE id = {id}
+            """)
+           
