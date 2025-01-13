@@ -28,18 +28,12 @@ def get_subregions_character(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT 
-                CASE 
-                    WHEN src.sub_regiao_1 = %s THEN sr2.nome
-                    ELSE sr1.nome
-                END AS sub_regiao_destino,
-                src.direcao, 
-                src.situacao
+            SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
             FROM sub_regiao_conexao src
             JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
             JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-            WHERE sr1.id = %s OR sr2.id = %s;
-            """, (sub_regiao_id, sub_regiao_id, sub_regiao_id)
+            WHERE sr1.id = %s;
+            """, (sub_regiao_id,)
         )
         result = cur.fetchall()
         return result
@@ -56,4 +50,18 @@ def list_npcs_subregion(conn, sub_regiao_id):
             """, (sub_regiao_id,)
         )
         result = cur.fetchall()
+        return result
+    
+# List all characters 
+def list_all_characters(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT id, nome, elemento FROM personagem")
+        result = cur.fetchall()
+        return result
+    
+# List character with id
+def list_character_id(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(f"SELECT * FROM personagem WHERE id = {character_id}")
+        result = cur.fetchone()
         return result

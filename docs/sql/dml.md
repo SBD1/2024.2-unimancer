@@ -9,11 +9,33 @@ DML é um conjunto de instruções SQL que permitem consultar, adicionar, editar
 ### Região
 
 ```sql
+-- adiciona regiao
 INSERT INTO regiao (nome, descricao, elemento) VALUES 
-    ("Bosques dos Serafins", "Bosque com o alto índice de serafins.", "Fogo"),
-    ("Deserto de Obsidiana", "Deserto com areias negras e calor extremo.", "Fogo"),
-    ("Lago dos Espelhos", "Lago tranquilo com águas cristalinas.", "Água"),
-    ("Planície dos Ventos", "Vasta planície com ventos constantes.", "Ar");
+    ("Vilarejo do Amanhecer", "Região inicial do jogador, um vilarejo tranquilo, esbelto...", "Água")
+
+-- adiciona subregiao
+INSERT INTO subregiao (regiao_id, parent_id, nome, descricao)
+VALUES
+    ((SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer'), NULL, 'Ferraria Albnur', 'Local de trabalho árduo onde ferramentas e armas são forjadas.'),
+    ((SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer'), NULL, 'Praça Central', 'O coração do vilarejo, cheio de vida e comércio.'),
+    ((SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer'), NULL, 'Casa do Ancião', 'Uma casa tranquila que guarda histórias e conselhos sábios.'),
+    ((SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer'), NULL, 'Taberna da Caneca Partida', 'Um refúgio caloroso para diversão e descanso.');
+
+-- adiciona as conexoes das subregioes
+INSERT INTO sub_regiao_conexao (sub_regiao_1, sub_regiao_2, direcao, situacao)
+VALUES
+    ((SELECT id FROM sub_regiao WHERE nome = 'Ferraria Albnur' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Sul', 'Passável'),
+    ((SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Ferraria Albnur' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Norte', 'Passável'),
+    ((SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Casa do Ancião' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Oeste', 'Passável'),
+    ((SELECT id FROM sub_regiao WHERE nome = 'Casa do Ancião' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Leste', 'Passável'),
+    ((SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Taberna da Caneca Partida' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Leste', 'Passável'),
+    ((SELECT id FROM sub_regiao WHERE nome = 'Taberna da Caneca Partida' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')),
+     (SELECT id FROM sub_regiao WHERE nome = 'Praça Central' AND regiao_id = (SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer')), 'Oeste', 'Passável');
 ```
 
 ### Feitiço

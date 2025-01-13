@@ -1,10 +1,11 @@
 from utils import debug
+from queries.query import list_character_id
 
 elements = ["Fogo", "Água", "Terra", "Ar", "Trevas", "Luz"]
 
 class Character:
     
-    def __init__(self, conn):
+    def __init__(self, conn, id = None):
         self.conn = conn
         self.nome = None
         self.elemento = None
@@ -19,7 +20,23 @@ class Character:
         self.inteligencia = 1
         self.moedas = 15
         self.nivel = 1
-        self.get_information()
+        if not id:
+            self.get_information()
+        else:
+            characters_info = list_character_id(self.conn, id)
+            self.sub_regiao_id = characters_info[0]
+            self.nome = characters_info[1]
+            self.elemento = characters_info[2]
+            self.conhecimento_arcano = characters_info[3]
+            self.vida = characters_info[4]
+            self.vida_maxima = characters_info[5]
+            self.xp = characters_info[6]
+            self.xp_total = characters_info[7]
+            self.energia_arcana = characters_info[8]
+            self.energia_arcana_maxima = characters_info[9]
+            self.inteligencia = characters_info[10]
+            self.moedas = characters_info[11]
+            self.nivel = characters_info[12]
         
     def get_information(self):
         print("\n === Criação de Personagem === ")

@@ -23,7 +23,7 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 ## Apresentações
 
 1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo);
-2. [Entrega do SQL](https://youtu.be/).
+2. [Entrega do SQL](https://youtu.be/2Z54N1kAIhc).
 
 ## Screenshots
 
