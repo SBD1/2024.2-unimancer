@@ -39,7 +39,7 @@ def get_subregions_character(conn, sub_regiao_id):
             JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
             JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
             WHERE sr1.id = %s OR sr2.id = %s;
-            """, (sub_regiao_id,)
+            """, (sub_regiao_id, sub_regiao_id, sub_regiao_id)
         )
         result = cur.fetchall()
         return result
