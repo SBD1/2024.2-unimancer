@@ -5,7 +5,7 @@
 DDL é um conjunto de comandos usados em sistemas de gerenciamento de banco de dados para criar, alterar e gerenciar a estrutura dos bancos de dados.
 
 
-### DDL
+## DDL
 
 ```sql
 CREATE TYPE TIPO_INVENTARIO AS ENUM ('Mochila', 'Grimório');

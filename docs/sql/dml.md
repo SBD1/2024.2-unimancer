@@ -5,9 +5,9 @@
 DML é um conjunto de instruções SQL que permitem consultar, adicionar, editar e excluir dados de tabelas ou visualizações de banco de dados
 
 
-### DML
+## DML
 
-#### Região
+### Região
 
 ```sql
 INSERT INTO regiao (nome, descricao, elemento) VALUES 
@@ -17,7 +17,7 @@ INSERT INTO regiao (nome, descricao, elemento) VALUES
     ("Planície dos Ventos", "Vasta planície com ventos constantes.", "Ar");
 ```
 
-#### Sub-Região
+### Sub-Região
 
 ```sql
 -- Sub-regiões de "Bosques dos Serafins"
