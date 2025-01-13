@@ -1,114 +1,61 @@
 from database import Database
 from utils import debug
 
-
 def populate_database(db: Database):
     try:
-        # Adding regions
+        ## Adding regions
         default_regions = [
-            ("Bosques dos Serafins", "Bosque com o alto índice de serafins.", "Fogo"),
-            (
-                "Deserto de Obsidiana",
-                "Deserto com areias negras e calor extremo.",
-                "Fogo",
-            ),
-            ("Lago dos Espelhos", "Lago tranquilo com águas cristalinas.", "Água"),
-            ("Planície dos Ventos", "Vasta planície com ventos constantes.", "Ar"),
+            ("Vilarejo do Amanhecer", "Região inicial do jogar, um vilarejo tranquilo, esbelto...", "Água")
         ]
-
         db.cur.executemany(
             """
-                INSERT INTO regiao (nome, descricao, elemento)
-                VALUES (%s, %s, %s)
-            """,
-            default_regions,
+            INSERT INTO regiao (nome, descricao, elemento)
+            VALUES (%s, %s, %s)
+            """, default_regions
         )
 
         debug("default: Regions added successfully!")
 
-        # insert subregions
-        default_subregions = [
-            # Sub-regiões de "Bosques dos Serafins"
-            (
-                1,
-                None,
-                None,
-                None,
-                None,
-                None,
-                "Clareira Central",
-                "Uma clareira iluminada no coração do bosque.",
-            ),
-            (
-                1,
-                None,
-                2,
-                None,
-                None,
-                None,
-                "Trilha Norte",
-                "Uma trilha que leva ao norte do bosque.",
-            ),
-            # Sub-regiões de "Deserto de Obsidiana"
-            (
-                2,
-                None,
-                None,
-                None,
-                None,
-                None,
-                "Oásis Escondido",
-                "Um pequeno oásis no meio do deserto.",
-            ),
-            (
-                2,
-                None,
-                6,
-                None,
-                None,
-                None,
-                "Dunas do Norte",
-                "Dunas escaldantes ao norte do deserto.",
-            ),
-            # Sub-regiões de "Lago dos Espelhos"
-            (
-                3,
-                None,
-                None,
-                None,
-                None,
-                None,
-                "Ilha Central",
-                "Uma ilha no centro do lago.",
-            ),
-            (3, None, 10, None, None, None, "Margem Norte", "A margem norte do lago."),
-            # Sub-regiões de "Planície dos Ventos"
-            (4, None, None, None, None, None, "Campo Aberto", "Um vasto campo aberto."),
-            (
-                4,
-                None,
-                14,
-                None,
-                None,
-                None,
-                "Vale do Norte",
-                "Um vale ao norte da planície.",
-            ),
-        ]
+        # get region id to link
+        db.cur.execute("SELECT id FROM regiao WHERE nome = %s", ("Vilarejo do Amanhecer"))
+        regiao_id = db.cur.fetchone()[0]
 
+        #insert subregions
+        default_subregions = [
+            (regiao_id, None, "Ferraria Albnur", "Local de trabalho árduo onde ferramentas e armas são forjadas."),
+            (regiao_id, None, "Praça Central", "O coração do vilarejo, cheio de vida e comércio."),
+            (regiao_id, None, "Casa do Ancião", "Uma casa tranquila que guarda histórias e conselhos sábios."),
+            (regiao_id, None, "Taberna da Caneca Partida", "Um refúgio caloroso para diversão e descanso.")
+        ]
         db.cur.executemany(
             """
-                INSERT INTO sub_regiao (
-                    id_regiao, id_armazenamento, id_norte, id_leste, id_oeste, id_sul, nome, descricao
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            """,
-            default_subregions,
+            INSERT INTO sub_regiao (regiao_id, armazenamento_id, nome, descricao)
+            VALUES (%s, %s, %s, %s)
+            """, default_subregions
         )
+        debug("default: Subregions added successfully!")
+        
+        # get subregions id to link
+        db.cur.execute("SELECT id, nome FROM sub_regiao WHERE regiao_id = %s", (regiao_id))
+        subregion_ids = {row[1]: row[0] for row in db.cur.fetchall()}
+        default_connections = [
+            (subregion_ids["Ferraria Albnur"], subregion_ids["Praça Central"], "Sul", "Livre"),
+            (subregion_ids["Praça Central"], subregion_ids["Ferraria Albnur"], "Norte", "Livre"),
+            (subregion_ids["Praça Central"], subregion_ids["Casa do Ancião"], "Oeste", "Livre"),
+            (subregion_ids["Casa do Ancião"], subregion_ids["Praça Central"], "Leste", "Livre"),
+            (subregion_ids["Praça Central"], subregion_ids["Taberna da Caneca Partida"], "Leste", "Livre"),
+            (subregion_ids["Taberna da Caneca Partida"], subregion_ids["Praça Central"], "Oeste", "Livre")
+        ]
+        db.cur.executemany(
+            """
+            INSERT INTO sub_regiao_conexao (sub_regiao_1, sub_regiao_2, direcao, situacao)
+            VALUES (%s, %s, %s, %s)
+            """, default_connections
+        )
+        debug("default: Subregion connections added successfully!")
 
-        print("subregions added successfully!")
         db.conn.commit()
 
     except Exception as e:
-        print(f"error to populate database: {e}")
         db.conn.rollback()
+        debug(f"default: Error occurred while adding regions and subregions: {e}")
