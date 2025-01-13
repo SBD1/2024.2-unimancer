@@ -28,11 +28,17 @@ def get_subregions_character(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
+            SELECT 
+                CASE 
+                    WHEN src.sub_regiao_1 = %s THEN sr2.nome
+                    ELSE sr1.nome
+                END AS sub_regiao_destino,
+                src.direcao, 
+                src.situacao
             FROM sub_regiao_conexao src
             JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
             JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-            WHERE sr1.id = %s;
+            WHERE sr1.id = %s OR sr2.id = %s;
             """, (sub_regiao_id,)
         )
         result = cur.fetchall()

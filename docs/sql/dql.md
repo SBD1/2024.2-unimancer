@@ -108,11 +108,17 @@ WHERE inv.personagem_id = $1;
 
 #### Consultar todas as subregiões que um personagem pode ir
 ``` sql
-SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
+SELECT 
+    CASE 
+        WHEN src.sub_regiao_1 = %s THEN sr2.nome
+        ELSE sr1.nome
+    END AS sub_regiao_destino,
+    src.direcao, 
+    src.situacao
 FROM sub_regiao_conexao src
 JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
 JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-WHERE sr1.id = $1; 
+WHERE sr1.id = %s OR sr2.id = %s; 
 ```
 
 ---
@@ -127,13 +133,14 @@ JOIN civil c ON c.id = n.id
 WHERE c.sub_regiao_id = $1;
 ```
 
-#### Listar mercadores e seus itens disponíveis
+#### Listar mercador e seus itens disponíveis
 ```sql
 SELECT m.id, m.dialogo, i.nome, a.quantidade 
 FROM mercador m
 JOIN armazenamento_mercador am ON am.mercador_id = m.id
 JOIN armazenamento a ON a.id = am.armazenamento_id
-JOIN item i ON i.id = a.item_id;
+JOIN item i ON i.id = a.item_id
+WHERE m.id = $1;
 ```
 
 #### Listar diálogos dos mercadores

@@ -1,9 +1,15 @@
 -- 1. consult all sub-regions where the character can go
-SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
+SELECT 
+    CASE 
+        WHEN src.sub_regiao_1 = %s THEN sr2.nome
+        ELSE sr1.nome
+    END AS sub_regiao_destino,
+    src.direcao, 
+    src.situacao
 FROM sub_regiao_conexao src
 JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
 JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-WHERE sr1.id = $1;  -- $1 is the actual subregion's ID 
+WHERE sr1.id = %s OR sr2.id = %s;
 
 -- 2. List all character
 SELECT * FROM personagem;
@@ -109,11 +115,12 @@ SELECT m.id, m.dialogo
 FROM mercador m;
 
 -- 20. get all itens storaged by a merchant
-SELECT i.nome, am.quantidade
-FROM armazenamento_mercador am
-JOIN armazenamento a ON am.armazenamento_id = a.id
-JOIN item i ON a.item_id = i.id
-WHERE am.mercador_id = $1; -- $1 is merchant's id
+SELECT m.id, m.dialogo, i.nome, a.quantidade 
+FROM mercador m
+JOIN armazenamento_mercador am ON am.mercador_id = m.id
+JOIN armazenamento a ON a.id = am.armazenamento_id
+JOIN item i ON i.id = a.item_id
+WHERE m.id = $1; -- $1 is the merchant`s ID
 
 -- 21. get itens from a 'armazenamento' (storage?)
 SELECT i.nome, i.descricao, a.quantidade
