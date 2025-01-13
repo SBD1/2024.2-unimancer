@@ -28,5 +28,7 @@ nav:
       - Modelo Entidade-Relacionamento: modelagem/mer.md
       - Modelo Relacional: modelagem/mr.md
       - Dicionário de dados: modelagem/dd.md
+  - SQL:
+      - DDL: sql/ddl.md
   - Apresentações:
       - Primeira entrega: apresentacoes/1a-entrega.md
