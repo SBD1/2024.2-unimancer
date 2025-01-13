@@ -191,11 +191,6 @@ CREATE TABLE feitico_aprendido (
 
 CREATE TABLE pergaminho (
     id INT PRIMARY KEY REFERENCES item(id),
-    descricao TEXT NOT NULL,
-    chance_drop INT NOT NULL CHECK (chance_drop >= 0),
-    nome VARCHAR(20) NOT NULL,
-    peso INT NOT NULL CHECK (peso >= 0),
-    preco INT NOT NULL CHECK (preco >= 0),
     cor VARCHAR(10) NOT NULL
 );
 

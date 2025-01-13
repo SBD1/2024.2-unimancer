@@ -517,11 +517,6 @@ ___
 | Nome | Tipo de Dado | Restrições |
 |------|--------------|------------|
 | id | INT | PRIMARY KEY |
-| descricao | TEXT | NOT NULL |
-| chance_drop | INT | NOT NULL CHECK (chance_drop >= 0) |
-| nome | VARCHAR(20) | NOT NULL |
-| peso | INT | NOT NULL CHECK (peso >= 0) |
-| preco | INT | NOT NULL CHECK (preco >= 0) |
 | cor | VARCHAR(10) | NOT NULL |
 
 **Chaves Estrangeiras:**
