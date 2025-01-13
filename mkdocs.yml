@@ -30,5 +30,6 @@ nav:
       - Dicionário de dados: modelagem/dd.md
   - SQL:
       - DDL: sql/ddl.md
+      - DML: sql/dml.md
   - Apresentações:
       - Primeira entrega: apresentacoes/1a-entrega.md
