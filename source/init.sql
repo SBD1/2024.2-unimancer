@@ -253,11 +253,6 @@ CREATE TABLE armazenamento_inimigo (
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id)
 );
 
-CREATE TABLE feitico_inimigo (
-    inimigo_id INT NOT NULL REFERENCES inimigo(id),
-    feitico_id INT NOT NULL REFERENCES feitico(id)
-);
-
 CREATE TABLE inimigo_instancia (
     id SERIAL PRIMARY KEY,
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
@@ -270,27 +265,4 @@ CREATE TABLE combate (
     personagem_id INT NOT NULL REFERENCES personagem(id),
     dano_causado INT NOT NULL CHECK (dano_causado >= 0),
     dano_recebido INT NOT NULL CHECK (dano_recebido >= 0)
-    id_inimigo_instancia INT NOT NULL,
-    id_personagem INT NOT NULL,
-    dano_causado INT NOT NULL,
-    dano_recebido INT NOT NULL,
-    PRIMARY KEY (id_inimigo_instancia, id_personagem),
-    FOREIGN KEY (id_inimigo_instancia) REFERENCES inimigo_instancia(id_inimigo_instancia),
-    FOREIGN KEY (id_personagem) REFERENCES personagem(id_personagem)
-);
-
---Tabela feitico escrito
-CREATE TABLE feitico_escrito(
-	id_item INT NOT NULL REFERENCES tipo_item(id_item),
-	id_feitico INT NOT NULL REFERENCES feitico(id_feitico),
-	PRIMARY KEY (id_item, id_feitico)
-);
-
--- Tabela feitico_aprendido
-CREATE TABLE feitico_aprendido (
-    id_inventario INT NOT NULL,
-    id_feitico INT NOT NULL,
-    PRIMARY KEY (id_inventario, id_feitico),
-    FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
-    FOREIGN KEY (id_feitico) REFERENCES feitico(id_feitico)
 );
