@@ -31,5 +31,6 @@ nav:
   - SQL:
       - DDL: sql/ddl.md
       - DML: sql/dml.md
+      - DQL: sql/dql.md
   - Apresentações:
       - Primeira entrega: apresentacoes/1a-entrega.md
