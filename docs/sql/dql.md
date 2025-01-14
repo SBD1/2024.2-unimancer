@@ -108,17 +108,11 @@ WHERE inv.personagem_id = $1;
 
 #### Consultar todas as subregiões que um personagem pode ir
 ``` sql
-SELECT 
-    CASE 
-        WHEN src.sub_regiao_1 = %s THEN sr2.nome
-        ELSE sr1.nome
-    END AS sub_regiao_destino,
-    src.direcao, 
-    src.situacao
+SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
 FROM sub_regiao_conexao src
 JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
 JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-WHERE sr1.id = %s OR sr2.id = %s; 
+WHERE sr1.id = %s;
 ```
 
 ---
