@@ -16,8 +16,7 @@ def populate_database(db: Database):
 
         debug("default: Regions added successfully!")
 
-        # get region id to link
-        db.cur.execute("SELECT id FROM regiao WHERE nome = %s", ("Vilarejo do Amanhecer"))
+        db.cur.execute("SELECT id FROM regiao WHERE nome = 'Vilarejo do Amanhecer'")
         regiao_id = db.cur.fetchone()[0]
 
         # insert subregions
@@ -36,15 +35,15 @@ def populate_database(db: Database):
         debug("default: Subregions added successfully!")
         
         # get subregions id to link
-        db.cur.execute("SELECT id, nome FROM sub_regiao WHERE regiao_id = %s", (regiao_id))
+        db.cur.execute(f"SELECT id, nome FROM sub_regiao WHERE regiao_id = {regiao_id}")
         subregion_ids = {row[1]: row[0] for row in db.cur.fetchall()}
         default_connections = [
-            (subregion_ids["Ferraria Albnur"], subregion_ids["Praça Central"], "Sul", "Livre"),
-            (subregion_ids["Praça Central"], subregion_ids["Ferraria Albnur"], "Norte", "Livre"),
-            (subregion_ids["Praça Central"], subregion_ids["Casa do Ancião"], "Oeste", "Livre"),
-            (subregion_ids["Casa do Ancião"], subregion_ids["Praça Central"], "Leste", "Livre"),
-            (subregion_ids["Praça Central"], subregion_ids["Taberna da Caneca Partida"], "Leste", "Livre"),
-            (subregion_ids["Taberna da Caneca Partida"], subregion_ids["Praça Central"], "Oeste", "Livre")
+            (subregion_ids["Ferraria Albnur"], subregion_ids["Praça Central"], "Sul", "Passável"),
+            (subregion_ids["Praça Central"], subregion_ids["Ferraria Albnur"], "Norte", "Passável"),
+            (subregion_ids["Praça Central"], subregion_ids["Casa do Ancião"], "Oeste", "Passável"),
+            (subregion_ids["Casa do Ancião"], subregion_ids["Praça Central"], "Leste", "Passável"),
+            (subregion_ids["Praça Central"], subregion_ids["Taberna da Caneca Partida"], "Leste", "Passável"),
+            (subregion_ids["Taberna da Caneca Partida"], subregion_ids["Praça Central"], "Oeste", "Passável")
         ]
         db.cur.executemany(
             """

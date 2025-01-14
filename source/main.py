@@ -22,9 +22,8 @@ if len(sys.argv) > 1:
        db.delete_tables()
        if arg == "reset":
            db.execute_file(init_sql)
+           populate_database(db)
    exit(0)
-
-print(get_table_names())
 
 if len(get_table_names()) == 0:
    print("Nenhuma tabela encontrada. Criando banco de dados...")
