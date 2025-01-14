@@ -1,5 +1,5 @@
 config:
-	@cp .env._template .env
+	@cp .env.template .env
 
 build:
 	@sudo docker compose up --build
