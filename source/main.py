@@ -15,7 +15,6 @@ def get_table_names() -> list:
     tables = db.cur.fetchall()
     return [table[0] for table in tables]
 
-
 # Process command line arguments.
 if len(sys.argv) > 1:
    arg = sys.argv[1]
@@ -25,8 +24,12 @@ if len(sys.argv) > 1:
            db.execute_file(init_sql)
    exit(0)
 
+print(get_table_names())
+
 if len(get_table_names()) == 0:
+   print("Nenhuma tabela encontrada. Criando banco de dados...")
    db.execute_file(init_sql)
+   print("Banco de dados e tabelas criados com sucesso!")
    populate_database(db)
 
-interface.show_menu()
+interface.game_loop(db.conn)

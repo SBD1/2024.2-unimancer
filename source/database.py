@@ -32,6 +32,8 @@ class Database:
         )
         
         self.tables = (
+            "tipo_item",
+            "tipo_npc",
             "item",
             "armazenamento",
             "regiao",
@@ -81,11 +83,12 @@ class Database:
     # So that we can create the default lines of the database again.
     def delete_tables(self) -> None:
         try:
+            for table in self.tables:
+                self.delete_table(table)
             for type in self.types:
                 self.delete_type(type)
 
-            for table in self.tables:
-                self.delete_table(table)
+            
 
             self.conn.commit()
 

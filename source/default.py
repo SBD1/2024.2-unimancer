@@ -3,7 +3,7 @@ from utils import debug
 
 def populate_database(db: Database):
     try:
-        ## Adding regions
+        # Adding regions
         default_regions = [
             ("Vilarejo do Amanhecer", "Região inicial do jogar, um vilarejo tranquilo, esbelto...", "Água")
         ]
@@ -20,7 +20,7 @@ def populate_database(db: Database):
         db.cur.execute("SELECT id FROM regiao WHERE nome = %s", ("Vilarejo do Amanhecer"))
         regiao_id = db.cur.fetchone()[0]
 
-        #insert subregions
+        # insert subregions
         default_subregions = [
             (regiao_id, None, "Ferraria Albnur", "Local de trabalho árduo onde ferramentas e armas são forjadas."),
             (regiao_id, None, "Praça Central", "O coração do vilarejo, cheio de vida e comércio."),

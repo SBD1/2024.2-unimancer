@@ -24,10 +24,11 @@ class Character:
     def get_information(self):
         print("\n === Criação de Personagem === ")
         self.nome = input("Digite o nome do personagem: ")
-        elemento = ""
+        elemento = input(f"Escolha o elemento ({', '.join(elements)}): ")
         while elemento not in elements:
             print("Elemento inválido!")
             elemento = input(f"Escolha o elemento ({', '.join(elements)}): ")
+        self.elemento = elemento
         
     def add_database(self):
         try:

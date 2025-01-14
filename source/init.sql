@@ -1,5 +1,5 @@
 CREATE TYPE TIPO_INVENTARIO AS ENUM ('Mochila', 'Grimório');
-CREATE TYPE TIPO_ELEMENTO AS ENUM ('Fogo', 'Água', 'Terra', 'Ar', 'Trevas', 'Luz');
+CREATE TYPE TIPO_ELEMENTO AS ENUM ('Fogo', 'Agua', 'Terra', 'Ar', 'Trevas', 'Luz');
 CREATE TYPE TIPO_DIFICULDADE AS ENUM ('Iniciante', 'Fácil', 'Médio', 'Difícil', 'Legendário');
 CREATE TYPE TIPO_ITEM AS ENUM ('Poção', 'Acessório');
 CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
@@ -19,7 +19,7 @@ CREATE TYPE TIPO_ACESSORIO AS ENUM (
     'Meias',
     'Bengala',
     'Manto'
- );
+);
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
