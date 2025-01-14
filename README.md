@@ -22,9 +22,12 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 
 ## Apresentações
 
-1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo).
+1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo);
+2. [Entrega do SQL](https://youtu.be/).
 
 ## Screenshots
+
+### Módulo 1
 
 **Diagrama de Entidade-Relacionamento**
 ![Diagrama de Entidade-Relacionamento](./docs/modulo 1/v2_der.drawio.png)
@@ -32,6 +35,13 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 **Modelo Relacionamento**
 ![Modelo Relacionamento](./docs/modulo 1/v1_mr.drawio.png)
 
+### Módulo 2
+
+**Diagrama de Entidade-Relacionamento**
+![Diagrama de Entidade-Relacionamento](./docs/modulo 2/v3_der.drawio.png)
+
+**Modelo Relacionamento**
+![Modelo Relacionamento](./docs/modulo 2/v2_MR.drawio.png)
 
 ## Instalação
 
@@ -55,15 +65,15 @@ Após clonar seu repositório, certifique-se de estar com o docker e o python in
 
 Caso não tenha, acesse a documentação para instalar [docker](https://docs.docker.com/) [python](https://www.python.org/)
 
-Entrando no diretório do projeto, primeiro precisamos configurar o ambiente do docker. Existe um arquivo chamado `.env_.template`, renomeie para `.env`, após isso, basta utilizar
+Entrando no diretório do projeto, primeiro precisamos configurar o ambiente do docker. Existe um arquivo chamado `.env.template`, renomeie para `.env`, após isso, basta utilizar
 
-    > docker-compose up -d
+    > make build
 
-para gerar o docker, o arquivo está configurado para utilizar a porta 5432 para o banco de dados e a porta 5050 para a interface do pg admin, certifique-se de estar com essas portas livres ou edite-as no arquivo `docker-compose.yml`
+para gerar o docker, o arquivo está configurado para utilizar a porta **5432** para o banco de dados e a porta **5050** para a interface do pg admin, certifique-se de estar com essas portas livres ou edite-as no arquivo `docker-compose.yml`
 
 Agora para definitivamente embarcar nessa jornada, basta executar o programa em seu terminal utilizando
 
-    > python source/main.py
+    > make interface
 
 ## Outros
 ### **Mecânicas do Jogo**
@@ -74,10 +84,12 @@ Agora para definitivamente embarcar nessa jornada, basta executar o programa em 
 
 - Personalize seu personagem escolhendo seu nome e especialização mágica.
 - Escolha entre os quatro elementos disponíveis:
-    - **Água**: Magias de cura e manipulação de fluxo.
-    - **Fogo**: Magias destrutivas e agressivas.
-    - **Terra**: Defesa e resistência inigualáveis.
-    - **Vento**: Velocidade e controle estratégico.
+    - **Água**: Magias de líquidos e manipulação de fluxo;
+    - **Fogo**: Magias destrutivas e agressivas;
+    - **Terra**: Defesa e resistência inigualáveis;
+    - **Vento**: Velocidade e controle estratégico;
+    - **Luz**: Magias de suporte e cura;
+    - **Trevas**: Magias de controle.
 
 ---
 
