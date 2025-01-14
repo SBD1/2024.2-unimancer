@@ -30,18 +30,22 @@ Magos especializados em um único elemento caminham pelo mundo. Sua missão é s
 ### Módulo 1
 
 **Diagrama de Entidade-Relacionamento**
-![Diagrama de Entidade-Relacionamento](./docs/modulo 1/v2_der.drawio.png)
+
+<img alt="Diagrama de Entidade-Relacionamento" src="./docs/modulo 1/v2_der.drawio.png"/>
 
 **Modelo Relacionamento**
-![Modelo Relacionamento](./docs/modulo 1/v1_mr.drawio.png)
+
+<img alt="Modelo Relacionamento" src="./docs/modulo 1/v1_mr.drawio.png"/>
 
 ### Módulo 2
 
 **Diagrama de Entidade-Relacionamento**
-![Diagrama de Entidade-Relacionamento](./docs/modulo 2/v3_der.drawio.png)
+
+<img alt="Diagrama de Entidade-Relacionamento" src="./docs/modulo 1/v1_mr.drawio.png"/>
 
 **Modelo Relacionamento**
-![Modelo Relacionamento](./docs/modulo 2/v2_MR.drawio.png)
+
+<img alt="Modelo Relacionamento" src="./docs/modulo 2/v2_MR.drawio.png"/>
 
 ## Instalação
 
