@@ -228,7 +228,7 @@ ___
 | id | INT | NOT NULL |
 | sub_regiao_id | INT | NOT NULL|
 | descricao | TEXT | NOT NULL |
-| tipo_civil | TIPO_CIVIL | NOT NULL |
+| tipo_civil | TIPO_CIVIL | - |
 
 **Chaves Estrangeiras:**
 

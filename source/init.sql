@@ -92,7 +92,7 @@ CREATE TABLE civil (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
     descricao TEXT NOT NULL,
-    tipo TIPO_CIVIL NOT NULL
+    tipo TIPO_CIVIL
 );
 
 CREATE TABLE quester (
