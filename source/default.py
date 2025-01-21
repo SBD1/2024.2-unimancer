@@ -4,6 +4,7 @@ from defaults.regions import regions
 from defaults.sub_regions import sub_regions
 from defaults.sub_regions_connections import sub_regions_connections
 from defaults.items import rings
+from defaults.items import hats
 
 def populate_database(db: Database):
     try:
@@ -12,10 +13,9 @@ def populate_database(db: Database):
         sub_regions()
         sub_regions_connections()
         
-        # Items.
-        
-        # -- Precisa do procedure `create_acessorio` para funcionar.
+        # Items: precisa do procedure `create_acessorio` para funcionar.
         # -- rings()
+        # -- hats()
 
         db.conn.commit()
 

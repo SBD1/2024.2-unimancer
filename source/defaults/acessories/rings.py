@@ -22,7 +22,7 @@ def template(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('anel', %s, %s, %s, %s, %s);
+            CALL create_acessorio('Anel', %s, %s, %s, %s, %s);
             """, default_values
         )
 
