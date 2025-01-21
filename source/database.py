@@ -39,6 +39,7 @@ class Database:
             "regiao",
             "sub_regiao",
             "sub_regiao_conexao",
+            "sub_regiao_item_conexao",
             "personagem",
             "inventario",
             "npc",

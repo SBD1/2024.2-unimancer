@@ -159,6 +159,26 @@
 
 ---
 
+### **Sub-regiao Item conexão**
+
+**Descrição:**
+
+| Nome | Tipo de Dado | Restrições |
+|------|--------------|------------|
+| sub_regiao1_id | INT | NOT NULL |
+| sub_regiao2_id | INT | NOT NULL |
+| item_id | INT | NOT NULL |
+
+**Chaves Estrangeiras:**
+
+| Coluna | Referencia Tabela | Referencia Coluna |
+|--------|--------------------|-------------------|
+| sub_regiao1_id | sub_regiao | id |
+| sub_regiao2_id | sub_regiao | id |
+| item_id | item | id |
+
+---
+
 ### **Personagem**
 
 **Descrição:** Representa os dados armazenados em cada personagem.

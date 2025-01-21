@@ -59,6 +59,12 @@ CREATE TABLE sub_regiao_conexao (
     situacao TIPO_SITUACAO NOT NULL
 );
 
+CREATE TABLE sub_regiao_item_conexao (
+    sub_regiao1_id INT NOT NULL REFERENCES sub_regiao(id),
+    sub_regiao2_id INT NOT NULL REFERENCES sub_regiao(id),
+    item_id INT NOT NULL REFERENCES item(id)
+);
+
 CREATE TABLE personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),

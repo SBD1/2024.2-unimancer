@@ -69,6 +69,12 @@ CREATE TABLE IF NOT EXISTS sub_regiao_conexao (
     situacao TIPO_SITUACAO NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS sub_regiao_item_conexao (
+    sub_regiao_1 INT NOT NULL REFERENCES sub_regiao(id),
+    sub_regiao_2 INT NOT NULL REFERENCES sub_regiao(id),
+    item_id INT NOT NULL REFERENCES item(id)
+);
+
 CREATE TABLE IF NOT EXISTS personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
