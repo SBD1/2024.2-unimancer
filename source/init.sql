@@ -25,6 +25,8 @@ CREATE TABLE item (
     id SERIAL PRIMARY KEY,
     tipo TIPO_ITEM NOT NULL,
     descricao TEXT NOT NULL,
+    -- É o numero de inimigos que você tem que matar para conseguir o item.
+    -- O cálculo é: 1 / chance_drop.
 	chance_drop INT NOT NULL CHECK (chance_drop >= 0),
 	nome VARCHAR(20) NOT NULL,
 	peso INT NOT NULL CHECK (peso >= 0),
