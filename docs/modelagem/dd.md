@@ -286,6 +286,7 @@ ___
 | id | SERIAL | PRIMARY KEY |
 | quester_id | INT | NOT NULL |
 | armazenamento_id | INT | NOT NULL |
+| item_requerimento_id | INT | NOT NULL |
 | titulo | VARCHAR(20) | NOT NULL |
 | descricao | TEXT | NOT NULL |
 | recompensa | TEXT | NOT NULL |
@@ -297,6 +298,7 @@ ___
 |--------|--------------------|-------------------|
 | quester_id | quester | id |
 | armazenamento_id | armazenamento | id |
+| item_requerimento_id | item | id |
 
 ---
 

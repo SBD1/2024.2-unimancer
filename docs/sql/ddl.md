@@ -121,6 +121,7 @@ CREATE TABLE IF NOT EXISTS quest (
     id SERIAL PRIMARY KEY,
     quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    item_requerimento_id INT NOT NULL REFERENCES item(id),
     titulo VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
