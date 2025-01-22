@@ -49,29 +49,30 @@ def sub_regions(db: Database):
             (regioes["Deserto de Areias Infinitas"], None, "Ruínas Submersas", "Ruínas antigas parcialmente enterradas na areia."),
             (regioes["Deserto de Areias Infinitas"], None, "Caverna de Cristal", "Uma caverna brilhante repleta de cristais reluzentes."),
 
-            # Montanha do Crepúsculo
-            (regioes["Montanha do Crepúsculo"], None, "Pico Congelado", "O ponto mais alto da montanha, coberto por neve eterna."),
-            (regioes["Montanha do Crepúsculo"], None, "Vilarejo dos Gigantes", "Uma vila antiga habitada por criaturas gigantes."),
-            (regioes["Montanha do Crepúsculo"], None, "Ponte Suspensa", "Uma ponte precária que conecta picos distantes."),
-            (regioes["Montanha do Crepúsculo"], None, "Cavernas Ecoantes", "Um labirinto de cavernas onde cada som é amplificado."),
-
-            # Terras Devastadas
-            (regioes["Terras Devastadas"], None, "Catedral Queimada", "Uma catedral em ruínas, marcada por chamas antigas."),
-            (regioes["Terras Devastadas"], None, "Planícies de Cinzas", "Um campo vasto e desolado, coberto de cinzas."),
-            (regioes["Terras Devastadas"], None, "Fenda Arcana", "Uma fenda mágica que emana energia arcana."),
-            (regioes["Terras Devastadas"], None, "Cemitério", "Um lugar assombrado, onde os mortos descansam inquietos."),
-
             # Caverna Cristalizada
             (regioes["Caverna Cristalizada"], None, "Trono Cristalizado", "Um trono majestoso, feito inteiramente de cristais."),
             (regioes["Caverna Cristalizada"], None, "Núcleo Cristalino", "O coração pulsante da caverna, cheio de energia."),
             (regioes["Caverna Cristalizada"], None, "Vale da Fortuna", "Um vale repleto de riquezas escondidas."),
             (regioes["Caverna Cristalizada"], None, "Entrada Cristalizada", "A entrada principal para a caverna brilhante."),
 
+            # Montanha do Crepúsculo
+            (regioes["Montanha do Crepúsculo"], None, "Pico Congelado", "O ponto mais alto da montanha, coberto por neve eterna."),
+            (regioes["Montanha do Crepúsculo"], None, "Vilarejo dos Gigantes", "Uma vila antiga habitada por criaturas gigantes."),
+            (regioes["Montanha do Crepúsculo"], None, "Ponte Suspensa", "Uma ponte precária que conecta picos distantes."),
+            (regioes["Montanha do Crepúsculo"], None, "Cavernas Ecoantes", "Um labirinto de cavernas onde cada som é amplificado."),
+
             # Caverna Soterrada
             (regioes["Caverna Soterrada"], None, "Vila Esquecida", "Uma vila perdida no tempo, enterrada nas profundezas."),
             (regioes["Caverna Soterrada"], None, "Bosque Perdido", "Um bosque sombrio e labiríntico."),
             (regioes["Caverna Soterrada"], None, "Monte Caído", "Uma montanha desmoronada que guarda segredos."),
             (regioes["Caverna Soterrada"], None, "Jardim de Ossos", "Um jardim macabro, repleto de ossos antigos.")
+        
+            # Terras Devastadas
+            (regioes["Terras Devastadas"], None, "Catedral Queimada", "Uma catedral em ruínas, marcada por chamas antigas."),
+            (regioes["Terras Devastadas"], None, "Planícies de Cinzas", "Um campo vasto e desolado, coberto de cinzas."),
+            (regioes["Terras Devastadas"], None, "Fenda Arcana", "Uma fenda mágica que emana energia arcana."),
+            (regioes["Terras Devastadas"], None, "Cemitério", "Um lugar assombrado, onde os mortos descansam inquietos."),
+
         ]
         db.cur.executemany(
             """
