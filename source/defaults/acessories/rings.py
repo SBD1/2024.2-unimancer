@@ -2,7 +2,7 @@ from database import Database
 from utils import debug
 
 # Add rings in the database.
-def template(db: Database):
+def rings(db: Database):
     try:
         # [("descricao...", "inimigos para matar para dropar", "nome", "peso", "preco")]
         default_values = [

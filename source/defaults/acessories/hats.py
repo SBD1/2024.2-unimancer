@@ -2,7 +2,7 @@ from database import Database
 from utils import debug
 
 # Add hats in the magical fantasy game where only exists magical creatures.
-def template(db: Database):
+def hats(db: Database):
     try:
         # [("descricao...", inimigos para matar para dropar, "nome", "peso", "preco")]
         default_values = [

@@ -3,8 +3,8 @@ from utils import debug
 from defaults.regions import regions
 from defaults.sub_regions import sub_regions
 from defaults.sub_regions_connections import sub_regions_connections
-from defaults.items import rings
-from defaults.items import hats
+from defaults.acessories import rings
+from defaults.acessories import hats
 
 def populate_database(db: Database):
     try:
