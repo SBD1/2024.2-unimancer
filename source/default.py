@@ -9,9 +9,9 @@ from defaults.acessories import hats
 def populate_database(db: Database):
     try:
         # Map.
-        regions()
-        sub_regions()
-        sub_regions_connections()
+        regions(db)
+        sub_regions(db)
+        sub_regions_connections(db)
         
         # Items: precisa do procedure `create_acessorio` para funcionar.
         # -- rings()

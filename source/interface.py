@@ -39,11 +39,38 @@ def header(character):
           f"energia arcana: {character.energia_arcana}/{character.energia_arcana_maxima} "
           f"moedas: {character.moedas} xp: {character.xp}/{character.xp_total} ===")
 
+# Display player inventory
+def inventory(character, conn):
+    clear_screen()
+    print(f"Inventário de === {character.nome} ===")
+    print("-" * 40)
+
+    query = """
+        SELECT i.nome, i.tipo, i.descricao, ii.id AS item_instancia_id
+        FROM inventario inv
+        JOIN item_instancia ii ON inv.id = ii.inventario_id
+        JOIN item i ON ii.item_id = i.id
+        WHERE inv.personagem_id = %s;
+    """
+
+    with conn.cursor() as cur:
+        cur.execute(query, (character.id,))
+        items = cur.fetchall()
+    
+        if not items:
+            print("O inventário está vazio.")
+        else:
+            for item in items:
+                nome, tipo, descricao, _ = item
+                print(f"- {nome} ({tipo}): {descricao}")
+        
+        print("-" * 40)
+
 # Show available subregions and handle navigation
 def navigate(conn, character):
     while True:
         clear_screen()
-        print(Fore.CYAN + "\n ----- Descrição -------" + Fore.RESET_ALL)
+        print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
         print(get_subregion_description(conn,character))
 
         print("\n--- Locais Disponíveis ---")
@@ -103,6 +130,7 @@ def game_loop(conn):
                 
             personagem_id = input("Escolha um personagem (id): ")
             character = Character(conn, personagem_id)
+            debug(f"Personagem {character.nome} selecionado com sucesso!")
 
     elif option == "criar":
         character = Character(conn) 
@@ -111,10 +139,11 @@ def game_loop(conn):
 
     while True:
         clear_screen()
-        print(Fore.CYAN + "\n--- Menu Principal ---" + Fore.RESET_ALL)
+        print(Fore.CYAN + "\n--- Menu Principal ---" + Style.RESET_ALL)
         print("1. Navegar")
         print("2. Ver status do personagem")
-        print("3. Sair")
+        print("3. Ver Inventário")
+        print("4. Sair")
         
         option = input("Escolha uma opção: ").lower()
         if option == "1":
@@ -123,6 +152,9 @@ def game_loop(conn):
             header(character)
             input("\nPressione Enter para continuar...")
         elif option == "3":
+            inventory(character, conn)
+            input("\nPressione Enter para continuar...")
+        elif option == "4":
             print("Saindo do jogo...")
             break
         else:

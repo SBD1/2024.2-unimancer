@@ -7,6 +7,7 @@ class Character:
     
     def __init__(self, conn, id = None):
         self.conn = conn
+        self.id = None
         self.nome = None
         self.elemento = None
         self.sub_regiao_id = 1
@@ -23,20 +24,21 @@ class Character:
         if not id:
             self.get_information()
         else:
-            characters_info = list_character_id(self.conn, id)
-            self.sub_regiao_id = characters_info[0]
-            self.nome = characters_info[1]
-            self.elemento = characters_info[2]
-            self.conhecimento_arcano = characters_info[3]
-            self.vida = characters_info[4]
-            self.vida_maxima = characters_info[5]
-            self.xp = characters_info[6]
-            self.xp_total = characters_info[7]
-            self.energia_arcana = characters_info[8]
-            self.energia_arcana_maxima = characters_info[9]
-            self.inteligencia = characters_info[10]
-            self.moedas = characters_info[11]
-            self.nivel = characters_info[12]
+            character_info = self.get_character_info(conn, id) 
+            self.id = character_info[0] 
+            self.sub_regiao_id = character_info[1]
+            self.nome = character_info[2]
+            self.elemento = character_info[3]
+            self.conhecimento_arcano = character_info[4]
+            self.vida = character_info[5]
+            self.vida_maxima = character_info[6]
+            self.xp = character_info[7]
+            self.xp_total = character_info[8]
+            self.energia_arcana = character_info[9]
+            self.energia_arcana_maxima = character_info[10]
+            self.inteligencia = character_info[11]
+            self.moedas = character_info[12]
+            self.nivel = character_info[13]
         
     def get_information(self):
         print("\n === Criação de Personagem === ")
@@ -82,14 +84,75 @@ class Character:
                     self.nivel
                 ))
                 self.conn.commit()
+
+                cur.execute("SELECT LASTVAL()")
+                personagem_id = cur.fetchone()[0]
+                self.id = personagem_id;
+                
+                # Mochila
+                cur.execute("""
+                    INSERT INTO inventario (
+                        personagem_id,
+                        tipo
+                        ) VALUES (%s, %s)
+                    """, (
+                        personagem_id, 
+                        "Mochila"
+                ))
+                self.conn.commit()
+                # cur.execute("SELECT LASTVAL()")
+                # inv_moch = cur.fetchone()[0]
+                # cur.execute("""
+                #     INSERT INTO mochila (
+                #         id,
+                #         personagem_id,
+                #         tipo
+                #         ) VALUES (%s, %s, %s)
+                #     """, (
+                #         inv_moch,
+                #         0, 
+                #         50,
+                # ))
+                # self.conn.commit() 
+
+                # Grimorio
+                cur.execute("""
+                    INSERT INTO inventario (
+                        personagem_id,
+                        tipo
+                        ) VALUES (%s, %s)
+                    """, (
+                        personagem_id, 
+                        "Grimório"
+                ))
+                self.conn.commit() 
+                # cur.execute("SELECT LASTVAL()")
+                # inv_grimo = cur.fetchone()[0]
+                # cur.execute("""
+                #     INSERT INTO grimorio (
+                #         id,
+                #         personagem_id,
+                #         tipo
+                #         ) VALUES (%s, %s, %s)
+                #     """, (
+                #         inv_grimo,
+                #         0, 
+                #         5,
+                # ))
+                # self.conn.commit() 
+
                 debug(f"Character: Personagem '{self.nome}' adicionado com sucesso!")
+                return self
+
         except Exception as e:
             debug(f"Character: Erro ao adicionar personagem: {e}")
     
-    def get_character_info(self, id):
-        with self.conn.cursor() as cur:
+    def get_character_info(self, conn, id): 
+        with conn.cursor() as cur:
             cur.execute("""
-                SELECT * FROM personagem
-                WHERE id = {id}
-            """)
-           
+                SELECT *
+                FROM personagem
+                WHERE id = %s
+            """, (id,))
+            result = cur.fetchone() 
+            return result
