@@ -3,7 +3,7 @@ from utils import debug
 
 def sub_regions(db: Database):
     try:
-        # consult IDs of every subregion
+        # consult IDs of every region
         db.cur.execute("SELECT id, nome FROM regiao")
         regioes = {regiao[1]: regiao[0] for regiao in db.cur.fetchall()}
 

@@ -61,10 +61,10 @@ CREATE TABLE sub_regiao_conexao (
     situacao TIPO_SITUACAO NOT NULL
 );
 
-CREATE TABLE sub_regiao_item_conexao (
+CREATE TABLE sub_regiao_acessorio_conexao (
     sub_regiao1_id INT NOT NULL REFERENCES sub_regiao(id),
     sub_regiao2_id INT NOT NULL REFERENCES sub_regiao(id),
-    item_id INT NOT NULL REFERENCES item(id)
+    acessorio_id INT NOT NULL REFERENCES acessorio(id)
 );
 
 CREATE TABLE personagem (
@@ -113,7 +113,6 @@ CREATE TABLE quest (
     id SERIAL PRIMARY KEY,
     quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
-    item_requerimento_id INT NOT NULL REFERENCES item(id),
     titulo VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,

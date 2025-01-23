@@ -159,7 +159,7 @@
 
 ---
 
-### **Sub-regiao Item conexão**
+### **Sub-regiao Acessorio conexão**
 
 **Descrição:**
 
@@ -167,7 +167,7 @@
 |------|--------------|------------|
 | sub_regiao1_id | INT | NOT NULL |
 | sub_regiao2_id | INT | NOT NULL |
-| item_id | INT | NOT NULL |
+| acessorio_id | INT | NOT NULL |
 
 **Chaves Estrangeiras:**
 
@@ -175,7 +175,7 @@
 |--------|--------------------|-------------------|
 | sub_regiao1_id | sub_regiao | id |
 | sub_regiao2_id | sub_regiao | id |
-| item_id | item | id |
+| acessorio_id | acessorio | id |
 
 ---
 
@@ -286,7 +286,6 @@ ___
 | id | SERIAL | PRIMARY KEY |
 | quester_id | INT | NOT NULL |
 | armazenamento_id | INT | NOT NULL |
-| item_requerimento_id | INT | NOT NULL |
 | titulo | VARCHAR(20) | NOT NULL |
 | descricao | TEXT | NOT NULL |
 | recompensa | TEXT | NOT NULL |
@@ -298,7 +297,6 @@ ___
 |--------|--------------------|-------------------|
 | quester_id | quester | id |
 | armazenamento_id | armazenamento | id |
-| item_requerimento_id | item | id |
 
 ---
 
