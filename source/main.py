@@ -2,7 +2,7 @@ import sys
 from database import Database
 from create_character import Character
 from default import populate_database
-import interface
+from interface import *
 
 init_sql = "./source/init.sql"
 db = Database("localhost", "postgres", "postgres", "123456")
@@ -31,4 +31,4 @@ if len(get_table_names()) == 0:
    print("Banco de dados e tabelas criados com sucesso!")
    populate_database(db)
 
-interface.game_loop(db.conn)
+game_loop(db.conn)

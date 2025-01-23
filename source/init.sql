@@ -61,12 +61,6 @@ CREATE TABLE sub_regiao_conexao (
     situacao TIPO_SITUACAO NOT NULL
 );
 
-CREATE TABLE sub_regiao_acessorio_conexao (
-    sub_regiao1_id INT NOT NULL REFERENCES sub_regiao(id),
-    sub_regiao2_id INT NOT NULL REFERENCES sub_regiao(id),
-    acessorio_id INT NOT NULL REFERENCES acessorio(id)
-);
-
 CREATE TABLE personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
@@ -224,6 +218,12 @@ CREATE TABLE efeito (
 CREATE TABLE acessorio (
     id INT PRIMARY KEY REFERENCES item(id),
     tipo TIPO_ACESSORIO NOT NULL
+);
+
+CREATE TABLE sub_regiao_acessorio_conexao (
+    sub_regiao1_id INT NOT NULL REFERENCES sub_regiao(id),
+    sub_regiao2_id INT NOT NULL REFERENCES sub_regiao(id),
+    acessorio_id INT NOT NULL REFERENCES acessorio(id)
 );
 
 CREATE TABLE acessorio_efeito (

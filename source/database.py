@@ -65,6 +65,7 @@ class Database:
             "efeito",
             "regiao_efeito",
             "acessorio",
+            "sub_regiao_acessorio_conexao",
             "acessorio_efeito",
             "pocao",
             "pocao_efeito",

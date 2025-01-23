@@ -65,7 +65,7 @@ def sub_regions(db: Database):
             (regioes["Caverna Soterrada"], None, "Vila Esquecida", "Uma vila perdida no tempo, enterrada nas profundezas."),
             (regioes["Caverna Soterrada"], None, "Bosque Perdido", "Um bosque sombrio e labiríntico."),
             (regioes["Caverna Soterrada"], None, "Monte Caído", "Uma montanha desmoronada que guarda segredos."),
-            (regioes["Caverna Soterrada"], None, "Jardim de Ossos", "Um jardim macabro, repleto de ossos antigos.")
+            (regioes["Caverna Soterrada"], None, "Jardim de Ossos", "Um jardim macabro, repleto de ossos antigos."),
         
             # Terras Devastadas
             (regioes["Terras Devastadas"], None, "Catedral Queimada", "Uma catedral em ruínas, marcada por chamas antigas."),

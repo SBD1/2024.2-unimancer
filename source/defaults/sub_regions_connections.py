@@ -70,10 +70,10 @@ def sub_regions_connections(db: Database):
             (floresta_subs["Ruínas Perdidas"], floresta_subs["Bosque Sombrio"], "Leste", "Passável"),
             (floresta_subs["Bosque Sombrio"], floresta_subs["Lago da Serenidade"], "Leste", "Passável"),
             (floresta_subs["Lago da Serenidade"], floresta_subs["Bosque Sombrio"],  "Oeste", "Passável"),
-            (floresta_subs["Bosque Sombrio"], floresta_subs["Ruínas Peridas"], "Oeste", "Passável"),
-            (floresta_subs["Ruínas Peridas"],  floresta_subs["Bosque Sombrio"], "Leste", "Passável"),
-            (floresta_subs["Ruínas Peridas"],  ruinas_subs["Entrada da Ruína"], "Oeste", "Passável"),
-            (ruinas_subs["Entrada da Ruína"], floresta_subs["Ruínas Peridas"], "Leste", "Passável")
+            (floresta_subs["Bosque Sombrio"], floresta_subs["Ruínas Perdidas"], "Oeste", "Passável"),
+            (floresta_subs["Ruínas Perdidas"],  floresta_subs["Bosque Sombrio"], "Leste", "Passável"),
+            (floresta_subs["Ruínas Perdidas"],  ruinas_subs["Entrada da Ruína"], "Oeste", "Passável"),
+            (ruinas_subs["Entrada da Ruína"], floresta_subs["Ruínas Perdidas"], "Leste", "Passável")
         ]
 
         # 2.1. Ruínas do Abismo
