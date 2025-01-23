@@ -22,5 +22,14 @@ stop:
 rmv:
 	@sudo docker compose down -v
 
-interface:
-	@python source/main.py
+int:
+	@export PYTHONPATH="./source/"
+	@python ./source/main.py
+
+int@delete:
+	@export PYTHONPATH="./source/"
+	@python ./source/main.py delete
+
+int@reset:
+	@export PYTHONPATH="./source/"
+	@python ./source/main.py reset
