@@ -102,7 +102,7 @@ class Database:
     # Execute a SQL file in the database.
     def execute_file(self, path: str) -> None:
         debug("Database: Reading file...")
-        with open(path, "r") as file:
+        with open(path, encoding='utf8', mode='r') as file:
             sql = file.read()
             self.cur.execute(sql)
             self.conn.commit()
