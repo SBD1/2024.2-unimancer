@@ -6,6 +6,10 @@ from defaults.sub_regions_connections import sub_regions_connections
 from defaults.acessories import rings
 from defaults.acessories import hats
 from defaults.enemies import default_enemies 
+from defaults.npcs.civil import civil
+from defaults.npcs.npc import npc
+from defaults.npcs.merchant import merchant
+from defaults.npcs.quester import quester
 
 def populate_database(db: Database):
     try:
@@ -15,6 +19,11 @@ def populate_database(db: Database):
         sub_regions_connections(db)
         default_enemies(db)
 
+        npc(db)
+        civil(db)
+        merchant(db)
+        quester(db)
+        
         # Items: precisa do procedure `create_acessorio` para funcionar.
         # -- rings()
         # -- hats()

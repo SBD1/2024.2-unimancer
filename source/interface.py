@@ -2,7 +2,7 @@ import os
 import platform
 from colorama import Fore, Style, init
 from create_character import Character
-from queries.query import get_subregions_character, list_all_characters
+from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion
 from utils import debug 
 
 # Initialize colorama
@@ -66,19 +66,28 @@ def inventory(character, conn):
         
         print("-" * 40)
 
-# Show available subregions and handle navigation
+# Show available subregions and handle navigation 
 def navigate(conn, character):
     while True:
         clear_screen()
         print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
         print(get_subregion_description(conn,character))
 
-        print("\n--- Locais Disponíveis ---")
+        print(Fore.YELLOW + "\n--- Locais Disponíveis ---" + Style.RESET_ALL)
         subregions = get_subregions_character(conn, character.sub_regiao_id)
 
         # show connected subregions
         for idx, (destino, direcao, situacao) in enumerate(subregions, start=1):
             print(f"{idx}. {destino} ({direcao}) - Situação: {situacao}")
+
+        print(Fore.YELLOW + "\n--- Personagens ---" + Style.RESET_ALL)
+        # list npcs in the subregion
+        npcs = list_npcs_subregion(conn, character.sub_regiao_id)
+        for npc in npcs:
+            nome, tipo = npc
+            print(f"{nome} - ({tipo})")
+        
+        print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
 
         print("0. Voltar ao menu principal.")
 
