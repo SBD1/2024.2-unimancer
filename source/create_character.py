@@ -52,94 +52,9 @@ class Character:
     def add_database(self):
         try:
             with self.conn.cursor() as cur:
-                cur.execute("""
-                    INSERT INTO personagem (
-                        sub_regiao_id,
-                        nome,
-                        elemento,
-                        conhecimento_arcano,
-                        vida,
-                        vida_maxima,
-                        xp,
-                        xp_total,
-                        energia_arcana,
-                        energia_arcana_maxima,
-                        inteligencia,
-                        moedas,
-                        nivel
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (
-                    self.sub_regiao_id,
-                    self.nome,
-                    self.elemento,
-                    self.conhecimento_arcano,
-                    self.vida,
-                    self.vida_maxima,
-                    self.xp,
-                    self.xp_total,
-                    self.energia_arcana,
-                    self.energia_arcana_maxima,
-                    self.inteligencia,
-                    self.moedas,
-                    self.nivel
-                ))
+                cur.execute("SELECT criar_personagem(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (self.sub_regiao_id, self.nome, self.elemento, self.conhecimento_arcano, self.vida, self.vida_maxima, self.xp, self.xp_total, self.energia_arcana, self.energia_arcana_maxima, self.inteligencia, self.moedas, self.nivel))
+                self.id = cur.fetchone()[0]
                 self.conn.commit()
-
-                cur.execute("SELECT LASTVAL()")
-                personagem_id = cur.fetchone()[0]
-                self.id = personagem_id;
-                
-                # Mochila
-                cur.execute("""
-                    INSERT INTO inventario (
-                        personagem_id,
-                        tipo
-                        ) VALUES (%s, %s)
-                    """, (
-                        personagem_id, 
-                        "Mochila"
-                ))
-                self.conn.commit()
-                # cur.execute("SELECT LASTVAL()")
-                # inv_moch = cur.fetchone()[0]
-                # cur.execute("""
-                #     INSERT INTO mochila (
-                #         id,
-                #         personagem_id,
-                #         tipo
-                #         ) VALUES (%s, %s, %s)
-                #     """, (
-                #         inv_moch,
-                #         0, 
-                #         50,
-                # ))
-                # self.conn.commit() 
-
-                # Grimorio
-                cur.execute("""
-                    INSERT INTO inventario (
-                        personagem_id,
-                        tipo
-                        ) VALUES (%s, %s)
-                    """, (
-                        personagem_id, 
-                        "Grimório"
-                ))
-                self.conn.commit() 
-                # cur.execute("SELECT LASTVAL()")
-                # inv_grimo = cur.fetchone()[0]
-                # cur.execute("""
-                #     INSERT INTO grimorio (
-                #         id,
-                #         personagem_id,
-                #         tipo
-                #         ) VALUES (%s, %s, %s)
-                #     """, (
-                #         inv_grimo,
-                #         0, 
-                #         5,
-                # ))
-                # self.conn.commit() 
 
                 debug(f"Character: Personagem '{self.nome}' adicionado com sucesso!")
                 return self

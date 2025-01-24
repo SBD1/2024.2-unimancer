@@ -2,9 +2,10 @@ import sys
 from database import Database
 from create_character import Character
 from default import populate_database
-from interface import *
+from interface import game_loop
 
 init_sql = "./source/init.sql"
+procedures_sql = "./source/procedure.sql"
 db = Database("localhost", "postgres", "postgres", "123456")
 
 DEBUG = True
@@ -22,6 +23,7 @@ if len(sys.argv) > 1:
        db.delete_tables()
        if arg == "reset":
            db.execute_file(init_sql)
+           db.execute_file(procedures_sql)
            populate_database(db)
    exit(0)
 
