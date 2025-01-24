@@ -267,7 +267,7 @@ CREATE OR REPLACE FUNCTION criar_feitico_dano(
     IN descricao TEXT ,
     IN elemento TEXT, -- ::TIPO_ELEMENTO,
     IN countdown INT,
-    IN conhecimento_arcano_necessario,
+    IN conhecimento_arcano_necessario INT,
     IN energia_arcana INT,
     IN dano_total INT
 ) RETURNS INT AS $$
@@ -293,7 +293,7 @@ CREATE OR REPLACE FUNCTION criar_feitico_dano_area(
     IN descricao TEXT ,
     IN elemento TEXT, -- ::TIPO_ELEMENTO,
     IN countdown INT,
-    IN conhecimento_arcano_necessario,
+    IN conhecimento_arcano_necessario int,
     IN energia_arcana INT,
     IN dano INT,
     IN qtd_inimigos_afetados INT
@@ -319,7 +319,7 @@ CREATE OR REPLACE FUNCTION criar_feitico_cura(
     IN descricao TEXT ,
     IN elemento TEXT, -- ::TIPO_ELEMENTO,
     IN countdown INT,
-    IN conhecimento_arcano_necessario,
+    IN conhecimento_arcano_necessario INT,
     IN energia_arcana INT,
     IN qtd_cura INT
 ) RETURNS INT AS $$
