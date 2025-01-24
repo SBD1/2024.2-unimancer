@@ -6,6 +6,7 @@ from interface import game_loop
 
 init_sql = "./source/init.sql"
 procedures_sql = "./source/procedure.sql"
+triggers_sql = "./source/triggers.sql"
 db = Database("localhost", "postgres", "postgres", "123456")
 
 DEBUG = True
@@ -24,6 +25,7 @@ if len(sys.argv) > 1:
        if arg == "reset":
            db.execute_file(init_sql)
            db.execute_file(procedures_sql)
+           db.execute_file(triggers_sql)
            populate_database(db)
    exit(0)
 
