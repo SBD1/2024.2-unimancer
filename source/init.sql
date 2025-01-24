@@ -269,9 +269,9 @@ CREATE TABLE inimigo_instancia (
     vida INT NOT NULL CHECK (vida >= 0)
 );
 
-CREATE TABLE combate (
-    inimigo_instancia_id INT NOT NULL REFERENCES inimigo_instancia(id),
-    personagem_id INT NOT NULL REFERENCES personagem(id),
-    dano_causado INT NOT NULL CHECK (dano_causado >= 0),
-    dano_recebido INT NOT NULL CHECK (dano_recebido >= 0)
-);
+-- CREATE TABLE combate (
+--     inimigo_instancia_id INT NOT NULL REFERENCES inimigo_instancia(id),
+--     personagem_id INT NOT NULL REFERENCES personagem(id),
+--     dano_causado INT NOT NULL CHECK (dano_causado >= 0),
+--     dano_recebido INT NOT NULL CHECK (dano_recebido >= 0)
+-- );

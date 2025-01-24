@@ -338,3 +338,89 @@ BEGIN
     RETURN v_feitico_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- PostGreSQL: create `combate`
+CREATE OR REPLACE FUNCTION criar_combate(
+    IN p_personagem_id INT,
+    IN p_xp INT,
+    IN p_dano_recebido INT, 
+    IN p_energia_arcana INT
+) RETURNS INT AS $$
+BEGIN
+    -- Atualizar o personagem com os valores calculados
+    UPDATE personagem
+    SET vida = GREATEST(vida - p_dano_recebido, 0),
+        xp = LEAST(xp + p_xp, xp_total), 
+        energia_arcana = LEAST(energia_arcana + p_energia_arcana, energia_arcana_maxima)
+    WHERE id = p_personagem_id;
+
+    RETURN p_personagem_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- PostGreSQL: create `aprender_feitico`
+CREATE OR REPLACE FUNCTION aprender_feitico(
+    IN p_personagem_id INT,
+    IN p_feitico_id INT
+) RETURNS INT AS $$
+DECLARE
+    v_inventario_id INT;
+    v_requisito_id INT;
+    v_possui_requisito BOOLEAN;
+BEGIN
+    SELECT id
+    INTO v_inventario_id
+    FROM inventario
+    WHERE personagem_id = p_personagem_id;
+
+    SELECT de_id 
+    INTO v_requisito_id 
+    FROM feitico_requerimento
+    WHERE para_id = feitico_id;
+
+    SELECT EXISTS (
+        SELECT 1
+        FROM feitico_aprendido
+        WHERE inventario_id = v_inventario_id AND feitico_id = p_feitico_id
+    ) INTO v_possui_requisito;
+
+    IF v_possui_requisito THEN
+        INSERT INTO feitico_aprendido(inventario_id, feitico_id)
+        VALUES (inventario_id, feitico_id);
+    END IF;
+
+    RETURN p_personagem_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- PostGreSQL: create `criar_transacao`
+CREATE OR REPLACE FUNCTION criar_transacao(
+    IN p_mercador_id INT,
+    IN p_personagem_id INT,
+    IN p_item_id INT
+) RETURNS INT AS $$
+DECLARE
+    v_inventario_id INT;
+    v_transacao_id INT;
+BEGIN
+    -- Select inventario personagem
+    SELECT id
+    INTO v_inventario_id
+    FROM inventario
+    WHERE personagem_id = p_personagem_id;
+
+    -- Criar instancia de Item
+    INSERT INTO item_instancia (item_id, inventario_id)
+    VALUES (p_item_id, v_inventario_id);
+
+    -- Cria transacao
+    INSERT INTO transacao (mercador_id, personagem_id, item_id)
+    VALUES (p_mercador_id, p_personagem_id, p_item_id)
+    RETURNING id INTO v_transacao_id;
+
+    RETURN v_transacao_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
