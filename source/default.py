@@ -6,6 +6,7 @@ from defaults.sub_regions_connections import sub_regions_connections
 from defaults.acessories import rings
 from defaults.acessories import hats
 from defaults.enemies import default_enemies 
+from defaults.enemies_instances import create_enemy_instances
 from defaults.npcs.civil import civil
 from defaults.npcs.npc import npc
 from defaults.npcs.merchant import merchant
@@ -18,6 +19,7 @@ def populate_database(db: Database):
         sub_regions(db)
         sub_regions_connections(db)
         default_enemies(db)
+        create_enemy_instances(db)
 
         npc(db)
         civil(db)
