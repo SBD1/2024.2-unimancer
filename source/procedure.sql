@@ -340,7 +340,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `combate`
-CREATE OR REPLACE FUNCTION criar_combate(
+CREATE OR REPLACE FUNCTION finalizar_combate(
     IN p_personagem_id INT,
     IN p_xp INT,
     IN p_dano_recebido INT, 

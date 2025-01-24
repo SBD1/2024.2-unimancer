@@ -86,7 +86,7 @@ class Database:
             "criar_feitico_dano",
             "criar_feitico_dano_area",
             "criar_feitico_cura",
-            "criar_combate",
+            "finalizar_combate",
             "aprender_feitico",
             "criar_transacao"
         )
