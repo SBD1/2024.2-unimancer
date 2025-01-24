@@ -76,8 +76,19 @@ class Database:
         )
 
         self.procedures = (
+            "criar_civil",
+            "criar_quester",
+            "criar_acessorio",
+            "criar_mercador",
+            "criar_inimigo",
+            "criar_personagem",
+            "criar_pocao",
+            "criar_feitico_dano",
+            "criar_feitico_dano_area",
+            "criar_feitico_cura",
+            "criar_combate",
             "aprender_feitico",
-            "criar_combate"
+            "criar_transacao"
         )
         
     def delete_type(self, type_name: str) -> None:
