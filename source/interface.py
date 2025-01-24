@@ -2,7 +2,7 @@ import os
 import platform
 from colorama import Fore, Style, init
 from create_character import Character
-from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion
+from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory
 from utils import debug 
 
 # Initialize colorama
@@ -14,6 +14,16 @@ def clear_screen():
         os.system("cls")
     else:
         os.system("clear")
+
+def show_title():
+    print("")
+    print(" ██╗   ██╗███╗   ██╗██╗███╗   ███╗ █████╗ ███╗   ██╗ ██████╗███████╗██████╗ ")
+    print(" ██║   ██║████╗  ██║██║████╗ ████║██╔══██╗████╗  ██║██╔════╝██╔════╝██╔══██╗")
+    print(" ██║   ██║██╔██╗ ██║██║██╔████╔██║███████║██╔██╗ ██║██║     █████╗  ██████╔╝")
+    print(" ██║   ██║██║╚██╗██║██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗")
+    print(" ╚██████╔╝██║ ╚████║██║██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗██║  ██║")
+    print("  ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝  ╚═╝")
+    print("")
 
 # Show initial menu of the game and return option chosen.
 def show_menu() -> str:
@@ -45,26 +55,16 @@ def inventory(character, conn):
     print(f"Inventário de === {character.nome} ===")
     print("-" * 40)
 
-    query = """
-        SELECT i.nome, i.tipo, i.descricao, ii.id AS item_instancia_id
-        FROM inventario inv
-        JOIN item_instancia ii ON inv.id = ii.inventario_id
-        JOIN item i ON ii.item_id = i.id
-        WHERE inv.personagem_id = %s;
-    """
+    # items = list_all_items(conn, character.id)
 
-    with conn.cursor() as cur:
-        cur.execute(query, (character.id,))
-        items = cur.fetchall()
-    
-        if not items:
-            print("O inventário está vazio.")
-        else:
-            for item in items:
-                nome, tipo, descricao, _ = item
-                print(f"- {nome} ({tipo}): {descricao}")
-        
-        print("-" * 40)
+    #if not items:
+    #    print("O inventário está vazio.")
+    #else:
+    #    for item in items:
+    #        nome, descricao, qtd = item
+    #        print(f"- {nome} ({descricao}): {qtd}")
+    #
+    print("-" * 40)
 
 # Show available subregions and handle navigation 
 def navigate(conn, character):
@@ -124,29 +124,40 @@ def get_subregion_description(conn, character):
 
 # Main game loop
 def game_loop(conn):
-    option = show_menu()
-    characters = list_all_characters(conn)
-    if option == "sair":
-        print("Saindo do jogo...")
-        return
+    ok = False
+    while(ok == False):
+        clear_screen()
+        show_title()
+        option = show_menu()
+        characters = list_all_characters(conn)
 
-    elif option == "listar":
-        if not characters:
-            print("Nenhum personagem encontrado")
-        else:
-            for idx, character in enumerate(characters, start=1):
-                print(f"\n Personagem: {idx}, ID: {character[0]}, nome: {character[1]}, elemento: {character[2]}") 
-                
-            personagem_id = input("Escolha um personagem (id): ")
-            character = Character(conn, personagem_id)
-            debug(f"Personagem {character.nome} selecionado com sucesso!")
+        if option == "sair":
+            print("Saindo do jogo...")
+            return
 
-    elif option == "criar":
-        character = Character(conn) 
-        character.add_database()  
-        debug(f"Personagem {character.nome} criado com sucesso!")
+        elif option == "listar":
+            if not characters:
+                clear_screen()
+                print(Fore.RED + "Nenhum personagem encontrado" + Style.RESET_ALL)
+                input("\nPressione Enter para continuar...")
+                ok = False
+            else:
+                for idx, character in enumerate(characters, start=1):
+                    print(f"\n Personagem: {idx}, ID: {character[0]}, nome: {character[1]}, elemento: {character[2]}") 
+                    
+                personagem_id = input("Escolha um personagem (id): ")
+                character = Character(conn, personagem_id)
+                debug(f"Personagem {character.nome} selecionado com sucesso!")
+                ok = True
+
+        elif option == "criar":
+            character = Character(conn) 
+            character.add_database()  
+            debug(f"Personagem {character.nome} criado com sucesso!")
+            ok = True
 
     while True:
+        show_title()
         clear_screen()
         print(Fore.CYAN + "\n--- Menu Principal ---" + Style.RESET_ALL)
         print("1. Navegar")

@@ -65,3 +65,9 @@ def list_character_id(conn, character_id):
         cur.execute(f"SELECT * FROM personagem WHERE id = {character_id}")
         result = cur.fetchone()
         return result
+    
+def list_item_inventory(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(f"SELECT i.nome, i.descricao, ii.quantidade FROM inventario inv JOIN item_instancia ii ON inv.id = ii.inventario_id JOIN item i ON ii.item_id = i.id WHERE inv.personagem_id = {character_id};")
+        result = cur.fetchall()
+        return result

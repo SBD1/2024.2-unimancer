@@ -14,22 +14,17 @@ def civil(db: Database):
             (npcs["Renan"], 4, "Visto frequentemente perto do rio, pescando ou relaxando.", None),
             (npcs["Millena"], 5, "Uma pessoa tranquila que observa o movimento da cidade sem se envolver.", None),
             (npcs["Arius"], 1, "Um homem que parece estar sempre em busca de algo.", "Quester"),
-            (npcs["ELysia"], 3, "Uma mulher que parece estar sempre em busca de algo.", "Quester"),
+            (npcs["Elysia"], 3, "Uma mulher que parece estar sempre em busca de algo.", "Quester"),
             (npcs["Isolde"], 1, "Uma mulher que parece estar sempre em busca de algo.", "Quester"),
             (npcs["Kael"], 4, "Um homem que parece estar sempre em busca de algo.", "Quester"),
             (npcs["Jason"], 4, "Um homem que parece estar sempre em busca de algo.", "Mercador"),
             (npcs["Nico"], 4, "Um homem que parece estar sempre em busca de algo.", "Mercador"),
         ]
-        db.cur.executemany(
-            """
-            INSERT INTO civil (id, sub_regiao_id, descricao, tipo)
-            VALUES (%s, %s, %s, %s)
-            """, civis
-        )
-
-        debug("default: Civils added successfully!")
+        db.cur.executemany(""" SELECT criar_civil(%s, %s, %s, %s) """,civis)
 
         db.conn.commit()
+        debug("default: Civils added successfully!")
+        
 
     except Exception as e:
         db.conn.rollback()
