@@ -187,6 +187,7 @@ CREATE TABLE IF NOT EXISTS feitico_dano (
 
 CREATE TABLE IF NOT EXISTS feitico_dano_area (
     id INT PRIMARY KEY REFERENCES feitico(id),
+    dano INT NOT NULL CHECK (dano >= 0),
     qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0)
 );
 

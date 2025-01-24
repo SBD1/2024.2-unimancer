@@ -172,6 +172,7 @@ CREATE TABLE feitico_dano (
 
 CREATE TABLE feitico_dano_area (
     id INT PRIMARY KEY REFERENCES feitico(id),
+    dano INT NOT NULL CHECK (dano >= 0),
     qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0)
 );
 
@@ -244,7 +245,7 @@ CREATE TABLE pocao_efeito (
 
 CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT REFERENCES armazenamento(id), -- change to not null
+    armazenamento_id INT REFERENCES armazenamento(id), -- To-do: change to not null
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),
@@ -253,7 +254,7 @@ CREATE TABLE inimigo (
     moedas_obtidas INT NOT NULL CHECK (moedas_obtidas >= 0),
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
     energia_arcana_maxima INT NOT NULL CHECK (energia_arcana_maxima >= 0),
-    dialogo TEXT -- change to not null
+    dialogo TEXT -- To-do: change to not null
 );
 
 CREATE TABLE armazenamento_inimigo (
