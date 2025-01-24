@@ -86,7 +86,7 @@ CREATE TABLE inventario (
 
 CREATE TABLE npc (
     id SERIAL PRIMARY KEY,
-	nome VARCHAR(20) NOT NULL,
+	nome VARCHAR(100) NOT NULL,
     tipo TIPO_NPC NOT NULL
 );
 
@@ -244,7 +244,7 @@ CREATE TABLE pocao_efeito (
 
 CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    armazenamento_id INT REFERENCES armazenamento(id), -- change to not null
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),
@@ -253,7 +253,7 @@ CREATE TABLE inimigo (
     moedas_obtidas INT NOT NULL CHECK (moedas_obtidas >= 0),
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
     energia_arcana_maxima INT NOT NULL CHECK (energia_arcana_maxima >= 0),
-    dialogo TEXT NOT NULL
+    dialogo TEXT -- change to not null
 );
 
 CREATE TABLE armazenamento_inimigo (

@@ -159,7 +159,7 @@ def sub_regions_connections(db: Database):
             """, connections
         )
         db.conn.commit()
-        debug("All subregions added successfully")
+        debug("All subregions-connection added successfully")
 
     except Exception as e:
         db.conn.rollback()
