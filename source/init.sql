@@ -128,7 +128,7 @@ CREATE TABLE item_instancia (
 
 CREATE TABLE mercador (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    armazenamento_id INT REFERENCES armazenamento(id),
     dialogo TEXT NOT NULL
 );
 

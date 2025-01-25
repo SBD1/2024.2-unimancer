@@ -21,10 +21,10 @@ BEGIN
         tipo
     )
     VALUES (
-        id,
-        sub_regiao,
+        npc_id,
+        sub_regiao_id,
         descricao,
-        tipo
+        tipo::tipo_civil
     );
     RETURN npc_id;
 END;
