@@ -11,7 +11,7 @@ def npc(db: Database):
             ("Renan", "Civil"),
             ("Millena", "Civil"),
             ("Arius", "Civil"),
-            ("ELysia", "Civil"),
+            ("Elysia", "Civil"),
             ("Isolde", "Civil"),
             ("Kael", "Civil"),
             ("Jason", "Civil"),
