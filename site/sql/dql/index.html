@@ -1,0 +1,1632 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../dml/">
+      
+      
+        <link rel="next" href="../../apresentacoes/1a-entrega/">
+      
+      
+      <link rel="icon" href="../../img/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>DQL - Unimancer</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/logo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-query-language-dql" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Unimancer" class="md-header__button md-logo" aria-label="Unimancer" data-md-component="logo">
+      
+  <img src="../../img/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Unimancer
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DQL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Trocar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Trocar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Trocar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Trocar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SBD1/2024.2-unimancer" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unimancer
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Unimancer" class="md-nav__button md-logo" aria-label="Unimancer" data-md-component="logo">
+      
+  <img src="../../img/logo.png" alt="logo">
+
+    </a>
+    Unimancer
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SBD1/2024.2-unimancer" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unimancer
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Modelagem
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Modelagem
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelagem/der/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Diagrama Entidade-Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelagem/mer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Entidade-Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelagem/mr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Relacional
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelagem/dd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dicionário de dados
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SQL
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            SQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ddl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DDL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    DQL
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    DQL
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introdução
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dql" class="md-nav__link">
+    <span class="md-ellipsis">
+      DQL
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-itens-e-armazenamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Itens e Armazenamento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Itens e Armazenamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-todos-os-itens-disponiveis-no-jogo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar todos os itens disponíveis no jogo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-itens-armazenados-em-um-local-especifico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar itens armazenados em um local específico
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar-itens-no-inventario-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verificar itens no inventário de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-regioes-e-sub-regioes" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Regiões e Sub-regiões
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Regiões e Sub-regiões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-todas-as-regioes-e-seus-elementos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar todas as regiões e seus elementos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-sub-regioes-de-uma-regiao-especifica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar sub-regiões de uma região específica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-conexoes-entre-sub-regioes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar conexões entre sub-regiões
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-personagens-e-inventarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Personagens e Inventários
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Personagens e Inventários">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detalhes-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detalhes de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-a-mochila-e-o-peso-da-mochila-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar a mochila e o peso da mochila de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-itens-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar itens de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-pocoes-do-inventario-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar poções do inventário de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-os-feiticos-aprendidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar os feitiços aprendidos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-os-efeitos-de-um-acessorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar os efeitos de um acessório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-todas-as-subregioes-que-um-personagem-pode-ir" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar todas as subregiões que um personagem pode ir
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-npcs-e-interacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. NPCs e Interações
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. NPCs e Interações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-npcs-em-uma-sub-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar NPCs em uma sub-região
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-mercador-e-seus-itens-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar mercador e seus itens disponíveis
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-dialogos-dos-mercadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar diálogos dos mercadores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-transacoes-entre-mercador-e-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar transações entre mercador e personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-feiticos-e-grimorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Feitiços e Grimórios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Feitiços e Grimórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-aprendidos-por-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços aprendidos por um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-feiticos-em-pergaminhos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar feitiços em pergaminhos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-dano-em-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Dano em área
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-dano" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Dano
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-cura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Cura
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-quests" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Quests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Quests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-quests-disponiveis-por-um-quester" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar quests disponíveis por um Quester
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-progresso-de-quests-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar progresso de quests de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-combates" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Combates
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Combates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consultar-historico-de-combates-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar histórico de combates de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-inimigos-em-uma-sub-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar inimigos em uma sub-região
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Histórico de Versão
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Apresentações
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Apresentações
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apresentacoes/1a-entrega/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Primeira entrega
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introdução
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dql" class="md-nav__link">
+    <span class="md-ellipsis">
+      DQL
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-itens-e-armazenamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Itens e Armazenamento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Itens e Armazenamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-todos-os-itens-disponiveis-no-jogo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar todos os itens disponíveis no jogo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-itens-armazenados-em-um-local-especifico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar itens armazenados em um local específico
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar-itens-no-inventario-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verificar itens no inventário de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-regioes-e-sub-regioes" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Regiões e Sub-regiões
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Regiões e Sub-regiões">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-todas-as-regioes-e-seus-elementos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar todas as regiões e seus elementos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-sub-regioes-de-uma-regiao-especifica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar sub-regiões de uma região específica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-conexoes-entre-sub-regioes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar conexões entre sub-regiões
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-personagens-e-inventarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Personagens e Inventários
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Personagens e Inventários">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detalhes-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detalhes de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-a-mochila-e-o-peso-da-mochila-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar a mochila e o peso da mochila de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-itens-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar itens de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-pocoes-do-inventario-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar poções do inventário de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-os-feiticos-aprendidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar os feitiços aprendidos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-os-efeitos-de-um-acessorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar os efeitos de um acessório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-todas-as-subregioes-que-um-personagem-pode-ir" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar todas as subregiões que um personagem pode ir
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-npcs-e-interacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. NPCs e Interações
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. NPCs e Interações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-npcs-em-uma-sub-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar NPCs em uma sub-região
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-mercador-e-seus-itens-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar mercador e seus itens disponíveis
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-dialogos-dos-mercadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar diálogos dos mercadores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-transacoes-entre-mercador-e-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar transações entre mercador e personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-feiticos-e-grimorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Feitiços e Grimórios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Feitiços e Grimórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-aprendidos-por-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços aprendidos por um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-feiticos-em-pergaminhos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar feitiços em pergaminhos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-dano-em-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Dano em área
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-dano" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Dano
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-feiticos-de-cura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar feitiços de Cura
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-quests" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Quests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Quests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-quests-disponiveis-por-um-quester" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar quests disponíveis por um Quester
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-progresso-de-quests-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar progresso de quests de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-combates" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Combates
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Combates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consultar-historico-de-combates-de-um-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar histórico de combates de um personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-inimigos-em-uma-sub-regiao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar inimigos em uma sub-região
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Histórico de Versão
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="data-query-language-dql">Data Query Language - DQL</h1>
+<h2 id="introducao">Introdução</h2>
+<p>DQL é um conjunto de comandos que permitem consultar e recuperar dados de um banco de dados relacional.</p>
+<h2 id="dql">DQL</h2>
+<h3 id="1-itens-e-armazenamento">1. Itens e Armazenamento</h3>
+<h4 id="listar-todos-os-itens-disponiveis-no-jogo">Listar todos os itens disponíveis no jogo</h4>
+<pre><code class="language-sql">SELECT * FROM item;
+</code></pre>
+<h4 id="consultar-itens-armazenados-em-um-local-especifico">Consultar itens armazenados em um local específico</h4>
+<pre><code class="language-sql">SELECT a.id, i.nome, a.quantidade 
+FROM armazenamento a
+JOIN item i ON a.item_id = i.id;
+</code></pre>
+<h4 id="verificar-itens-no-inventario-de-um-personagem">Verificar itens no inventário de um personagem</h4>
+<pre><code class="language-sql">SELECT ii.id, i.nome, i.tipo 
+FROM item_instancia ii
+JOIN item i ON ii.item_id = i.id
+WHERE ii.inventario_id = (SELECT id FROM inventario WHERE personagem_id = $1);
+</code></pre>
+<hr />
+<h3 id="2-regioes-e-sub-regioes">2. Regiões e Sub-regiões</h3>
+<h4 id="listar-todas-as-regioes-e-seus-elementos">Listar todas as regiões e seus elementos</h4>
+<pre><code class="language-sql">SELECT * FROM regiao;
+</code></pre>
+<h4 id="listar-sub-regioes-de-uma-regiao-especifica">Listar sub-regiões de uma região específica</h4>
+<pre><code class="language-sql">SELECT sr.id, sr.nome, sr.descricao 
+FROM sub_regiao sr
+WHERE sr.regiao_id = $1;
+</code></pre>
+<h4 id="consultar-conexoes-entre-sub-regioes">Consultar conexões entre sub-regiões</h4>
+<pre><code class="language-sql">SELECT src.sub_regiao_1, src.sub_regiao_2, src.direcao, src.situacao 
+FROM sub_regiao_conexao src;
+</code></pre>
+<hr />
+<h3 id="3-personagens-e-inventarios">3. Personagens e Inventários</h3>
+<h4 id="detalhes-de-um-personagem">Detalhes de um personagem</h4>
+<pre><code class="language-sql">SELECT * FROM personagem WHERE id = $1;
+</code></pre>
+<h4 id="consultar-a-mochila-e-o-peso-da-mochila-de-um-personagem">Consultar a mochila e o peso da mochila de um personagem</h4>
+<pre><code class="language-sql">SELECT m.id, m.peso, m.peso_total
+FROM mochila m
+JOIN inventario inv ON m.id = inv.id
+WHERE inv.personagem_id = $1;
+</code></pre>
+<h4 id="consultar-itens-de-um-personagem">Consultar itens de um personagem</h4>
+<pre><code class="language-sql">SELECT i.nome, i.descricao, ii.quantidade
+FROM inventario inv
+JOIN item_instancia ii ON inv.id = ii.inventario_id
+JOIN item i ON ii.item_id = i.id
+WHERE inv.personagem_id = $1;
+</code></pre>
+<h4 id="consultar-pocoes-do-inventario-de-um-personagem">Consultar poções do inventário de um personagem</h4>
+<pre><code class="language-sql">SELECT p.id, p.turnos, p.usado, i.nome AS item_nome
+FROM pocao p
+JOIN item i ON p.id = i.id
+JOIN item_instancia ii ON i.id - ii.item_id
+JOIN inventario inv ON ii.inventario_id = inv.id
+WHERE inv.personagem_id = $1;
+</code></pre>
+<h4 id="consultar-os-feiticos-aprendidos">Consultar os feitiços aprendidos</h4>
+<pre><code class="language-sql">SELECT f.descricao, f.elemento, f.tipo
+FROM feitico f
+JOIN feitico_aprendido fa ON f.id = fa.feitico_id
+WHERE fa.inventario_id = $1; -- $1 is iventory id's
+</code></pre>
+<h4 id="consultar-os-efeitos-de-um-acessorio">Consultar os efeitos de um acessório</h4>
+<pre><code class="language-sql">SELECT e.nome, e.descricao, e.defesa, e.inteligencia, e.critico
+FROM efeito e
+JOIN acessorio_efeito ae ON e.id = ae.efeito_id
+JOIN acessorio a ON ae.acessorio_id = a.id
+JOIN item_instancia ii ON a.id = ii.item_id
+JOIN inventario inv ON ii.inventario_id = inv.id
+WHERE inv.personagem_id = $1;
+</code></pre>
+<h4 id="consultar-todas-as-subregioes-que-um-personagem-pode-ir">Consultar todas as subregiões que um personagem pode ir</h4>
+<pre><code class="language-sql">SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
+FROM sub_regiao_conexao src
+JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
+JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
+WHERE sr1.id = %s;
+</code></pre>
+<hr />
+<h3 id="4-npcs-e-interacoes">4. NPCs e Interações</h3>
+<h4 id="listar-npcs-em-uma-sub-regiao">Listar NPCs em uma sub-região</h4>
+<pre><code class="language-sql">SELECT n.id, n.nome, n.tipo 
+FROM npc n
+JOIN civil c ON c.id = n.id
+WHERE c.sub_regiao_id = $1;
+</code></pre>
+<h4 id="listar-mercador-e-seus-itens-disponiveis">Listar mercador e seus itens disponíveis</h4>
+<pre><code class="language-sql">SELECT m.id, m.dialogo, i.nome, a.quantidade 
+FROM mercador m
+JOIN armazenamento_mercador am ON am.mercador_id = m.id
+JOIN armazenamento a ON a.id = am.armazenamento_id
+JOIN item i ON i.id = a.item_id
+WHERE m.id = $1;
+</code></pre>
+<h4 id="listar-dialogos-dos-mercadores">Listar diálogos dos mercadores</h4>
+<pre><code class="language-sql">SELECT m.id, m.dialogo
+FROM mercador m;
+</code></pre>
+<h4 id="consultar-transacoes-entre-mercador-e-personagem">Consultar transações entre mercador e personagem</h4>
+<pre><code class="language-sql">SELECT t.id, m.dialogo AS mercador, p.nome AS personagem, i.nome AS item
+FROM transcoes t
+JOIN mercador m ON t.mercador_id = m.id
+JOIN personagem p ON t.personagem_id = p.id
+JOIN item i ON t.item_id = i.id;
+</code></pre>
+<hr />
+<h3 id="5-feiticos-e-grimorios">5. Feitiços e Grimórios</h3>
+<h4 id="listar-feiticos-aprendidos-por-um-personagem">Listar feitiços aprendidos por um personagem</h4>
+<pre><code class="language-sql">SELECT f.id, f.descricao, f.elemento, f.tipo 
+FROM feitico_aprendido fa
+JOIN feitico f ON fa.feitico_id = f.id
+WHERE fa.inventario_id = (SELECT id FROM inventario WHERE personagem_id = $1);
+</code></pre>
+<h4 id="consultar-feiticos-em-pergaminhos">Consultar feitiços em pergaminhos</h4>
+<pre><code class="language-sql">SELECT p.id, p.cor, f.descricao, f.elemento 
+FROM pergaminho p
+JOIN feitico_escrito fe ON fe.item_id = p.id
+JOIN feitico f ON fe.feitico_id = f.id;
+</code></pre>
+<h4 id="listar-feiticos-de-dano-em-area">Listar feitiços de Dano em área</h4>
+<pre><code class="language-sql">SELECT f.descricao, f.elemento, f.energia_arcana, fda.qtd_inimigos_afetados
+FROM feitico f
+JOIN feitico_dano_area fda ON f.id = fta.id;
+</code></pre>
+<h4 id="listar-feiticos-de-dano">Listar feitiços de Dano</h4>
+<pre><code class="language-sql">SELECT f.descricao, f.elemento, f.energia_arcana, fd.dano_total
+FROM feitico f
+JOIN feitico_dano fd ON f.id = fd.id;
+</code></pre>
+<h4 id="listar-feiticos-de-cura">Listar feitiços de Cura</h4>
+<pre><code class="language-sql">SELECT f.descricao, f.elemento, f.energia_arcana, fc.qtd_cura
+FROM feitico f
+JOIN feitico_dano fc ON f.id = fc.id;
+</code></pre>
+<hr />
+<h3 id="6-quests">6. Quests</h3>
+<h4 id="listar-quests-disponiveis-por-um-quester">Listar quests disponíveis por um Quester</h4>
+<pre><code class="language-sql">SELECT q.id, q.titulo, q.descricao, q.dificuldade, q.recompensa 
+FROM quest q
+WHERE q.quester_id = $1;
+</code></pre>
+<h4 id="consultar-progresso-de-quests-de-um-personagem">Consultar progresso de quests de um personagem</h4>
+<pre><code class="language-sql">SELECT qi.id, q.titulo, qi.completed 
+FROM quest_instancia qi
+JOIN quest q ON qi.quest_id = q.id
+WHERE qi.personagem_id = $1;
+</code></pre>
+<hr />
+<h3 id="7-combates">7. Combates</h3>
+<h4 id="consultar-historico-de-combates-de-um-personagem">Consultar histórico de combates de um personagem</h4>
+<pre><code class="language-sql">SELECT c.inimigo_instancia_id, c.dano_causado, c.dano_recebido 
+FROM combate c
+WHERE c.personagem_id = $1;
+</code></pre>
+<h4 id="listar-inimigos-em-uma-sub-regiao">Listar inimigos em uma sub-região</h4>
+<pre><code class="language-sql">SELECT ii.id, i.nome, ii.vida 
+FROM inimigo_instancia ii
+JOIN inimigo i ON ii.inimigo_id = i.id
+WHERE ii.sub_regiao_id = $1;
+</code></pre>
+<h2 id="historico-de-versao">Histórico de Versão</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Versão</th>
+<th style="text-align: center;">Data</th>
+<th style="text-align: center;">Descrição</th>
+<th style="text-align: center;">Autor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>1.0</code></td>
+<td style="text-align: center;">13/01/2024</td>
+<td style="text-align: center;">Criação</td>
+<td style="text-align: center;">Grupo</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>1.1</code></td>
+<td style="text-align: center;">13/01/2024</td>
+<td style="text-align: center;">Correções e Adições</td>
+<td style="text-align: center;">Grupo</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
