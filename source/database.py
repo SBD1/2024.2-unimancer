@@ -74,12 +74,31 @@ class Database:
             "inimigo_instancia",
             "combate"
         )
+
+        self.procedures = (
+            "criar_civil",
+            "criar_quester",
+            "criar_acessorio",
+            "criar_mercador",
+            "criar_inimigo",
+            "criar_personagem",
+            "criar_pocao",
+            "criar_feitico_dano",
+            "criar_feitico_dano_area",
+            "criar_feitico_cura",
+            "finalizar_combate",
+            "aprender_feitico",
+            "criar_transacao"
+        )
         
     def delete_type(self, type_name: str) -> None:
         self.cur.execute(f"DROP TYPE IF EXISTS {type_name} CASCADE")
         
     def delete_table(self, table_name: str) -> None:
         self.cur.execute(f"DROP TABLE IF EXISTS {table_name} CASCADE")
+
+    def delete_procedures(self, procedure_name: str) -> None:
+        self.cur.execute(f"DROP FUNCTION IF EXISTS {procedure_name} CASCADE")
 
     # For debugging purposes, force delete every single table of the database and it's dependencies.
     # So that we can create the default lines of the database again.
@@ -89,6 +108,8 @@ class Database:
                 self.delete_table(table)
             for type in self.types:
                 self.delete_type(type)
+            for procedure in self.procedures:
+                self.delete_procedures(procedure)
 
             
 

@@ -15,8 +15,8 @@ def merchant(db: Database):
         
         db.cur.executemany(
             """
-            INSERT INTO quester (id, dialogo, num_quests)
-            VALUES (%s, %s, %s)
+            INSERT INTO mercador (id, dialogo)
+            VALUES (%s, %s)
             """, mercador
         )
 

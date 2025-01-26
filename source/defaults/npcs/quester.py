@@ -10,7 +10,7 @@ def quester(db: Database):
 
         questers = [
             (npcs["Arius"], "Bem-vindo, jovem. Você deseja embarcar em uma jornada?", 3),
-            (npcs["ELysia"], "Eu vi algo estranho nas montanhas... Está preparado?", 2),
+            (npcs["Elysia"], "Eu vi algo estranho nas montanhas... Está preparado?", 2),
             (npcs["Isolde"], "Você está pronto para enfrentar o que há de mais perigoso neste mundo?", 1),
             (npcs["Kael"], "Tenho algumas pistas para você, mas isso vai exigir coragem.", 4),
         ]
