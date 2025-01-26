@@ -4,7 +4,7 @@ CREATE TYPE TIPO_DIFICULDADE AS ENUM ('Iniciante', 'Fácil', 'Médio', 'Difícil
 CREATE TYPE TIPO_ITEM AS ENUM ('Poção', 'Acessório');
 CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
 CREATE TYPE TIPO_NPC AS ENUM ('Civil', 'Inimigo');
-CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
+CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester', 'Civil');
 CREATE TYPE TIPO_DIRECAO AS ENUM ('Norte', 'Sul', 'Leste', 'Oeste');
 CREATE TYPE TIPO_SITUACAO AS ENUM ('Passável', 'Não Passável');
 CREATE TYPE TIPO_ACESSORIO AS ENUM (
@@ -94,7 +94,7 @@ CREATE TABLE civil (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
     descricao TEXT NOT NULL,
-    tipo TIPO_CIVIL
+    tipo TIPO_CIVIL NOT NULL
 );
 
 CREATE TABLE quester (

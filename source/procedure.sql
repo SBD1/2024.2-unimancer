@@ -5,11 +5,12 @@ CREATE OR REPLACE FUNCTION criar_civil(
     IN nome VARCHAR(100),
     IN sub_regiao_id INT,
     IN descricao TEXT,
-    IN tipo TEXT
+    IN tipo TIPO_CIVIL
 ) RETURNS INT AS $$
 DECLARE 
     npc_id INT;
 BEGIN
+
     INSERT INTO npc (nome, tipo)
     VALUES (nome, 'Civil')
     RETURNING id INTO npc_id;
@@ -24,8 +25,11 @@ BEGIN
         npc_id,
         sub_regiao_id,
         descricao,
-        tipo::tipo_civil
+        tipo
     );
+
+    -- RAISE NOTICE 'Civil inserido com id=%', npc_id;
+
     RETURN npc_id;
 END;
 $$ LANGUAGE plpgsql;

@@ -38,6 +38,20 @@ def get_subregions_character(conn, sub_regiao_id):
         result = cur.fetchall()
         return result
 
+# List enemys from a subregion
+def list_enemys_subregion(conn, sub_regiao_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """            
+            SELECT i.descricao, i.elemento, i.vida_maxima, i.xp_obtido, i.moedas_obtidas
+            FROM inimigo i
+            JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
+            WHERE ii.sub_regiao_id = %s;
+            """, (sub_regiao_id,)
+        )
+        result = cur.fetchall()
+        return result
+
 # List all NPC's from a subregion
 def list_npcs_subregion(conn, sub_regiao_id):
     with conn.cursor() as cur:
