@@ -1,5 +1,4 @@
 from utils import debug
-from queries.query import list_character_id
 
 elements = ["Fogo", "Água", "Terra", "Ar", "Trevas", "Luz"]
 
@@ -43,11 +42,19 @@ class Character:
     def get_information(self):
         print("\n === Criação de Personagem === ")
         self.nome = input("Digite o nome do personagem: ")
-        elemento = input(f"Escolha o elemento ({', '.join(elements)}): ")
-        while elemento not in elements:
-            print("Elemento inválido!")
-            elemento = input(f"Escolha o elemento ({', '.join(elements)}): ")
-        self.elemento = elemento
+        
+        def ask():
+            return input(f"Escolha o elemento ({', '.join(elements)}): ").lower()
+        
+        elemento = ask()
+        lower_case_elements = [elemento.lower() for elemento in elements]
+        while elemento not in lower_case_elements:
+            print("Elemento inválido.")
+            elemento = ask()
+        
+        self.elemento = elemento.capitalize()
+
+        
         
     def add_database(self):
         try:
@@ -61,6 +68,8 @@ class Character:
 
         except Exception as e:
             debug(f"Character: Erro ao adicionar personagem: {e}")
+
+        
     
     def get_character_info(self, conn, id): 
         with conn.cursor() as cur:

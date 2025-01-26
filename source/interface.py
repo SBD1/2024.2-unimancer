@@ -1,9 +1,11 @@
 import os
 import platform
+import psycopg2
 from colorama import Fore, Style, init
 from create_character import Character
-from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory
+from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_npc_role, get_enemy_info
 from utils import debug 
+from combat import Combate
 
 # Initialize colorama
 init()
@@ -28,8 +30,7 @@ def show_title():
 # Show initial menu of the game and return option chosen.
 def show_menu() -> str:
     def ask():
-        option = input("Escolha uma opção: ")
-        return option.lower()
+        return input("Escolha uma opção: ").lower()
     
     print(Style.BRIGHT + Fore.YELLOW + "\n--- Bem-vindo ao Unimancer! ---" + Style.RESET_ALL)
     print("criar: criar um novo personagem;")
@@ -89,8 +90,16 @@ def navigate(conn, character):
         
         print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
 
+        print(Fore.YELLOW + "\n--- Inimigos ---" + Style.RESET_ALL)
+        # list enemys in the subregion
+        enemys = list_enemys_subregion(conn, character.sub_regiao_id)
+        for enemy in enemys:
+            print(f"{enemy[1]} - {enemy[2]}")
+        
+        print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
+
         try:
-            choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem: ")
+            choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem\n3-Lutar: \n")
             if choice_interaction == "0":
                 break
             elif choice_interaction == "1":
@@ -111,10 +120,32 @@ def navigate(conn, character):
                 npc_choice = int(input("Escolha um personagem (número): "))
                 if 1 <= npc_choice <= len(npcs):
                     npc_nome = npcs[npc_choice - 1][0]
-                    #get_npc_details(npc_nome)  # Chama a função para obter detalhes do NPC
-                    print(f"\nVocê interagiu com {npc_nome}.")
+                    npc_role = get_npc_role(npc_nome)  
+                    if npc_role == "quester":
+                        print("Você encontrou um quester!")
+                        #quester = Quester(character, conn)
+                        #quester.interact()
+                    else:
+                        print("Você encontrou um vendedor!")
+                        #vendedor = Vendedor(character, conn)
+                        #merchant.interact()
                 else:
                     print("\nOpção inválida!")
+            elif choice_interaction == "3":
+                clear_screen()
+                print("Escolha o inimigo que deseja enfrentar:")
+                print("0. Nenhum")
+                for idx, (enemy) in enumerate(enemys, start=1):
+                    print(f"{idx}. {enemy[1]}")
+                result = int(input("Escolha um inimigo: "))
+                if result == 0:
+                    navigate(conn, character)
+                enemy_id = enemys[result - 1][0]
+
+                enemy_choice = get_enemy_info(conn, enemy_id)
+                combate = Combate(character, enemy_choice, conn)
+                combate.iniciar()
+                navigate(conn, character)           
         except ValueError:
             print("\nEntrada inválida! Escolha um número correspondente ou '0'.")
 
@@ -127,10 +158,15 @@ def fetch_subregion_id_by_name(name, conn):
 
 # Function to get subregion description
 def get_subregion_description(conn, character):
-    with conn.cursor() as cur:
-        cur.execute(f"SELECT descricao FROM sub_regiao WHERE id = {character.sub_regiao_id}")
-        result = cur.fetchone()
-        return result[0]
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"SELECT descricao FROM sub_regiao WHERE id = {character.sub_regiao_id}")
+            result = cur.fetchone()
+            return result[0]
+    except psycopg2.Error as e:
+        print(f"Erro ao obter descrição da sub-região: {e}")
+        conn.rollback()  # Reverte a transação em caso de erro
+        return "Erro ao acessar a descrição."
 
 # Main game loop
 def game_loop(conn):
@@ -162,7 +198,7 @@ def game_loop(conn):
 
         elif option == "criar":
             character = Character(conn) 
-            character.add_database()  
+            character.add_database() 
             debug(f"Personagem {character.nome} criado com sucesso!")
             ok = True
 

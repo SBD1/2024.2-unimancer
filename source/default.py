@@ -1,21 +1,20 @@
-from database import Database
-from utils import debug
+from utils import debug, error
+from database.Database import Database
 
-# Map:
-from defaults.regions import regions
-from defaults.sub_regions import sub_regions
-from defaults.sub_regions_connections import sub_regions_connections
-from defaults.enemies import default_enemies 
-from defaults.enemies_instances import create_enemy_instances
+import database.defaults.maps.regions as regions
+import database.defaults.maps.sub_regions as sub_regions
+import database.defaults.maps.sub_regions_connections as sub_regions_connections
 
-# Acessories:
-from defaults.acessories import rings
-from defaults.acessories import hats
+import database.defaults.npcs.enemies.enemies as default_enemies 
+import database.defaults.npcs.enemies.enemies_instances as create_enemy_instances
 
-# Npcs:
-from defaults.npcs.citizens import citizens
-from defaults.npcs.merchants import merchants
-from defaults.npcs.questers import questers
+import database.defaults.npcs.citizens.citizens as citizens
+import database.defaults.npcs.citizens.merchants as merchants
+import database.defaults.npcs.citizens.questers as questers
+
+import database.defaults.item.acessory.boots as boots
+import database.defaults.item.acessory.rings as rings
+import database.defaults.item.acessory.hats as hats
 
 def populate_database(db: Database):
     try:
@@ -23,19 +22,24 @@ def populate_database(db: Database):
         regions(db)
         sub_regions(db)
         sub_regions_connections(db)
+        
+        # Enemies.
         default_enemies(db)
         create_enemy_instances(db)
 
+        # Citizens.
         citizens(db)
         merchants(db)
         questers(db)
         
         # Items: precisa do procedure `create_acessorio` para funcionar.
-        # -- rings()
-        # -- hats()
+        rings()
+        hats()
+        boots()
 
         db.conn.commit()
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding regions and subregions: {e}")
+        error(f"default: error occurred while populating the database: {e}")
+        

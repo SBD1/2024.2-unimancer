@@ -43,13 +43,28 @@ def list_enemys_subregion(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
             """            
-            SELECT i.descricao, i.elemento, i.vida_maxima, i.xp_obtido, i.moedas_obtidas
-            FROM inimigo i
+            SELECT n.id, n.nome, i.descricao, ii.sub_regiao_id
+            FROM npc n
+            JOIN inimigo i ON n.id = i.id
             JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
             WHERE ii.sub_regiao_id = %s;
             """, (sub_regiao_id,)
         )
         result = cur.fetchall()
+        return result
+
+# get enemy info
+def get_enemy_info(conn, enemy_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT n.nome, i.id, i.armazenamento_id, i.descricao, i.elemento, i.vida_maxima, i.xp_obtido, i.inteligencia, i.moedas_obtidas,  i.conhecimento_arcano, i.energia_arcana_maxima
+            FROM npc n
+            JOIN inimigo i ON n.id = i.id
+            WHERE n.id = %s;
+            """, (enemy_id,)
+        )
+        result = cur.fetchone()
         return result
 
 # List all NPC's from a subregion
@@ -84,4 +99,18 @@ def list_item_inventory(conn, character_id):
     with conn.cursor() as cur:
         cur.execute(f"SELECT i.nome, i.descricao, ii.quantidade FROM inventario inv JOIN item_instancia ii ON inv.id = ii.inventario_id JOIN item i ON ii.item_id = i.id WHERE inv.personagem_id = {character_id};")
         result = cur.fetchall()
+        return result
+
+# Query to know if a character is a merchant, quester or civil 
+def get_npc_role(conn, npc_name, npc_type):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT c.tipo
+            FROM npc n
+            INNER JOIN civil c ON n.id = c.id
+            WHERE n.id = %s;
+            """, (npc_name)
+        )
+        result = cur.fetchone()
         return result
