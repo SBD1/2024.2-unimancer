@@ -1,4 +1,18 @@
-![unimancer-mage](/img/animation.gif)
+<!-- ![unimancer-mage](./img/animation.gif) -->
+
+<div class="container card">
+	<div class="container">
+		<div class="clothes"></div>
+		<div class="face"></div>
+		<div class="eye left"></div>
+		<div class="eye right"></div>
+		<div class="big orb light"></div>
+		<div class="small orb left light"></div>
+		<div class="small orb right light"></div>
+		<div class="hat shadow"></div>
+		<div class="hat"></div>
+	</div>
+</div>
 
 ## Alunos
 

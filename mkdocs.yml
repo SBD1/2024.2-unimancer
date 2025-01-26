@@ -2,24 +2,26 @@ site_name: Unimancer
 repo_url: https://github.com/SBD1/2024.2-unimancer
 repo_name: Unimancer
 
+extra_css:
+  - stylesheets/logo.css
+
 theme:
   name: material
-  logo: img/blackmace.png
-  favicon: img/blackmace.png
+  logo: img/logo.png
+  favicon: img/logo.png
   palette:
     - scheme: default
-      primary: amber
-      accent: orange
+      primary: blue
+      accent: light blue
       toggle:
         icon: material/weather-night
-        name: Switch to dark mode
+        name: Trocar para modo escuro
     - scheme: slate
-      primary: amber
-      accent: orange
+      primary: indigo
+      accent: blue
       toggle:
         icon: material/weather-sunny
-        name: Switch to light mode
-
+        name: Trocar para modo claro
 
 nav:
   - Home: index.md

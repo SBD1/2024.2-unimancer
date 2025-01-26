@@ -33,3 +33,6 @@ int@delete:
 int@reset:
 	@export PYTHONPATH="./source/"
 	@python ./source/main.py reset
+
+mkdocs@build:
+	@mkdocs build

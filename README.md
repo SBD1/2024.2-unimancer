@@ -1,4 +1,6 @@
-![unimancer-mage](docs/img/animation.gif)
+<p align="center">
+  <img alt="Unimancer Logo" src="./docs/img/logo.png"/>
+</p>
 
 ## Alunos
 
