@@ -71,7 +71,7 @@ def navigate(conn, character):
     while True:
         clear_screen()
         print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
-        print(get_subregion_description(conn,character))
+        print(get_subregion_description(conn, character))
 
         print(Fore.YELLOW + "\n--- Locais Disponíveis ---" + Style.RESET_ALL)
         subregions = get_subregions_character(conn, character.sub_regiao_id)
@@ -89,22 +89,32 @@ def navigate(conn, character):
         
         print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
 
-        print("0. Voltar ao menu principal.")
-
-        # player choice a destiny
         try:
-            choice = int(input("\nEscolha uma direção ou '0' para voltar: "))
-            if choice == 0:
-                break  
-            elif 1 <= choice <= len(subregions):
-                destino, direcao, situacao = subregions[choice - 1]
-                if situacao == "Passável":  
-                    print(f"\nVocê se moveu para: {destino} ({direcao}).")
-                    character.sub_regiao_id = fetch_subregion_id_by_name(destino, conn)
+            choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem: ")
+            if choice_interaction == "0":
+                break
+            elif choice_interaction == "1":
+                choice = int(input("\nEscolha uma direção: "))
+                if 1 <= choice <= len(subregions):
+                    destino, direcao, situacao = subregions[choice - 1]
+                    if situacao == "Passável":  
+                        print(f"\nVocê se moveu para: {destino} ({direcao}).")
+                        character.sub_regiao_id = fetch_subregion_id_by_name(destino, conn)
+                    else:
+                        print("\nEssa passagem está bloqueada!")
                 else:
-                    print("\nEssa passagem está bloqueada!")
-            else:
-                print("\nOpção inválida!")
+                    print("\nOpção inválida!")
+            elif choice_interaction == "2":
+                print("Escolha o personagem que deseja interagir:")
+                for idx, (nome, tipo) in enumerate(npcs, start=1):
+                    print(f"{idx}. {nome} - ({tipo})")
+                npc_choice = int(input("Escolha um personagem (número): "))
+                if 1 <= npc_choice <= len(npcs):
+                    npc_nome = npcs[npc_choice - 1][0]
+                    #get_npc_details(npc_nome)  # Chama a função para obter detalhes do NPC
+                    print(f"\nVocê interagiu com {npc_nome}.")
+                else:
+                    print("\nOpção inválida!")
         except ValueError:
             print("\nEntrada inválida! Escolha um número correspondente ou '0'.")
 
