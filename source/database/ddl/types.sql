@@ -18,5 +18,18 @@ CREATE TYPE TIPO_ACESSORIO AS ENUM (
     'Calça',
     'Meias',
     'Bengala',
-    'Manto'
+
+CREATE TYPE TIPO_COR AS ENUM (
+    'Ruby',
+    'Ciano',
+    'Arco-íris',
+    'Prata',
+    'Dourado',
+    'Bronze',
+    'Índigo',
+    'Turquesa',
+    'Magenta',
+    'Esmeralda',
+    'Cobre',
+    'Púrpura'
 );
