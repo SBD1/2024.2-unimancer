@@ -27,7 +27,9 @@ def regions(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name}s added Successfully!")
+        debug(f"default: {len(table_name)} {table_name} added successfully!")
+        
+        return len(table_name)
 
     except Exception as e:
         db.conn.rollback()
