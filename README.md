@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Unimancer Logo" src="./docs/img/logo.png"/>
+  <img alt="Unimancer Logo" src="./docs/img/logo.png" width="200"/>
 </p>
 
 ## Alunos
