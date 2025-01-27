@@ -219,7 +219,7 @@ CREATE OR REPLACE FUNCTION criar_acessorio(
   IN tipo TEXT,
   IN descricao TEXT,
   IN drop_inimigos_media INT,
-  IN nome VARCHAR(50),
+  IN nome VARCHAR(200),
   IN peso INT,
   IN preco INT  
 )
@@ -241,23 +241,23 @@ $$ LANGUAGE plpgsql;
 -- PostGreSQL: create `pergaminho`
 CREATE OR REPLACE FUNCTION criar_pergaminho(
     IN p_descricao TEXT,
-    IN p_chance_drop INT,
+    IN p_drop_inimigos_media INT,
     IN p_nome VARCHAR(20),
     IN p_peso INT,
     IN p_preco INT,
-    IN p_cor INT
+    IN p_cor TEXT
 ) RETURNS INT AS $$
 DECLARE
     v_item_id INT;
 BEGIN
     -- create item.
-    INSERT INTO item (tipo, descricao, chance_drop, nome, peso, preco)
-    VALUES ('Pergaminho', p_descricao, p_chance_drop, p_nome, p_peso, p_preco)
+    INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
+    VALUES ('Pergaminho', p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco)
     RETURNING id INTO v_item_id;
 
     -- create scroll.
     INSERT INTO pergaminho (id, cor)
-    VALUES (v_item_id, p_cor);
+    VALUES (v_item_id, p_cor::TIPO_COR);
 
     RETURN v_item_id;
 END;
@@ -266,7 +266,7 @@ $$ LANGUAGE plpgsql;
 -- PostGreSQL: create `pocao`
 CREATE OR REPLACE FUNCTION criar_pocao(
     IN p_descricao TEXT,
-    IN p_chance_drop INT,
+    IN p_drop_inimigos_media INT,
     IN p_nome VARCHAR(20),
     IN p_peso INT,
     IN p_preco INT,
@@ -276,8 +276,8 @@ DECLARE
     v_item_id INT;
 BEGIN
     -- Criar o item da poção
-    INSERT INTO item (tipo, descricao, chance_drop, nome, peso, preco)
-    VALUES ('Poção', p_descricao, p_chance_drop, p_nome, p_peso, p_preco)
+    INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
+    VALUES ('Poção', p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco)
     RETURNING id INTO v_item_id;
 
     -- Criar a poção
@@ -342,8 +342,8 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `feitico_cura`
 CREATE OR REPLACE FUNCTION criar_feitico_cura(
-    IN descricao TEXT ,
-    IN elemento TEXT, -- ::TIPO_ELEMENTO,
+    IN descricao TEXT,
+    IN elemento TIPO_ELEMENTO,
     IN countdown INT,
     IN conhecimento_arcano_necessario INT,
     IN energia_arcana INT,
@@ -358,8 +358,8 @@ BEGIN
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_cura
-    INSERT INTO feitico_da (id, dano_total)
-    VALUES (v_feitico_id, dano_total);
+    INSERT INTO feitico_cura (id, qtd_cura)
+    VALUES (v_feitico_id, qtd_cura);
 
     RETURN v_feitico_id;
 END;
