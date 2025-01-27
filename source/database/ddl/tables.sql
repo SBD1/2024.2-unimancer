@@ -5,7 +5,7 @@ CREATE TABLE item (
     -- É o numero de inimigos que você tem que matar para conseguir o item.
     -- Chance de drop: O cálculo é: 1 / enemies_average.
 	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
-	nome VARCHAR(50) NOT NULL,
+	nome VARCHAR(200) NOT NULL,
 	peso INT NOT NULL CHECK (peso >= 0),
 	preco INT NOT NULL CHECK (preco >= 0)
 );
@@ -84,7 +84,9 @@ CREATE TABLE quest (
     id SERIAL PRIMARY KEY,
     quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    titulo VARCHAR(200) NOT NULL,
     titulo VARCHAR(20) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
     dificuldade TIPO_DIFICULDADE NOT NULL
