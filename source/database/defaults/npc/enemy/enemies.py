@@ -1,4 +1,3 @@
-from tomlkit import table
 from database import Database
 from utils import debug, error
 from colorama import Style

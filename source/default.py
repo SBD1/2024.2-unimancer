@@ -1,4 +1,4 @@
-from tomlkit import item
+
 from database.defaults.item.acessory import bracelet, buckle, cane, cloack, collar, gloves, hat, ring, pants, socks, boots, key
 from utils import debug, error
 from database.Database import Database
@@ -12,6 +12,8 @@ from database.defaults.storage import quest
 from database.defaults.map import regions as r, sub_regions as sr, sub_regions_connections as src
 
 from database.defaults.item.scroll import area_damage, cure, damage, scroll, writted_scroll, requirements
+
+from database.defaults.item import effects
 
 def populate_database(db: Database):
     
@@ -30,6 +32,9 @@ def populate_database(db: Database):
         merchants.merchants(db)
         questers.questers(db)
         
+        #effects
+        effects.effects(db)
+
         # Items: precisa do procedure `create_acessorio` para funcionar.
         item_total = 0
         item_total += boots.boots(db)
