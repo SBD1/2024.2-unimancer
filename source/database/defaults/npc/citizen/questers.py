@@ -12,17 +12,13 @@ def questers(db: Database):
                 "Ancião",
                 3,
                 "Velho homem aborrecido com a vida.",
-                """Bem-vindo, jovem. Você deseja embarcar em uma jornada?
-Os ratos selavagens desta área se tornaram uma praga para nosso povo!
-Destroem nossas plantações e assustam nossas crianças, por favor dê um jeito neles!"""
+                "Bem-vindo, jovem. Você deseja embarcar em uma jornada?"
             ),
             (
                 "Elysia",
                 2,
                 "descr",
-                """Eu vi algo estranho nas montanhas...
-
-Está preparado?"""
+                "Eu vi algo estranho nas montanhas... Está disposto a investigar?"
             ),
             (
                 "Isolde",
@@ -45,8 +41,9 @@ Está preparado?"""
         )
 
         db.conn.commit()
-        debug(f"default: {table_name}s added successfully!")
+        debug(f"default: {len(table_name)} {table_name} added successfully!")
         
+        return len(table_name)
 
     except Exception as e:
         db.conn.rollback()

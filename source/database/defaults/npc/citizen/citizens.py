@@ -21,8 +21,9 @@ def citizens(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name}s added successfully!")
+        debug(f"default: {len(table_name)} {table_name} added successfully!")
         
+        return len(table_name)
 
     except Exception as e:
         db.conn.rollback()
