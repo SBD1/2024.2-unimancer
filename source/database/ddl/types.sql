@@ -18,6 +18,9 @@ CREATE TYPE TIPO_ACESSORIO AS ENUM (
     'Calça',
     'Meias',
     'Bengala',
+    'Manto',
+    'Chave'
+);
 
 CREATE TYPE TIPO_COR AS ENUM (
     'Ruby',
