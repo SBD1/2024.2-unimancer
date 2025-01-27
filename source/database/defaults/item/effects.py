@@ -73,7 +73,7 @@ def effects(db: Database):
             ('Purificação Radiante', 'Cura venenos automaticamente após 2 turnos.', 0.2, 0.2, 0.0, 0.1, 0.1, 0.05, 0.0, 0.0),
             ('Absorção de Marés', 'Absorve parte do dano de magias aquáticas.', 0.25, 0.1, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0),
             ('Intimidação Profana', 'Reduz a chance de acerto dos inimigos.', 0.15, 0.15, 0.05, 0.0, 0.0, 0.05, 0.0, 0.0),
-            ('Velocidade Predatória', 'Aumenta a velocidade e esquiva em combate.', 0.2, 0.05, 0.15 0.0, 0.0, 0.1, 0.0, 0.0),
+            ('Velocidade Predatória', 'Aumenta a velocidade e esquiva em combate.', 0.2, 0.05, 0.15, 0.0, 0.0, 0.1, 0.0, 0.0),
             ('Resistência Gélida', 'Concede resistência ao frio extremo.', 0.3, 0.05, 0.0, 0.0, 0.15, 0.0, 0.0, 0.0),
             ('Tempestade Energizada', 'Amplifica o dano de ataques elétricos.', 0.05, 0.25, 0.2, 0.0, 0.3, 0.0, 0.0, 0.0),
             # Chapeu
@@ -83,12 +83,12 @@ def effects(db: Database):
             ('Poder Dracônico', 'Aumenta a força e resistência contra ataques de dragões.', 0.3, 0.2, 0.15, 0.1, 0.2, 0.05, 0.0, 0.0),
             ('Sopro Gélido', 'Reduz a velocidade dos inimigos, causando desconforto.', 0.2, 0.15, 0.05, 0.0, 0.2, 0.05, 0.0, 0.0),
             ('Energia Nefasta', 'Aumenta a regeneração de mana e poder em ambientes sombrios.', 0.15, 0.3, 0.1, 0.0, 0.3, 0.05, 0.0, 0.0),
-            ('Luz Purificadora', 'Remove efeitos negativos e reduz o dano recebido de magias.', 0.25, 0.15 0.05, 0.1, 0.2, 0.0, 0.0, 0.0),
-            ('Chamas Ardentes', 'Amplifica o dano de ataques de fogo.', 0.15 0.25, 0.2, 0.0, 0.3, 0.05, 0.0, 0.0),
-            ('Energia Trovejante', 'Aumenta a velocidade de ataque e precisão.', 0.15 0.2, 0.15 0.0, 0.3, 0.05, 0.0, 0.0),
-            ('Coragem Inabalável', 'Concede resistência extra contra ataques críticos.', 0.3, 0.2, 0.1, 0.15 0.2, 0.05, 0.0, 0.0),
-            ('Ilusão Arcana', 'Confunde os inimigos, reduzindo sua precisão.', 0.2, 0.25, 0.1, 0.0, 0.15 0.05, 0.0, 0.0),
-            ('Ecos Ancestrais', 'Concede bônus de resistência e regeneração.', 0.3, 0.2, 0.1, 0.15 0.2, 0.05, 0.0, 0.0),
+            ('Luz Purificadora', 'Remove efeitos negativos e reduz o dano recebido de magias.', 0.25, 0.15, 0.05, 0.1, 0.2, 0.0, 0.0, 0.0),
+            ('Chamas Ardentes', 'Amplifica o dano de ataques de fogo.', 0.15, 0.25, 0.2, 0.0, 0.3, 0.05, 0.0, 0.0),
+            ('Energia Trovejante', 'Aumenta a velocidade de ataque e precisão.', 0.15, 0.2, 0.15, 0.0, 0.3, 0.05, 0.0, 0.0),
+            ('Coragem Inabalável', 'Concede resistência extra contra ataques críticos.', 0.3, 0.2, 0.1, 0.15, 0.2, 0.05, 0.0, 0.0),
+            ('Ilusão Arcana', 'Confunde os inimigos, reduzindo sua precisão.', 0.2, 0.25, 0.1, 0.0, 0.15, 0.05, 0.0, 0.0),
+            ('Ecos Ancestrais', 'Concede bônus de resistência e regeneração.', 0.3, 0.2, 0.1, 0.15, 0.2, 0.05, 0.0, 0.0),
             # Calca
             ('Proteção Rústica', 'Concede leve proteção com couro resistente.', 0.02, 0.05, 0.0, 0.1, 0.0, 0.05, 0.0, 0.0),
             ('Força Dracônica', 'Oferece resistência e poder do couro de dragão.', 0.04, 0.08, 0.02, 0.15, 0.0, 0.1, 0.0, 0.0),
@@ -125,7 +125,7 @@ def effects(db: Database):
             ('Gelo Eterno', 'Amplifica resistência com gelo inquebrável.', 0.4, 0.2, 0.04, 0.5, 0.0, 0.11, 0.0, 0.0),
             ('Emanar Arcano', 'Fortalece energia com fulgor mágico.', 0.28, 0.15, 0.02, 0.4, 0.0, 0.08, 0.0, 0.0),
             ('Espiral Espiritual', 'Atrai espíritos com poder espectral.', 0.33, 0.25, 0.06, 0.45, 0.0, 0.15, 0.0, 0.0),
-            ('Lâmina Invisível', 'Proporciona ataques cortantes com vento.', 0.2, 0.1, 0.01, 0.3, 0.0, 0.065, 0.0, 0.0);
+            ('Lâmina Invisível', 'Proporciona ataques cortantes com vento.', 0.2, 0.1, 0.01, 0.3, 0.0, 0.065, 0.0, 0.0),
         ]
 
         db.cur.executemany(
