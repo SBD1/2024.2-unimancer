@@ -3,7 +3,7 @@ import platform
 import psycopg2
 from colorama import Fore, Style, init
 from create_character import Character
-from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_npc_role, get_enemy_info
+from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_enemy_info
 from utils import debug 
 from combat import Combate
 
@@ -120,9 +120,12 @@ def navigate(conn, character):
                 npc_choice = int(input("Escolha um personagem (número): "))
                 if 1 <= npc_choice <= len(npcs):
                     npc_nome = npcs[npc_choice - 1][0]
-                    npc_role = get_npc_role(npc_nome)  
+                    print(npc_nome)
+                    # npc_role = get_npc_role(conn, npc_nome) 
+                    npc_role = "quester" 
                     if npc_role == "quester":
                         print("Você encontrou um quester!")
+                        input("...")
                         #quester = Quester(character, conn)
                         #quester.interact()
                     else:

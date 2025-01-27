@@ -8,7 +8,7 @@ from utils import debug
 sql = {
     "types": "./source/database/ddl/types.sql",
     "init": "./source/database/ddl/tables.sql",
-    "procedures": "./source/database/ddl/procedure.sql",
+    "procedures": "./source/database/ddl/procedures.sql",
     "triggers": "./source/database/ddl/triggers.sql"
 }
 

@@ -72,15 +72,34 @@ def get_enemy_info(conn, enemy_id):
 def list_npcs_subregion(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
-            """            
-            SELECT n.nome, n.tipo
+            """
+            SELECT 
+                n.nome,
+                COALESCE(
+                    CASE 
+                        WHEN q.id IS NOT NULL THEN 'Quester'
+                        WHEN m.id IS NOT NULL THEN 'Mercador'
+                        ELSE 'Civil'
+                    END, 
+                    n.tipo::TEXT
+                ) AS tipo
             FROM npc n
             JOIN civil c ON n.id = c.id
+            LEFT JOIN quester q ON c.id = q.id
+            LEFT JOIN mercador m ON c.id = m.id
             WHERE c.sub_regiao_id = %s;
-            """, (sub_regiao_id,)
+            """, 
+            (sub_regiao_id,)
         )
         result = cur.fetchall()
         return result
+
+def get_npc_details(conn, type):
+    with conn.cursor() as cur:
+
+        result = cur.fetchall()
+        return result
+
     
 # List all characters 
 def list_all_characters(conn):
@@ -102,16 +121,18 @@ def list_item_inventory(conn, character_id):
         result = cur.fetchall()
         return result
 
-# Query to know if a character is a merchant, quester or civil 
-def get_npc_role(conn, npc_name, npc_type):
+def get_civilian_info(conn, npc_name):
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT c.tipo
+            SELECT n.nome, c.descricao
             FROM npc n
-            INNER JOIN civil c ON n.id = c.id
-            WHERE n.id = %s;
-            """, (npc_name)
+            JOIN civil c ON n.id = c.id
+            WHERE n.nome = %s;
+            """, (npc_name,)
         )
         result = cur.fetchone()
-        return result
+        return {
+            'nome': result[0],
+            'descricao': result[1]
+        }
