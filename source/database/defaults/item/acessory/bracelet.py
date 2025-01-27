@@ -17,7 +17,6 @@ def bracelets(db: Database):
             ("Bracelete de vidro etéreo, refletindo energias arcanas", 12, "Bracelete de Cristal Etéreo", 2, 50),
             ("Bracelete entalhado em rocha ancestral, trazendo firmeza inabalável", 25, "Bracelete da Rocha Primeva", 5, 100),
         ]
-    
         
         db.cur.executemany(
             """
@@ -26,7 +25,9 @@ def bracelets(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()

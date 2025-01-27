@@ -12,7 +12,7 @@ def cloack(db: Database):
             ("Um manto simples de tecido grosso", 5, "Manto de Lona Simples", 2, 30),
             ("Feito de algodão comum, esse manto é leve e confortável", 8, "Manto de Algodão Básico", 2, 25),
             ("Este manto de lã não é muito resistente", 9, "Manto de Lã Rústica", 3, 35),
-            ("Manto de tecido encantado", 11, "Manto de Neve Encantado", 4, 60),
+            ("Manto de tecido encantado que protege contra a neve.", 11, "Manto de Neve Encantado", 4, 60),
             ("Feito com peles de animais selvagens", 14, "Manto de Pele de Urso", 5, 70),
             ("Manto de seda refinada", 15, "Manto de Seda Flamejante", 6, 85),
             ("Manto forjado a partir de tecido celestial", 17, "Manto Celestial das Sombras", 6, 100),
@@ -27,7 +27,9 @@ def cloack(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()

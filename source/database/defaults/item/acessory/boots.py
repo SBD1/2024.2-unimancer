@@ -20,7 +20,6 @@ def boots(db: Database):
             ("Feitas de ossos de dragão", 20, "Botas de ossos", 6, 100),
             ("Botas da Realeza, forjado para magos experientes", 23, "Botas da Realeza", 5, 120),
         ]
-
         
         db.cur.executemany(
             """
@@ -29,7 +28,9 @@ def boots(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()

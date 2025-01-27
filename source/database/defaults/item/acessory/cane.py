@@ -18,7 +18,7 @@ def cane(db: Database):
             ("Esculpida em cristal mágico", 10, "Bengala de Cristal Arcano", 2, 95),
             ("Composta por ossos de dragão", 12, "Bengala de Ossos Dracônicos", 5, 100)
         ]
-        
+    
         db.cur.executemany(
             """
             SELECT criar_acessorio('Bengala', %s, %s, %s, %s, %s)
@@ -26,7 +26,9 @@ def cane(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()

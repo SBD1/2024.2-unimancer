@@ -23,7 +23,6 @@ def hats(db: Database):
             ("Sutileza ilusionista tece ilusões traiçoeiras aos olhos alheios.", 9, "Chapéu do Ilusionista Arcano", 3, 140),
             ("Guardado por espíritos milenares, desperta ecos de eras passadas.", 17, "Chapéu do Espírito Ancestral", 5, 220),
         ]
-
         
         db.cur.executemany(
             """
@@ -32,7 +31,9 @@ def hats(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()

@@ -25,7 +25,6 @@ def pants(db: Database):
             ("Calças feitas de algodão encantado", 36, "Calças de Algodão", 4, 220),
             ("Calças feitas de escamas de serpente", 35, "Calças de Serpente", 5, 230)
         ]
-
         
         db.cur.executemany(
             """
@@ -34,7 +33,9 @@ def pants(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} added successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
+        
+        return len(default_values)
 
     except Exception as e:
         db.conn.rollback()
