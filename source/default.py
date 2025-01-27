@@ -1,41 +1,42 @@
+from database.defaults.item.acessory import bracelet, buckle, cane, cloack, collar, gloves, hat, ring, pants, socks, boots
 from utils import debug, error
 from database.Database import Database
 
-import database.defaults.maps.regions as regions
-import database.defaults.maps.sub_regions as sub_regions
-import database.defaults.maps.sub_regions_connections as sub_regions_connections
+from database.defaults.npc.enemy import enemies, enemies_instances
 
-import database.defaults.npcs.enemies.enemies as default_enemies 
-import database.defaults.npcs.enemies.enemies_instances as create_enemy_instances
+from database.defaults.npc.citizen import citizens, merchants, questers
 
-import database.defaults.npcs.citizens.citizens as citizens
-import database.defaults.npcs.citizens.merchants as merchants
-import database.defaults.npcs.citizens.questers as questers
+from database.defaults.map import regions as r, sub_regions as sr, sub_regions_connections as src
 
-import database.defaults.item.acessory.boots as boots
-import database.defaults.item.acessory.rings as rings
-import database.defaults.item.acessory.hats as hats
 
 def populate_database(db: Database):
     try:
         # Map.
-        regions(db)
-        sub_regions(db)
-        sub_regions_connections(db)
+        r.regions(db)
+        sr.sub_regions(db)
+        src.sub_regions_connections(db)
         
         # Enemies.
-        default_enemies(db)
-        create_enemy_instances(db)
-
+        enemies.default_enemies(db)
+        enemies_instances.create_enemy_instances(db)
+#
         # Citizens.
-        citizens(db)
-        merchants(db)
-        questers(db)
+        citizens.citizens(db)
+        merchants.merchants(db)
+        questers.questers(db)
         
         # Items: precisa do procedure `create_acessorio` para funcionar.
-        rings()
-        hats()
-        boots()
+        boots.boots(db)
+        bracelet.bracelets(db)
+        buckle.buckle(db)
+        cane.cane(db)
+        cloack.cloack(db)
+        collar.collars(db)
+        gloves.gloves(db)
+        hat.hats(db)
+        pants.pants(db)
+        ring.rings(db)
+        socks.socks(db)
 
         db.conn.commit()
 

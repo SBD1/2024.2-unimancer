@@ -43,11 +43,11 @@ def list_enemys_subregion(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
             """            
-            SELECT n.id, n.nome, i.descricao, ii.sub_regiao_id
+            SELECT n.id, n.nome, i.descricao, i.elemento
             FROM npc n
             JOIN inimigo i ON n.id = i.id
             JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
-            WHERE ii.sub_regiao_id = %s;
+            WHERE ii.sub_regiao_id = %s AND ii.vida > 0;
             """, (sub_regiao_id,)
         )
         result = cur.fetchall()
@@ -58,9 +58,10 @@ def get_enemy_info(conn, enemy_id):
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT n.nome, i.id, i.armazenamento_id, i.descricao, i.elemento, i.vida_maxima, i.xp_obtido, i.inteligencia, i.moedas_obtidas,  i.conhecimento_arcano, i.energia_arcana_maxima
+            SELECT n.nome, ii.id, i.armazenamento_id, i.descricao, i.elemento, ii.vida, i.vida_maxima, i.xp_obtido, i.inteligencia, i.moedas_obtidas,  i.conhecimento_arcano, i.energia_arcana_maxima
             FROM npc n
             JOIN inimigo i ON n.id = i.id
+            JOIN inimigo_instancia ii ON ii.inimigo_id = i.id
             WHERE n.id = %s;
             """, (enemy_id,)
         )
@@ -97,7 +98,7 @@ def list_character_id(conn, character_id):
     
 def list_item_inventory(conn, character_id):
     with conn.cursor() as cur:
-        cur.execute(f"SELECT i.nome, i.descricao, ii.quantidade FROM inventario inv JOIN item_instancia ii ON inv.id = ii.inventario_id JOIN item i ON ii.item_id = i.id WHERE inv.personagem_id = {character_id};")
+        cur.execute(f"SELECT i.nome, i.descricao FROM inventario inv JOIN item_instancia ii ON inv.id = ii.inventario_id JOIN item i ON ii.item_id = i.id WHERE inv.personagem_id = {character_id};")
         result = cur.fetchall()
         return result
 
