@@ -183,14 +183,14 @@ CREATE TABLE efeito (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(20) NOT NULL,
     descricao TEXT NOT NULL,
-    defesa DECIMAL(1, 3) NOT NULL CHECK (defesa >= 0),
-    inteligencia DECIMAL(1, 3) NOT NULL CHECK (inteligencia >= 0),
-    critico DECIMAL(1, 3) NOT NULL CHECK (critico >= 0),
-    vida DECIMAL(1, 3) NOT NULL CHECK (vida >= 0),
-    energia_arcana DECIMAL(1, 3) NOT NULL CHECK (energia_arcana >= 0),
-    sorte DECIMAL(1, 3) NOT NULL CHECK (sorte >= 0),
-    xp DECIMAL(1, 3) NOT NULL CHECK (xp >= 0),
-    moedas DECIMAL(1, 3) NOT NULL CHECK (moedas >= 0)
+    defesa DECIMAL(4, 3) NOT NULL CHECK (defesa >= 0),
+    inteligencia DECIMAL(4, 3) NOT NULL CHECK (inteligencia >= 0),
+    critico DECIMAL(4, 3) NOT NULL CHECK (critico >= 0),
+    vida DECIMAL(4, 3) NOT NULL CHECK (vida >= 0),
+    energia_arcana DECIMAL(4, 3) NOT NULL CHECK (energia_arcana >= 0),
+    sorte DECIMAL(4, 3) NOT NULL CHECK (sorte >= 0),
+    xp DECIMAL(4, 3) NOT NULL CHECK (xp >= 0),
+    moedas DECIMAL(4, 3) NOT NULL CHECK (moedas >= 0)
 );
 
 CREATE TABLE acessorio (
