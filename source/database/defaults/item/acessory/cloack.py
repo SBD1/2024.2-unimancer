@@ -1,7 +1,11 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 def cloack(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Manto)" + Style.NORMAL
+    
     try:
         # [("descricao...", "inimigos para matar para dropar", "nome", "peso", "preco")]
         default_values = [
@@ -18,14 +22,13 @@ def cloack(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Manto', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Manto', %s, %s, %s, %s, %s);
             """, default_values
         )
 
-        debug("default: manto added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding ACESSORIOS.MANTO values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

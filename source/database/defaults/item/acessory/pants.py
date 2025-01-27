@@ -1,7 +1,11 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 def pants(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Calça)" + Style.NORMAL
+    
     try:
         # [("descricao...", inimigos para matar para dropar, "nome", "peso", "preco")]
         default_values = [
@@ -25,14 +29,13 @@ def pants(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Calça', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Calça', %s, %s, %s, %s, %s);
             """, default_values
         )
 
-        debug("default: calcas added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding *ACESSORIOS.PANTS* values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

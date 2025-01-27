@@ -1,7 +1,11 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 def boots(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Bota)" + Style.NORMAL
+    
     try:
         # [("descricao...", inimigos para matar para dropar, "nome", "peso", "preco")]
         default_values = [
@@ -20,14 +24,13 @@ def boots(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Botas', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Botas', %s, %s::INT, %s, %s::INT, %s::INT)
             """, default_values
         )
 
-        debug("default: botas added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding *ACESSORIOS.BOOTS* values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

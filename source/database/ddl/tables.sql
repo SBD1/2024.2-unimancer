@@ -3,9 +3,9 @@ CREATE TABLE item (
     tipo TIPO_ITEM NOT NULL,
     descricao TEXT NOT NULL,
     -- É o numero de inimigos que você tem que matar para conseguir o item.
-    -- O cálculo é: 1 / chance_drop.
-	chance_drop INT NOT NULL CHECK (chance_drop >= 0),
-	nome VARCHAR(20) NOT NULL,
+    -- Chance de drop: O cálculo é: 1 / enemies_average.
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(50) NOT NULL,
 	peso INT NOT NULL CHECK (peso >= 0),
 	preco INT NOT NULL CHECK (preco >= 0)
 );
@@ -175,7 +175,7 @@ CREATE TABLE pergaminho (
 );
 
 CREATE TABLE feitico_escrito (
-	item_id INT NOT NULL REFERENCES item(id),
+	item_id INT NOT NULL REFERENCES pergaminho(id),
 	feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 

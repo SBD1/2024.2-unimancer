@@ -4,7 +4,7 @@ from colorama import Style
 
 def create_enemy_instances(db: Database):
     
-    table_name = Style.BRIGHT + "INSTANCIA_INIMIGO" + Style.NORMAL
+    table_name = Style.BRIGHT + "INIMIGO_INSTANCIA" + Style.NORMAL
     
     try:
         enemy_instances = [
@@ -49,8 +49,8 @@ def create_enemy_instances(db: Database):
             """, enemy_instances
         )
         db.conn.commit()
-        debug(f"default: {table_name}s added Successfully!")
+        debug(f"default: {table_name}s added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        error(f"default: Error occurred while adding {table_name}s values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

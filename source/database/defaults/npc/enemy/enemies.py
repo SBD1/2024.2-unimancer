@@ -1,8 +1,13 @@
+from tomlkit import table
 from database import Database
 from utils import debug, error
+from colorama import Style
 
 # adding enemies to database
 def default_enemies(db: Database):
+    
+    table_name = Style.BRIGHT + "INIMIGO" + Style.NORMAL
+    
     try:
         enemies = [
             ("Rato Selvagem", "Um pequeno roedor agressivo que se alimenta de restos do vilarejo.", "Terra", 20, 5, 2, 0, 0, 1),
@@ -35,10 +40,9 @@ def default_enemies(db: Database):
         db.cur.executemany("SELECT criar_inimigo(%s, NULL, %s, %s, %s, %s, %s, %s, %s, %s)", enemies)
 
         db.conn.commit()
-        debug("default: enemies added successfully!")
+        debug(f"default: {table_name} added successfully!")
         
 
     except Exception as e:
-        error(f"default: error occurred while adding *inimigo* values: {e}")
         db.conn.rollback()
-        
+        error(f"default: error occurred while adding {table_name} values: {e}")

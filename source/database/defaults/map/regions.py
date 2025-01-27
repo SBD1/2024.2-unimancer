@@ -1,8 +1,12 @@
 from database import Database
 from utils import debug, error
+from colorama import Style
 
 # Add the regions and in the game.
 def regions(db: Database):
+    
+    table_name = Style.BRIGHT + "REGIAO" + Style.NORMAL
+    
     try:
         # Adding regions
         regions = [
@@ -22,10 +26,9 @@ def regions(db: Database):
             """, regions
         )
 
-        debug("default: regions added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name}s added Successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        error(f"default: error occurred while adding regions and subregions: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

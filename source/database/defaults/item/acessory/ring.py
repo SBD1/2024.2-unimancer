@@ -1,8 +1,12 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 # Add rings in the database.
 def rings(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Anel)" + Style.NORMAL
+    
     try:
         # [("descricao...", "inimigos para matar para dropar", "nome", "peso", "preco")]
         default_values = [
@@ -22,14 +26,13 @@ def rings(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Anel', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Anel', %s, %s, %s, %s, %s);
             """, default_values
         )
 
-        debug("default: aneis added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding ACESSORIOS.ANEIS values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

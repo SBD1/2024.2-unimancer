@@ -1,7 +1,11 @@
 from database import Database
 from utils import debug, error
+from colorama import Style
 
 def sub_regions(db: Database):
+    
+    table_name = Style.BRIGHT + "SUB_REGIAO" + Style.NORMAL
+    
     try:
         # consult IDs of every region
         db.cur.execute("SELECT id, nome FROM regiao")
@@ -81,8 +85,8 @@ def sub_regions(db: Database):
             """, sub_regions
         )
         db.conn.commit()
-        debug("default: sub-regions added successfully!")
+        debug(f"default: {table_name}s added Successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        error(f"default: error occurred while adding *sub-regions* values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

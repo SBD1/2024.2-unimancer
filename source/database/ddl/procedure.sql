@@ -216,25 +216,50 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `acessorio`
 CREATE OR REPLACE FUNCTION criar_acessorio(
-  IN nome VARCHAR(20),
+  IN tipo TEXT,
   IN descricao TEXT,
-  IN chance_drop INT,
+  IN drop_inimigos_media INT,
+  IN nome VARCHAR(50),
   IN peso INT,
-  IN preco INT,
-  IN tipo TIPO_ACESSORIO
+  IN preco INT  
 )
 RETURNS INT AS $$
 DECLARE
      v_item_id INT;
 BEGIN
-     INSERT INTO item (tipo, descricao, chance_drop, nome, peso, preco)
-     VALUES ('Acessório', descricao, chance_drop, nome, peso, preco)
+     INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
+     VALUES ('Acessório', descricao, drop_inimigos_media, nome, peso, preco)
      RETURNING id INTO v_item_id;
 
      INSERT INTO acessorio (id, tipo)
-     VALUES (v_item_id, tipo);
+     VALUES (v_item_id, tipo::TIPO_ACESSORIO);
  
      RETURN v_item_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- PostGreSQL: create `pergaminho`
+CREATE OR REPLACE FUNCTION criar_pergaminho(
+    IN p_descricao TEXT,
+    IN p_chance_drop INT,
+    IN p_nome VARCHAR(20),
+    IN p_peso INT,
+    IN p_preco INT,
+    IN p_cor INT
+) RETURNS INT AS $$
+DECLARE
+    v_item_id INT;
+BEGIN
+    -- create item.
+    INSERT INTO item (tipo, descricao, chance_drop, nome, peso, preco)
+    VALUES ('Pergaminho', p_descricao, p_chance_drop, p_nome, p_peso, p_preco)
+    RETURNING id INTO v_item_id;
+
+    -- create scroll.
+    INSERT INTO pergaminho (id, cor)
+    VALUES (v_item_id, p_cor);
+
+    RETURN v_item_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -340,28 +365,74 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- PostGreSQL: create `combate`
-CREATE OR REPLACE FUNCTION finalizar_combate(
+-- PosGreSQL: create `atualizar_combate`
+CREATE OR REPLACE FUNCTION atualizar_combate(
     IN p_personagem_id INT,
-    IN p_xp INT,
-    IN p_dano_recebido INT, 
-    IN p_energia_arcana INT
-    IN i_id
+    IN p_inimigo_id INT,
+    IN p_vida_personagem INT,
+    IN p_vida_inimigo INT
 ) RETURNS INT AS $$
+DECLARE
+    v_personagem_id INT;
 BEGIN
-    -- Atualizar o personagem com os valores calculados
+    -- Update character fields.
     UPDATE personagem
-    SET vida = GREATEST(vida - p_dano_recebido, 0),
-        xp = LEAST(xp + p_xp, xp_total), 
-        energia_arcana = LEAST(energia_arcana + p_energia_arcana, energia_arcana_maxima)
+    SET vida = GREATEST(p_vida_personagem, 0)
     WHERE id = p_personagem_id;
 
-    -- precisa destruir a instancia de inimiigo ir no armazenamento e criar a instancia de item e colocar na subregiao
+    -- Update enemy fields.
+    UPDATE inimigo_instancia
+    SET vida = GREATEST(p_vida_inimigo, 0)
+    WHERE id = p_inimigo_id;
 
     RETURN p_personagem_id;
 END;
 $$ LANGUAGE plpgsql;
 
+-- PostGreSQL: create `combate`
+CREATE OR REPLACE FUNCTION finalizar_combate(
+    IN p_id INT,
+    IN p_xp INT,
+    IN p_energia_arcana INT,
+    IN p_dano_recebido INT, 
+    IN p_dano_causado INT,
+    IN ei_id INT
+) RETURNS INT[] AS $$
+DECLARE
+    v_armazenamentos INT;
+    list_items INT[];
+BEGIN
+    -- Update character fields.
+    UPDATE personagem
+    SET xp = LEAST(xp + p_xp, xp_total), 
+        energia_arcana = LEAST(energia_arcana + p_energia_arcana, energia_arcana_maxima)
+    WHERE id = p_id;
+
+    -- Get items that can be dropped from this enemy.
+    SELECT
+        a.item_id,
+        a.quantidade,
+        i.drop_inimigos_media
+    INTO v_armazenamentos
+    FROM armazenamento_inimigo AS ai
+    JOIN armazenamento AS a ON ai.armazenamento_id = a.id
+    JOIN item AS i ON a.item_id = i.id
+    WHERE ai.inimigo_id = ei_id;
+
+    -- Generate items that will be dropped.
+    FOR i IN 1..v_armazenamentos.quantidade LOOP
+        IF random() < 1 / v_armazenamentos.drop_inimigos_media THEN
+            list_items := list_items || v_armazenamentos.item_id;
+        END IF;
+    END LOOP;
+
+    -- Add to the table `combate`: inimigo_instancia_id, personagem_id, dano_cauisad, dano_recebido.
+    INSERT INTO combate (inimigo_instancia_id, personagem_id, dano_causado, dano_recebido)
+    VALUES (ei_id, p_personagem_id, p_dano_causado, p_dano_recebido);
+
+    RETURN list_items;
+END;
+$$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `aprender_feitico`
 CREATE OR REPLACE FUNCTION aprender_feitico(
@@ -371,27 +442,49 @@ CREATE OR REPLACE FUNCTION aprender_feitico(
 DECLARE
     v_inventario_id INT;
     v_requisito_id INT;
-    v_possui_requisito BOOLEAN;
+    v_pre_requisito_aprendido BOOLEAN;
+    v_possui_feitico_atual BOOLEAN;
+    v_conhecimento_arcano_suficiente BOOLEAN;
 BEGIN
     SELECT id
     INTO v_inventario_id
     FROM inventario
     WHERE personagem_id = p_personagem_id;
 
-    SELECT de_id 
-    INTO v_requisito_id 
+    SELECT de_id
+    INTO v_requisito_id
     FROM feitico_requerimento
-    WHERE para_id = feitico_id;
+    WHERE para_id = p_feitico_id;
 
+    -- Verifica se já possui o feitiço pré-requisito
     SELECT EXISTS (
         SELECT 1
         FROM feitico_aprendido
-        WHERE inventario_id = v_inventario_id AND feitico_id = p_feitico_id
-    ) INTO v_possui_requisito;
+        WHERE inventario_id = v_inventario_id
+          AND feitico_id = v_requisito_id
+    ) INTO v_pre_requisito_aprendido;
 
-    IF v_possui_requisito THEN
+    -- Verifica se já possui o feitiço atual
+    SELECT EXISTS (
+        SELECT 1
+        FROM feitico_aprendido
+        WHERE inventario_id = v_inventario_id
+          AND feitico_id = p_feitico_id
+    ) INTO v_possui_feitico_atual;
+
+    -- Verifica se possui conhecimento arcano suficiente para o feitiço
+    SELECT (p.conhecimento_arcano >= f.conhecimento_arcano_necessario)
+    INTO v_conhecimento_arcano_suficiente
+    FROM personagem p
+    JOIN feitico f ON f.id = p_feitico_id
+    WHERE p.id = p_personagem_id;
+
+    -- Só aprende o feitiço se ainda não tiver, já possuir o pré-requisito e tiver conhecimento arcano
+    IF NOT v_possui_feitico_atual
+       AND v_pre_requisito_aprendido
+       AND v_conhecimento_arcano_suficiente THEN
         INSERT INTO feitico_aprendido(inventario_id, feitico_id)
-        VALUES (inventario_id, feitico_id);
+        VALUES (v_inventario_id, p_feitico_id);
     END IF;
 
     RETURN p_personagem_id;

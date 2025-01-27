@@ -1,7 +1,10 @@
 from database import Database
 from utils import debug, error
+from colorama import Style
 
 def merchants(db: Database):
+    
+    table_name = Style.BRIGHT + "MERCADOR" + Style.NORMAL
 
     try:
         mercadores = [
@@ -37,10 +40,9 @@ Mundo perigoso, não é mesmo? Mas não se preocupe, tenho os itens mágicos per
             """, mercadores
         )
 
-        debug("default: mercador added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name}s added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        error(f"default: Error occurred while adding mercador: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

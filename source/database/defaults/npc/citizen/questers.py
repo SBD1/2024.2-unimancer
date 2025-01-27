@@ -1,7 +1,10 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 def questers(db: Database):
+    
+    table_name = Style.BRIGHT + "QUESTER" + Style.NORMAL
 
     try:
         questers = [
@@ -41,10 +44,10 @@ Está preparado?"""
             """, questers
         )
 
-        debug("default: Questers added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name}s added successfully!")
+        
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding Questers: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

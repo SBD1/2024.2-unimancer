@@ -21,7 +21,7 @@ def citizens(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name}s populated successfully!")
+        debug(f"default: {table_name}s added successfully!")
         
 
     except Exception as e:

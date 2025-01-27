@@ -1,7 +1,11 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
 
 def socks(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Meias)" + Style.NORMAL
+    
     try:
 
         # [("descricao...", inimigos para matar para dropar, "nome", "peso", "preco")]
@@ -14,18 +18,16 @@ def socks(db: Database):
             ("Fabricada com raízes de árvores mágicas", 13, "Meia de raízes", 2, 50),
             ("Imbuídas com magia sombria", 15, "Meias do Vórtice Sombrio", 3, 50),
         ]
-
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Meias', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Meias', %s, %s, %s, %s, %s);
             """, default_values
         )
 
-        debug("default: meias added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding *ACESSORIOS.SOCKS* values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")

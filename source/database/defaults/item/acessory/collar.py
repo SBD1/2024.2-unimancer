@@ -1,8 +1,12 @@
 from database import Database
-from utils import debug
+from utils import debug, error
+from colorama import Style
         
 # add collars in the magical fantasy game where only exists magical creatures.
 def collars(db: Database):
+    
+    table_name = Style.BRIGHT + "ACESSORIO (Colar)" + Style.NORMAL
+    
     try:
         # [("descricao...", inimigos para matar para dropar, "nome", "peso", "preco")]
         default_values = [
@@ -24,14 +28,13 @@ def collars(db: Database):
         
         db.cur.executemany(
             """
-            CALL create_acessorio('Colar', %s, %s, %s, %s, %s);
+            SELECT criar_acessorio('Colar', %s, %s, %s, %s, %s);
             """, default_values
         )
 
-        debug("default: *collars* added successfully!")
-
         db.conn.commit()
+        debug(f"default: {table_name} added successfully!")
 
     except Exception as e:
         db.conn.rollback()
-        debug(f"default: Error occurred while adding *ACESSORIOS.COLLARS* values: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")
