@@ -1,9 +1,10 @@
+from tomlkit import table
 from database import Database
 from utils import debug, error
 from colorama import Style
 
 def area_spells(db: Database):
-    table_name = Style.BRIGHT + "feitico_dano_area" + Style.NORMAL
+    table_name = Style.BRIGHT + "FEITICO_DANO_AREA" + Style.NORMAL
     try:
         default_values = [
             # Água
@@ -296,10 +297,10 @@ def area_spells(db: Database):
             default_values
         )
         db.conn.commit()
-        debug(f"Inserted {len(default_values)} area spells into {table_name} successfully!")
+        debug(f"default: {len(default_values)} {table_name} added successfully!")
         
         return len(default_values)
     
     except Exception as e:
         db.conn.rollback()
-        error(f"Error while inserting area spells: {e}")
+        error(f"default: error occurred while adding {table_name}s values: {e}")
