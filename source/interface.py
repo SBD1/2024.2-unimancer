@@ -56,15 +56,15 @@ def inventory(character, conn):
     print(f"Inventário de === {character.nome} ===")
     print("-" * 40)
 
-    # items = list_all_items(conn, character.id)
+    items = list_item_inventory(conn, character.id)
 
-    #if not items:
-    #    print("O inventário está vazio.")
-    #else:
-    #    for item in items:
-    #        nome, descricao, qtd = item
-    #        print(f"- {nome} ({descricao}): {qtd}")
-    #
+    if not items:
+       print("O inventário está vazio.")
+    else:
+       for item in items:
+           nome, descricao, qtd = item
+           print(f"- {nome} ({descricao}): {qtd}")
+    
     print("-" * 40)
 
 # Show available subregions and handle navigation 
@@ -88,13 +88,13 @@ def navigate(conn, character):
             nome, tipo = npc
             print(f"{nome} - ({tipo})")
         
-        print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
+        print(Fore.YELLOW + "-------------------" + Style.RESET_ALL)
 
         print(Fore.YELLOW + "\n--- Inimigos ---" + Style.RESET_ALL)
         # list enemys in the subregion
         enemys = list_enemys_subregion(conn, character.sub_regiao_id)
         for enemy in enemys:
-            print(f"{enemy[1]} - {enemy[2]}")
+            print(f"{enemy[1]}({enemy[1]}) - {enemy[2]}")
         
         print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
 
@@ -136,16 +136,17 @@ def navigate(conn, character):
                 print("Escolha o inimigo que deseja enfrentar:")
                 print("0. Nenhum")
                 for idx, (enemy) in enumerate(enemys, start=1):
-                    print(f"{idx}. {enemy[1]}")
+                    print(f"{idx}. {enemy[1]} - {enemy[3]}")
                 result = int(input("Escolha um inimigo: "))
-                if result == 0:
-                    navigate(conn, character)
-                enemy_id = enemys[result - 1][0]
-
-                enemy_choice = get_enemy_info(conn, enemy_id)
-                combate = Combate(character, enemy_choice, conn)
-                combate.iniciar()
-                navigate(conn, character)           
+                if result != 0:
+                    enemy_id = enemys[result - 1][0]
+                    if enemy_id:
+                        enemy_choice = get_enemy_info(conn, enemy_id)
+                        combate = Combate(character, enemy_choice, conn)
+                        clear_screen()
+                        combate.iniciar()
+                else:
+                    print("\nOpção inválida!")           
         except ValueError:
             print("\nEntrada inválida! Escolha um número correspondente ou '0'.")
 

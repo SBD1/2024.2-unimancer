@@ -399,7 +399,7 @@ CREATE OR REPLACE FUNCTION finalizar_combate(
     IN ei_id INT
 ) RETURNS INT[] AS $$
 DECLARE
-    v_armazenamentos INT;
+    v_armazenamentos RECORD;
     list_items INT[];
 BEGIN
     -- Update character fields.
@@ -418,6 +418,11 @@ BEGIN
     JOIN armazenamento AS a ON ai.armazenamento_id = a.id
     JOIN item AS i ON a.item_id = i.id
     WHERE ai.inimigo_id = ei_id;
+
+    -- If the record variable `v_armazenamentos` is null, return the variable `list_items`.
+    IF v_armazenamentos IS NULL THEN
+        RETURN list_items;
+    END IF;
 
     -- Generate items that will be dropped.
     FOR i IN 1..v_armazenamentos.quantidade LOOP
