@@ -5,7 +5,7 @@ from colorama import Fore, Style, init
 from create_character import Character
 from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_enemy_info
 from utils import debug 
-from combat import Combate
+from combat import Combate, verificar_percepcao, Inimigo
 
 # Initialize colorama
 init()
@@ -68,90 +68,134 @@ def inventory(character, conn):
     print("-" * 40)
 
 # Show available subregions and handle navigation 
-def navigate(conn, character):
-    while True:
-        clear_screen()
-        print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
-        print(get_subregion_description(conn, character))
+def display_subregion_info(conn, character):
+    print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
+    print(get_subregion_description(conn, character))
 
-        print(Fore.YELLOW + "\n--- Locais Disponíveis ---" + Style.RESET_ALL)
-        subregions = get_subregions_character(conn, character.sub_regiao_id)
-
-        # show connected subregions
+    print(Fore.YELLOW + "\n--- Locais Disponíveis ---" + Style.RESET_ALL)
+    subregions = get_subregions_character(conn, character.sub_regiao_id)
+    if subregions:
         for idx, (destino, direcao, situacao) in enumerate(subregions, start=1):
             print(f"{idx}. {destino} ({direcao}) - Situação: {situacao}")
+    else:
+        print("Nenhum local disponível.")
 
-        print(Fore.YELLOW + "\n--- Personagens ---" + Style.RESET_ALL)
-        # list npcs in the subregion
-        npcs = list_npcs_subregion(conn, character.sub_regiao_id)
+    return subregions
+
+def display_enemies(conn, character):
+    enemys = list_enemys_subregion(conn, character.sub_regiao_id)
+    if enemys:
+        print(Fore.YELLOW + "\n--- Verificando Percepção dos Inimigos ---" + Style.RESET_ALL)
+        
+        for enemy in enemys:
+            enemy_id, enemy_name, *_ = enemy
+            enemy_info = get_enemy_info(conn, enemy_id)
+            inimigo_instanciado = Inimigo(*enemy_info)
+            inimigo_percebeu = verificar_percepcao(character, [inimigo_instanciado])
+            
+            if inimigo_percebeu:
+                inimigo_percebeu = (
+                inimigo_percebeu.nome,
+                inimigo_percebeu.id,
+                inimigo_percebeu.armazenamento_id,
+                inimigo_percebeu.descricao,
+                inimigo_percebeu.elemento,
+                inimigo_percebeu.vida,
+                inimigo_percebeu.vida_maxima,
+                inimigo_percebeu.xp_obtido,
+                inimigo_percebeu.inteligencia,
+                inimigo_percebeu.moedas_obtidas,
+                inimigo_percebeu.conhecimento_arcano,
+                inimigo_percebeu.energia_arcana_maxima
+            )
+                print(Style.BRIGHT + Fore.RED + "Um inimigo o percebeu! O combate será iniciado." + Style.RESET_ALL)
+                combate = Combate(character, inimigo_percebeu, conn)
+                combate.iniciar()
+                if character.vida <= 0:
+                    print(Fore.RED + "Você foi derrotado no combate! Voltando ao menu principal..." + Style.RESET_ALL)
+                    return
+    else:
+        print(Fore.GREEN + "Nenhum inimigo nesta sub-região." + Style.RESET_ALL)
+    
+    return enemys
+
+def display_npcs(conn, character):
+    print(Fore.YELLOW + "\n--- Personagens ---" + Style.RESET_ALL)
+    npcs = list_npcs_subregion(conn, character.sub_regiao_id)
+    if npcs:
         for npc in npcs:
             nome, tipo = npc
             print(f"{nome} - ({tipo})")
-        
-        print(Fore.YELLOW + "-------------------" + Style.RESET_ALL)
+    else:
+        print("Nenhum personagem encontrado.")
+    
+    return npcs
 
-        print(Fore.YELLOW + "\n--- Inimigos ---" + Style.RESET_ALL)
-        # list enemys in the subregion
-        enemys = list_enemys_subregion(conn, character.sub_regiao_id)
-        for enemy in enemys:
-            print(f"{enemy[1]}({enemy[1]}) - {enemy[2]}")
+def handle_player_choice(conn, character, subregions, npcs, enemys):
+    try:
+        choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem\n3-Lutar: \n")
         
-        print(Fore.YELLOW + "-------------------\n" + Style.RESET_ALL)
+        if choice_interaction == "0":
+            return False 
 
-        try:
-            choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem\n3-Lutar: \n")
-            if choice_interaction == "0":
-                break
-            elif choice_interaction == "1":
+        elif choice_interaction == "1":  # change current location
+            if subregions:
                 choice = int(input("\nEscolha uma direção: "))
                 if 1 <= choice <= len(subregions):
                     destino, direcao, situacao = subregions[choice - 1]
-                    if situacao == "Passável":  
+                    if situacao == "Passável":
                         print(f"\nVocê se moveu para: {destino} ({direcao}).")
                         character.sub_regiao_id = fetch_subregion_id_by_name(destino, conn)
                     else:
                         print("\nEssa passagem está bloqueada!")
                 else:
                     print("\nOpção inválida!")
-            elif choice_interaction == "2":
-                print("Escolha o personagem que deseja interagir:")
-                for idx, (nome, tipo) in enumerate(npcs, start=1):
-                    print(f"{idx}. {nome} - ({tipo})")
+            else:
+                print("Nenhuma sub-região para navegar.")
+        
+        elif choice_interaction == "2":  # Iteract with npcs
+            if npcs:
                 npc_choice = int(input("Escolha um personagem (número): "))
                 if 1 <= npc_choice <= len(npcs):
-                    npc_nome = npcs[npc_choice - 1][0]
-                    print(npc_nome)
-                    # npc_role = get_npc_role(conn, npc_nome) 
-                    npc_role = "quester" 
-                    if npc_role == "quester":
-                        print("Você encontrou um quester!")
-                        input("...")
-                        #quester = Quester(character, conn)
-                        #quester.interact()
-                    else:
-                        print("Você encontrou um vendedor!")
-                        #vendedor = Vendedor(character, conn)
-                        #merchant.interact()
+                    print(f"Você interagiu com {npcs[npc_choice - 1][0]}")
+                    # NPCS TO INTERACT
                 else:
                     print("\nOpção inválida!")
-            elif choice_interaction == "3":
-                clear_screen()
-                print("Escolha o inimigo que deseja enfrentar:")
-                print("0. Nenhum")
-                for idx, (enemy) in enumerate(enemys, start=1):
-                    print(f"{idx}. {enemy[1]} - {enemy[3]}")
+            else:
+                print("Nenhum NPC disponível para interação.")
+        
+        elif choice_interaction == "3": # Fight with an enemy
+            if enemys:
                 result = int(input("Escolha um inimigo: "))
-                if result != 0:
+                if result != 0 and 1 <= result <= len(enemys):
                     enemy_id = enemys[result - 1][0]
-                    if enemy_id:
-                        enemy_choice = get_enemy_info(conn, enemy_id)
-                        combate = Combate(character, enemy_choice, conn)
-                        clear_screen()
-                        combate.iniciar()
+                    enemy_info = get_enemy_info(conn, enemy_id)
+                    combate = Combate(character, enemy_info, conn)
+                    combate.iniciar()
                 else:
-                    print("\nOpção inválida!")           
-        except ValueError:
-            print("\nEntrada inválida! Escolha um número correspondente ou '0'.")
+                    print("\nOpção inválida!")
+            else:
+                print("Nenhum inimigo disponível para combate.")
+        
+        else:
+            print("\nOpção inválida!")
+        return True 
+        
+    except ValueError:
+        print("\nEntrada inválida! Escolha um número correspondente ou '0'.")
+        return True  
+
+def navigate(conn, character):
+    while True:
+        clear_screen()
+        
+        subregions = display_subregion_info(conn, character)
+        enemys = display_enemies(conn, character)
+        npcs = display_npcs(conn, character)
+        
+        if not handle_player_choice(conn, character, subregions, npcs, enemys):
+            break 
+
 
 # Function to change actual subregion
 def fetch_subregion_id_by_name(name, conn):
