@@ -41,6 +41,12 @@ def create_enemy_instances(db: Database):
 
             # Caverna Soterrada
             (24, 25, 200),  # Dragão da Devastação - Vila Esquecida
+
+            # Bosses
+            (25, 9, 150), # Abgail -> Fenda do Abismo
+            (26, 17, 180), # Lumina -> Trono Cristalizado
+            (27, 25, 200), # Necromante -> Vila Esquecida
+            (28, 29, 220) # Nosferus -> Catedral Queimada
         ]
         db.cur.executemany(
             """

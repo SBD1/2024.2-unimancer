@@ -32,7 +32,11 @@ def default_enemies(db: Database):
             ("Goblin Zumbi", "Um goblin reanimado, movido por uma força sombria.", "Trevas", 50, 20, 5, 0, 0, 2),
             ("Guerreiro Corrompido", "Um antigo herói que foi consumido pelo mal.", "Trevas", 100, 60, 50, 10, 20, 7),
             ("Fera Flamejante", "Uma criatura ardente que espalha destruição.", "Fogo", 110, 55, 40, 15, 30, 8),
-            ("Dragão da Devastação", "Um dragão imenso, a maior ameaça das terras devastadas.", "Trevas", 200, 100, 100, 50, 100, 20)
+            ("Dragão da Devastação", "Um dragão imenso, a maior ameaça das terras devastadas.", "Trevas", 200, 100, 100, 50, 100, 20),
+            ("Abgail", "Entidade de uma grande maga que pagou o preço por conhecer todas as verdades.", "Fogo", 150, 60, 75, 100, 100, 12),
+            ("Lumina", "Lumina é uma figura radiante, simbolizando a pureza e o poder da luz. Sua presença ilumina até as sombras mais profundas, e ela tem a capacidade de curar aliados ou desintegrar inimigos com feixes de luz concentrados.", "Luz", 180, 75, 90, 120, 90, 15),
+            ("Necromante", "O Necromante é um mestre das artes negras, comandando os mortos e manipulando as trevas para enfraquecer seus inimigos.", "Trevas", 200, 85, 100, 110, 120, 14),
+            ("Nosferus", "Antigo Unimancer que abandonou sua humanidade em busca de mais poder, e aprender a controlar outros elementos.", "Trevas", 220, 100, 125, 130, 80, 18)
         ]
         
         # add all enemies using procedure: criar_inimigo()
