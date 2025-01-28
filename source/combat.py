@@ -61,7 +61,7 @@ class Combate:
         modificador = (self.personagem.inteligencia - self.inimigo.inteligencia) * 0.05
         chance_fuga = base_chance + modificador
         return max(0.8, min(0.9, chance_fuga))
-
+    
     def atacar(self):
         dano_causado = random.randint(50, 60) * self.personagem.nivel
         dano_causado *= self.vantagem_elemento(self.personagem.elemento, self.inimigo.elemento)
@@ -170,3 +170,23 @@ class Combate:
                 cursor.execute("""SELECT finalizar_combate (%s, %s, %s, %s, %s, %s)""", 
                             (self.personagem.id, xp_ganho, 0, self.dano_causado, self.dano_recebido, self.inimigo.id))
                 self.conn.commit()
+
+
+def verificar_percepcao(personagem, inimigos):
+    print(Style.BRIGHT + Fore.YELLOW + "\n--- Verificando Percepção dos Inimigos ---" + Style.RESET_ALL)
+
+    for inimigo in inimigos:
+        rolagem_personagem = random.randint(1, 20) + personagem.inteligencia
+        rolagem_inimigo = random.randint(1, 20) + inimigo.inteligencia
+
+        print(
+            f"Rolagem: {personagem.nome} ({rolagem_personagem}) vs "
+            f"{inimigo.nome} ({rolagem_inimigo})"
+        )
+
+        if rolagem_inimigo >= rolagem_personagem:
+            print(Style.BRIGHT + Fore.RED + f"\nO inimigo {inimigo.nome} percebeu você!" + Style.RESET_ALL)
+            return inimigo
+
+    print(Style.BRIGHT + Fore.GREEN + "\nVocê conseguiu evitar os inimigos!" + Style.RESET_ALL)
+    return None
