@@ -27,7 +27,7 @@ def effects(db: Database):
             #Fivela
             ("Resiliência Simples", "Concede uma pequena melhoria na defesa física.", 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),  # Fivela de bronze
             ("Runas Destrutivas", "Amplifica o dano de magias ofensivas temporariamente.", 0.0, 0.3, 0.4, 0.0, 0.2, 0.0, 0.0, 0.0),  # Fivela Rúnica
-            ("Energia Maldita", "Aumenta o crítico e reduz ligeiramente a defesa do usuário.", -0.1, 0.0, 0.6, 0.0, 0.3, 0.0, 0.0, 0.0),  # Fivela Obscura
+            ("Energia Maldita", "Aumenta o crítico e reduz ligeiramente a defesa do usuário.", 0.1, 0.0, 0.6, 0.0, 0.3, 0.0, 0.0, 0.0),  # Fivela Obscura
             ("Luz Astral", "Melhora as habilidades de cura e concede resistência a magia.", 0.1, 0.2, 0.0, 0.3, 0.0, 0.0, 0.0, 0.0),  # Fivela Celestial
             ("Graça do Vento", "Concede maior agilidade e chance de esquiva.", 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.0, 0.0),  # Fivela da Ventania
             ("Proteção Glacial", "Aumenta a defesa física e mágica, protegendo contra o frio.", 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),  # Fivela do Gelo Inquebrável
@@ -62,7 +62,7 @@ def effects(db: Database):
             ('Energia Trovejante', 'Amplifica habilidades elétricas e aumenta crítico.', 0.0, 0.4, 0.5, 0.0, 0.2, 0.0, 0.0, 0.0), # Colar do Raio Furioso
             ('Força Sombria', 'Canaliza poder sombrio e aumenta resistência mágica.', 0.3, 0.4, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0), # Colar do Eclipse Noturno
             ('Agilidade Aquática', 'Aumenta a velocidade e dano de ataques aquáticos.', 0.0, 0.3, 0.2, 0.0, 0.2, 0.0, 0.0, 0.0), # Colar da Maré Mística
-            ('Sacrifício Carmesim', 'Converte vida em aumento extremo de poder.', 0.0, 0.6, 0.4, -0.3, 0.5, 0.0, 0.0, 0.0), # Colar Carmesim Profano
+            ('Sacrifício Carmesim', 'Converte vida em aumento extremo de poder.', 0.0, 0.6, 0.4, 0.3, 0.5, 0.0, 0.0, 0.0), # Colar Carmesim Profano
             ('Lâminas Invisíveis', 'Aumenta o dano de ataques cortantes e agilidade.', 0.0, 0.2, 0.3, 0.0, 0.0, 0.1, 0.0, 0.0), # Anel de Vento
             ('Poder Régio', 'Aumenta drasticamente o poder mágico e crítico.', 0.3, 0.6, 0.5, 0.0, 0.2, 0.0, 0.0, 0.0), # Anel da Realeza
             # Luvas
