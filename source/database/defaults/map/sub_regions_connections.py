@@ -163,9 +163,9 @@ def sub_regions_connections(db: Database):
             """, connections
         )
         db.conn.commit()
-        debug(f"default: {len(table_name)} {table_name} added successfully!")
+        debug(f"default: {len(connections)} {table_name} added successfully!")
         
-        return len(table_name)
+        return len(connections)
 
     except Exception as e:
         db.conn.rollback()

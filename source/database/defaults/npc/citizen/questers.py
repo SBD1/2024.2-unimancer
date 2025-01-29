@@ -41,9 +41,9 @@ def questers(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {len(table_name)} {table_name} added successfully!")
+        debug(f"default: {len(questers)} {table_name} added successfully!")
         
-        return len(table_name)
+        return len(questers)
 
     except Exception as e:
         db.conn.rollback()

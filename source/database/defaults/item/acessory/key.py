@@ -22,7 +22,7 @@ def keys(db: Database):
             (
                 "Chave de Bronze",
                 9999999,
-                "uma chave de bronze que abre a porta para o Abismo.",
+                "Uma chave de bronze que abre a porta para o Abismo.",
                 2,
                 78
             ),
@@ -30,7 +30,7 @@ def keys(db: Database):
             (
                 "Torcha do Escuro Montante",
                 9999999,
-                "uma tocha que brilha no escuro especificamente no Monte Caído.",
+                "Uma tocha que brilha no escuro especificamente no Monte Caído.",
                 5,
                 128
             )

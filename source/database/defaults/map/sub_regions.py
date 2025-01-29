@@ -85,9 +85,9 @@ def sub_regions(db: Database):
             """, sub_regions
         )
         db.conn.commit()
-        debug(f"default: {len(table_name)} {table_name} added successfully!")
+        debug(f"default: {len(sub_regions)} {table_name} added successfully!")
         
-        return len(table_name)
+        return len(sub_regions)
 
     except Exception as e:
         db.conn.rollback()
