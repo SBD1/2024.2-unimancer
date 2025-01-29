@@ -163,13 +163,17 @@ class Combate:
             print(Style.BRIGHT + Fore.GREEN + "Você venceu o combate!" + Style.RESET_ALL)
             input(Fore.YELLOW + "Pressione Enter para continuar..." + Style.RESET_ALL)
             xp_ganho = self.inimigo.xp_obtido
-            with self.conn.cursor() as cursor:
-                cursor.execute("""SELECT atualizar_combate (%s, %s, %s, %s)""", 
+            with self.conn.cursor() as cur:
+                cur.execute("""SELECT atualizar_combate (%s, %s, %s, %s)""", 
                             (self.personagem.id, self.inimigo.id, self.personagem.vida, 0))
                 self.conn.commit()
-                cursor.execute("""SELECT finalizar_combate (%s, %s, %s, %s, %s, %s)""", 
+                cur.execute("""SELECT finalizar_combate (%s, %s, %s, %s, %s, %s)""", 
                             (self.personagem.id, xp_ganho, 0, self.dano_causado, self.dano_recebido, self.inimigo.id))
                 self.conn.commit()
+                result = cur.fetchall()
+                print(result)
+                input(Fore.YELLOW + "Pressione Enter para continuar..." + Style.RESET_ALL)
+
 
 
 def verificar_percepcao(personagem, inimigos):

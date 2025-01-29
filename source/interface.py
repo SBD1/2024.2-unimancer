@@ -6,6 +6,7 @@ from create_character import Character
 from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_enemy_info
 from utils import debug 
 from combat import Combate, verificar_percepcao, Inimigo
+import time
 
 # Initialize colorama
 init()
@@ -67,10 +68,23 @@ def inventory(character, conn):
     
     print("-" * 40)
 
+def show_enemies(conn, character):
+    enemys = list_enemys_subregion(conn, character.sub_regiao_id)
+    if enemys:
+        print(Fore.YELLOW + "\n--- Inimigos na Região ---" + Style.RESET_ALL)
+        for idx, enemy in enumerate(enemys, start=1):
+            enemy_id, enemy_name, enemy_descricao,  *_ = enemy
+            print(f"{idx}. {enemy_name} - {enemy_descricao}")
+    else:
+        print(Fore.GREEN + "Nenhum inimigo nesta sub-região." + Style.RESET_ALL)
+    return enemys
+
+
 # Show available subregions and handle navigation 
 def display_subregion_info(conn, character):
     print(Fore.CYAN + "\n ----- Descrição -------" + Style.RESET_ALL)
-    print(get_subregion_description(conn, character))
+    rg = get_subregion_description(conn, character)
+    print(f"{rg[0][1]} - {rg[0][0]}")
 
     print(Fore.YELLOW + "\n--- Locais Disponíveis ---" + Style.RESET_ALL)
     subregions = get_subregions_character(conn, character.sub_regiao_id)
@@ -82,10 +96,18 @@ def display_subregion_info(conn, character):
 
     return subregions
 
-def display_enemies(conn, character):
+def display_enemies(conn, character, check):
     enemys = list_enemys_subregion(conn, character.sub_regiao_id)
-    if enemys:
+    if enemys and check:
         print(Fore.YELLOW + "\n--- Verificando Percepção dos Inimigos ---" + Style.RESET_ALL)
+        time.sleep(1)
+        print(Style.BRIGHT + Fore.YELLOW + "." + Style.RESET_ALL)
+        time.sleep(1)
+        print(Style.BRIGHT + Fore.YELLOW + "." + Style.RESET_ALL)
+        time.sleep(1)
+        print(Style.BRIGHT + Fore.YELLOW + "." + Style.RESET_ALL)
+        time.sleep(1)
+
         
         for enemy in enemys:
             enemy_id, enemy_name, *_ = enemy
@@ -107,16 +129,15 @@ def display_enemies(conn, character):
                 inimigo_percebeu.moedas_obtidas,
                 inimigo_percebeu.conhecimento_arcano,
                 inimigo_percebeu.energia_arcana_maxima
-            )
-                print(Style.BRIGHT + Fore.RED + "Um inimigo o percebeu! O combate será iniciado." + Style.RESET_ALL)
+                )
                 combate = Combate(character, inimigo_percebeu, conn)
                 combate.iniciar()
+                clear_screen()
+                display_subregion_info(conn, character)
+                show_enemies(conn, character)
                 if character.vida <= 0:
-                    print(Fore.RED + "Você foi derrotado no combate! Voltando ao menu principal..." + Style.RESET_ALL)
+                    print(Fore.RED + "Você foi derrotado no combate..." + Style.RESET_ALL)
                     return
-    else:
-        print(Fore.GREEN + "Nenhum inimigo nesta sub-região." + Style.RESET_ALL)
-    
     return enemys
 
 def display_npcs(conn, character):
@@ -152,8 +173,10 @@ def handle_player_choice(conn, character, subregions, npcs, enemys):
                     print("\nOpção inválida!")
             else:
                 print("Nenhuma sub-região para navegar.")
+            
+            navigate(conn, character)
         
-        elif choice_interaction == "2":  # Iteract with npcs
+        elif choice_interaction == "2":  # Interact with npcs
             if npcs:
                 npc_choice = int(input("Escolha um personagem (número): "))
                 if 1 <= npc_choice <= len(npcs):
@@ -186,16 +209,17 @@ def handle_player_choice(conn, character, subregions, npcs, enemys):
         return True  
 
 def navigate(conn, character):
+    check = 1
     while True:
         clear_screen()
-        
         subregions = display_subregion_info(conn, character)
-        enemys = display_enemies(conn, character)
+        show_enemies(conn, character)
+        enemys = display_enemies(conn, character, check)
+        check = 0
         npcs = display_npcs(conn, character)
         
         if not handle_player_choice(conn, character, subregions, npcs, enemys):
             break 
-
 
 # Function to change actual subregion
 def fetch_subregion_id_by_name(name, conn):
@@ -208,12 +232,12 @@ def fetch_subregion_id_by_name(name, conn):
 def get_subregion_description(conn, character):
     try:
         with conn.cursor() as cur:
-            cur.execute(f"SELECT descricao FROM sub_regiao WHERE id = {character.sub_regiao_id}")
-            result = cur.fetchone()
-            return result[0]
+            cur.execute(f"SELECT descricao, nome FROM sub_regiao WHERE id = {character.sub_regiao_id}")
+            result = cur.fetchall()
+            return result
     except psycopg2.Error as e:
         print(f"Erro ao obter descrição da sub-região: {e}")
-        conn.rollback()  # Reverte a transação em caso de erro
+        conn.rollback() 
         return "Erro ao acessar a descrição."
 
 # Main game loop
@@ -247,6 +271,7 @@ def game_loop(conn):
         elif option == "criar":
             character = Character(conn) 
             character.add_database() 
+            character.definy_initial_spells(conn)
             debug(f"Personagem {character.nome} criado com sucesso!")
             ok = True
 
