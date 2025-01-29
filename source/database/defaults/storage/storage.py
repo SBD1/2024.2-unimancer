@@ -31,7 +31,7 @@ def storage(item_name: str, quantity: int, db: Database) -> int:
 
 def populate_storage(db: Database):
     
-    table_name = Style.BRIGHT + "STORAGE" + Style.NORMAL
+    table_name = Style.BRIGHT + "ARMAZENAMENTO" + Style.NORMAL
    
     try:
         db.cur.execute("SELECT nome FROM item;")
