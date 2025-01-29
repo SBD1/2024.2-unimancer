@@ -117,9 +117,25 @@ def list_character_id(conn, character_id):
     
 def list_item_inventory(conn, character_id):
     with conn.cursor() as cur:
-        cur.execute(f"SELECT i.nome, i.descricao FROM inventario inv JOIN item_instancia ii ON inv.id = ii.inventario_id JOIN item i ON ii.item_id = i.id WHERE inv.personagem_id = {character_id};")
-        result = cur.fetchall()
-        return result
+        cur.execute("""
+            SELECT id FROM inventario WHERE personagem_id = %s AND tipo = 'Mochila'
+        """, (character_id,))
+        
+        inventarios = cur.fetchall()
+        
+        items = []
+        for inventario in inventarios:
+            inventario_id = inventario[0]
+            cur.execute("""
+                SELECT item.nome, item.descricao, COUNT(item_instancia.id) as quantidade
+                FROM item_instancia
+                JOIN item ON item_instancia.item_id = item.id
+                WHERE item_instancia.inventario_id = %s
+                GROUP BY item.nome, item.descricao
+            """, (inventario_id,))
+            
+            items.extend(cur.fetchall())
+    return items
 
 def get_civilian_info(conn, npc_name):
     with conn.cursor() as cur:

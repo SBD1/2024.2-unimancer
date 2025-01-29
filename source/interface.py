@@ -64,7 +64,7 @@ def inventory(character, conn):
     else:
        for item in items:
            nome, descricao, qtd = item
-           print(f"- {nome} ({descricao}): {qtd}")
+           print(f"- {nome} ({descricao}) - {qtd}")
     
     print("-" * 40)
 
@@ -298,6 +298,7 @@ def game_loop(conn):
             character = Character(conn) 
             character.add_database() 
             character.define_initial_spells(conn)
+            character.add_initial_items(conn)
             debug(f"Personagem {character.nome} criado com sucesso!")
             ok = True
 

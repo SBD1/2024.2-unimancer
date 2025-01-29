@@ -120,14 +120,14 @@ class Character:
             )
             result = cur.fetchone()
 
-            if not result:  # Se não existe, cria o inventário
+            if not result:  # if not exist, create new inventory
                 cur.execute(
                     "INSERT INTO inventario (personagem_id) VALUES (%s) RETURNING id",
                     (self.id,)
                 )
                 inventory_id = cur.fetchone()[0]
                 conn.commit()
-                print(f"✅ Inventário criado para {self.nome} (ID {inventory_id})")
+                print(f"Inventário criado para {self.nome} (ID {inventory_id})")
             else:
                 inventory_id = result[0]
             
@@ -155,3 +155,34 @@ class Character:
             print(f"Erro ao definir feitiços iniciais: {e}")
             conn.rollback()
 
+    def add_initial_items(self, conn):
+        try:
+            inventory_id = self.create_inventory_if_not_exists(conn)
+
+            elixir_da_vida_id = 133  
+            mana_liquida_id = 134  
+
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO item_instancia (item_id, inventario_id)
+                    VALUES (%s, %s)
+                    RETURNING item_id;
+                """, (elixir_da_vida_id, inventory_id))
+
+                cur.execute("""
+                    INSERT INTO item_instancia (item_id, inventario_id)
+                    VALUES (%s, %s)
+                    RETURNING item_id;
+                """, (elixir_da_vida_id, inventory_id))
+
+                cur.execute("""
+                    INSERT INTO item_instancia (item_id, inventario_id)
+                    VALUES (%s, %s)
+                    RETURNING item_id;
+                """, (mana_liquida_id, inventory_id))
+
+            conn.commit()
+            print(f"Elixir da Vida e Mana Líquida adicionados ao inventário de {self.nome}.")
+        except Exception as e:
+            print(f"Erro ao adicionar itens iniciais: {e}")
+            conn.rollback()
