@@ -7,7 +7,7 @@ from database.defaults.npc.enemy import enemies, enemies_instances
 
 from database.defaults.npc.citizen import citizens, merchants, questers
 
-from database.defaults.storage import quest
+from database.defaults.storage import quest, storage
 
 from database.defaults.map import regions as r, sub_regions as sr, sub_regions_connections as src
 
@@ -64,6 +64,7 @@ def populate_database(db: Database):
         writted_scroll.writted_scrolls(db, scrolls_id_start)
         
         quest.quests(db)
+        storage.populate_storage(db)
 
         #potions
         potions.potions(db)
