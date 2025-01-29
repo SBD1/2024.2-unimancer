@@ -451,56 +451,46 @@ DECLARE
     v_possui_feitico_atual BOOLEAN;
     v_conhecimento_arcano_suficiente BOOLEAN;
 BEGIN
-    -- get character inventory
-    SELECT id INTO v_inventario_id
+    SELECT id
+    INTO v_inventario_id
     FROM inventario
     WHERE personagem_id = p_personagem_id;
 
-    -- if doesn't have a inventory, return error
-    IF v_inventario_id IS NULL THEN
-        RAISE EXCEPTION 'O personagem % não possui inventário.', p_personagem_id;
-    END IF;
-
-    SELECT de_id INTO v_requisito_id
+    SELECT de_id
+    INTO v_requisito_id
     FROM feitico_requerimento
     WHERE para_id = p_feitico_id;
 
-    SELECT COALESCE(
-        (SELECT EXISTS (
-            SELECT 1 FROM feitico_aprendido 
-            WHERE inventario_id = v_inventario_id AND feitico_id = v_requisito_id
-        )), TRUE
+    -- Verifica se já possui o feitiço pré-requisito
+    SELECT EXISTS (
+        SELECT 1
+        FROM feitico_aprendido
+        WHERE inventario_id = v_inventario_id
+          AND feitico_id = v_requisito_id
     ) INTO v_pre_requisito_aprendido;
 
+    -- Verifica se já possui o feitiço atual
     SELECT EXISTS (
-        SELECT 1 FROM feitico_aprendido 
-        WHERE inventario_id = v_inventario_id AND feitico_id = p_feitico_id
+        SELECT 1
+        FROM feitico_aprendido
+        WHERE inventario_id = v_inventario_id
+          AND feitico_id = p_feitico_id
     ) INTO v_possui_feitico_atual;
 
-    SELECT COALESCE(
-        (p.conhecimento_arcano >= f.conhecimento_arcano_necessario), FALSE
-    ) INTO v_conhecimento_arcano_suficiente
+    -- Verifica se possui conhecimento arcano suficiente para o feitiço
+    SELECT (p.conhecimento_arcano >= f.conhecimento_arcano_necessario)
+    INTO v_conhecimento_arcano_suficiente
     FROM personagem p
     JOIN feitico f ON f.id = p_feitico_id
     WHERE p.id = p_personagem_id;
 
-    IF v_possui_feitico_atual THEN
-        RAISE NOTICE 'O personagem % já aprendeu este feitiço.', p_personagem_id;
-        RETURN p_personagem_id;
+    -- Só aprende o feitiço se ainda não tiver, já possuir o pré-requisito e tiver conhecimento arcano
+    IF NOT v_possui_feitico_atual
+       AND v_pre_requisito_aprendido
+       AND v_conhecimento_arcano_suficiente THEN
+        INSERT INTO feitico_aprendido(inventario_id, feitico_id)
+        VALUES (v_inventario_id, p_feitico_id);
     END IF;
-
-    IF NOT v_pre_requisito_aprendido THEN
-        RAISE NOTICE 'O personagem % não tem o pré-requisito necessário para este feitiço.', p_personagem_id;
-        RETURN p_personagem_id;
-    END IF;
-
-    IF NOT v_conhecimento_arcano_suficiente THEN
-        RAISE NOTICE 'O personagem % não tem conhecimento arcano suficiente para aprender este feitiço.', p_personagem_id;
-        RETURN p_personagem_id;
-    END IF;
-
-    INSERT INTO feitico_aprendido(inventario_id, feitico_id)
-    VALUES (v_inventario_id, p_feitico_id);
 
     RETURN p_personagem_id;
 END;
