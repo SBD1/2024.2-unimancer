@@ -13,7 +13,7 @@ from database.defaults.map import regions as r, sub_regions as sr, sub_regions_c
 
 from database.defaults.item.scroll import area_damage, cure, damage, scroll, writted_scroll, requirements
 
-from database.defaults.item import effects
+from database.defaults.item import effects, potions, potion_effect
 
 def populate_database(db: Database):
     
@@ -64,6 +64,11 @@ def populate_database(db: Database):
         writted_scroll.writted_scrolls(db, scrolls_id_start)
         
         quest.quests(db)
+
+        #potions
+        potions.potions(db)
+        potion_effect.potion_effect(db)
+
 
         db.conn.commit()
 
