@@ -68,6 +68,32 @@ def inventory(character, conn):
     
     print("-" * 40)
 
+def list_spells(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT feitico.descricao, feitico.energia_arcana
+            FROM inventario
+            JOIN feitico_aprendido ON inventario.id = feitico_aprendido.inventario_id
+            JOIN feitico ON feitico_aprendido.feitico_id = feitico.id
+            WHERE inventario.personagem_id = %s;
+        """, (character_id,))
+        
+        spells = cur.fetchall()
+
+    clear_screen()
+    print(Style.BRIGHT + Fore.CYAN + f"\n--- Feitiços Disponíveis ---\n" + Style.RESET_ALL)
+    
+    if not spells:
+        print(Fore.RED + "Nenhum feitiço aprendido." + Style.RESET_ALL)
+    else:
+        for descricao, custo in spells:
+            print(Fore.CYAN + f"  Custo de energia: {custo}" + Style.RESET_ALL)
+            print(f"  {descricao}")
+            print("-" * 40)
+    
+    input("\nPressione Enter para continuar...")
+
+
 def show_enemies(conn, character):
     enemys = list_enemys_subregion(conn, character.sub_regiao_id)
     if enemys:
@@ -271,7 +297,7 @@ def game_loop(conn):
         elif option == "criar":
             character = Character(conn) 
             character.add_database() 
-            character.definy_initial_spells(conn)
+            character.define_initial_spells(conn)
             debug(f"Personagem {character.nome} criado com sucesso!")
             ok = True
 
@@ -282,7 +308,8 @@ def game_loop(conn):
         print("1. Navegar")
         print("2. Ver status do personagem")
         print("3. Ver Inventário")
-        print("4. Sair")
+        print("4. Ver feitiços")
+        print("5. Sair")
         
         option = input("Escolha uma opção: ").lower()
         if option == "1":
@@ -294,6 +321,8 @@ def game_loop(conn):
             inventory(character, conn)
             input("\nPressione Enter para continuar...")
         elif option == "4":
+            list_spells(conn, character.id)
+        elif option == "5":
             print("Saindo do jogo...")
             break
         else:

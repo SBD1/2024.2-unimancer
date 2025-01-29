@@ -37,7 +37,7 @@ initial_spells = {
 
 class Character:
     
-    def __init__(self, conn, id = None):
+    def __init__(self, conn, id=None):
         self.conn = conn
         self.id = None
         self.nome = None
@@ -56,8 +56,8 @@ class Character:
         if not id:
             self.get_information()
         else:
-            character_info = self.get_character_info(conn, id) 
-            self.id = character_info[0] 
+            character_info = self.get_character_info(conn, id)
+            self.id = character_info[0]
             self.sub_regiao_id = character_info[1]
             self.nome = character_info[2]
             self.elemento = character_info[3]
@@ -71,63 +71,87 @@ class Character:
             self.inteligencia = character_info[11]
             self.moedas = character_info[12]
             self.nivel = character_info[13]
-    
-    def definy_initial_spells(self, conn):
-        try:
-            spells = initial_spells[self.elemento]
-
-            with conn.cursor() as cur:
-                for spell in spells:
-                    spell_id = spell[0]
-                    cur.execute(
-                        """
-                        SELECT aprender_feitico (%s, %s);
-                        """, (self.id, spell_id)
-                    )
-
-            debug(f"Initial Spells learned for '{self.nome}' with success")
-        except Exception as e:
-            debug(f"Error: {e}")
-            raise
 
     def get_information(self):
         print("\n === Criação de Personagem === ")
         self.nome = input("Digite o nome do personagem: ")
-        
+
         def ask():
             return input(f"Escolha o elemento ({', '.join(elements)}): ").lower()
-        
+
         elemento = ask()
         lower_case_elements = [elemento.lower() for elemento in elements]
         while elemento not in lower_case_elements:
             print("Elemento inválido.")
             elemento = ask()
-        
+
         self.elemento = elemento.capitalize()
-        # self.definy_initial_spells(self.conn)
 
     def add_database(self):
         try:
             with self.conn.cursor() as cur:
                 cur.execute("SELECT criar_personagem(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (self.sub_regiao_id, self.nome, self.elemento, self.conhecimento_arcano, self.vida, self.vida_maxima, self.xp, self.xp_total, self.energia_arcana, self.energia_arcana_maxima, self.inteligencia, self.moedas, self.nivel))
-                self.id = cur.fetchone()[0]
-                self.conn.commit()
-
-                debug(f"Character: Personagem '{self.nome}' adicionado com sucesso!")
+                result = cur.fetchone()
+                if result:
+                    self.id = result[0]
+                    self.conn.commit()
+                    debug(f"Character: Personagem '{self.id}' '{self.nome}' adicionado com sucesso!")
+                else:
+                    debug("Character: Não foi retornado um ID após a criação do personagem.")
                 return self
 
         except Exception as e:
             debug(f"Character: Erro ao adicionar personagem: {e}")
 
-    def get_character_info(self, conn, id): 
+    def get_character_info(self, conn, id):
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT *
                 FROM personagem
                 WHERE id = %s
             """, (id,))
-            result = cur.fetchone() 
+            result = cur.fetchone()
             return result
-    
 
+    def create_inventory_if_not_exists(self, conn):
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT id FROM inventario WHERE personagem_id = %s", (self.id,)
+            )
+            result = cur.fetchone()
+
+            if not result:  # Se não existe, cria o inventário
+                cur.execute(
+                    "INSERT INTO inventario (personagem_id) VALUES (%s) RETURNING id",
+                    (self.id,)
+                )
+                inventory_id = cur.fetchone()[0]
+                conn.commit()
+                print(f"✅ Inventário criado para {self.nome} (ID {inventory_id})")
+            else:
+                inventory_id = result[0]
+            
+            return inventory_id
+
+
+    def define_initial_spells(self, conn):
+        print(f"Definindo feitiços iniciais para {self.nome}...")  
+        try:
+            inventory_id = self.create_inventory_if_not_exists(conn)  
+            spells = initial_spells[self.elemento]
+
+            with conn.cursor() as cur:
+                for spell in spells:
+                    spell_id = spell[0]
+                    # print(f"Inserindo feitiço {spell_id} no inventário {inventory_id}")  # Debug
+                    cur.execute(
+                        """
+                        INSERT INTO feitico_aprendido (inventario_id, feitico_id)
+                        VALUES (%s, %s);
+                        """, (inventory_id, spell_id)
+                    )
+            conn.commit()
+        except Exception as e:
+            print(f"Erro ao definir feitiços iniciais: {e}")
+            conn.rollback()
 
