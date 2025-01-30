@@ -3,7 +3,7 @@ import platform
 import psycopg2
 from colorama import Fore, Style, init
 from create_character import Character
-from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_enemy_info
+from queries.query import get_subregions_character, list_all_characters, list_npcs_subregion, list_item_inventory, list_enemys_subregion, get_enemy_info, get_civilian_info
 from utils import debug 
 from combat import Combate, verificar_percepcao, Inimigo
 import time
@@ -178,6 +178,22 @@ def display_npcs(conn, character):
     
     return npcs
 
+def display_npc_info(npc_nome, npc_tipo, conn):
+    descricao = get_civilian_info(conn, npc_nome)
+    print(Fore.CYAN + "\n--- Ficha do Personagem ---" + Style.RESET_ALL)
+    print(Fore.GREEN + f"Nome: {descricao['nome']}" + Style.RESET_ALL)
+    print(Fore.GREEN + f"Descrição: {descricao['descricao']}" + Style.RESET_ALL)
+    print(Fore.MAGENTA + "\n.." + Style.RESET_ALL)
+    time.sleep(1)
+
+    if npc_tipo == "Quester":
+        get_quest(npc_nome) 
+        input("Pressione Enter para continuar...") 
+    else:
+        print(Fore.RED + f"{npc_nome} não tem nada a dizer." + Style.RESET_ALL)
+        print(Fore.MAGENTA + "Pressione 0 para voltar ao menu." + Style.RESET_ALL)
+        input()
+
 def handle_player_choice(conn, character, subregions, npcs, enemys):
     try:
         choice_interaction = input("\nO que você deseja fazer agora?\n0-Voltar\n1-Continuar caminhando\n2-Interagir com um personagem\n3-Lutar: \n")
@@ -203,11 +219,12 @@ def handle_player_choice(conn, character, subregions, npcs, enemys):
             navigate(conn, character)
         
         elif choice_interaction == "2":  # Interact with npcs
+            npcs = list_npcs_subregion(conn, character.sub_regiao_id)  
             if npcs:
                 npc_choice = int(input("Escolha um personagem (número): "))
                 if 1 <= npc_choice <= len(npcs):
-                    print(f"Você interagiu com {npcs[npc_choice - 1][0]}")
-                    # NPCS TO INTERACT
+                    npc_nome, npc_tipo = npcs[npc_choice - 1]
+                    display_npc_info(npc_nome, npc_tipo, conn)
                 else:
                     print("\nOpção inválida!")
             else:
@@ -265,6 +282,10 @@ def get_subregion_description(conn, character):
         print(f"Erro ao obter descrição da sub-região: {e}")
         conn.rollback() 
         return "Erro ao acessar a descrição."
+
+def get_quest(npc_nome):
+    print(f"Você recebeu uma missão de {npc_nome}.")
+    # Adicione mais lógica conforme necessário
 
 # Main game loop
 def game_loop(conn):
