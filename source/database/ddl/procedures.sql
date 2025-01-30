@@ -94,7 +94,6 @@ $$ LANGUAGE plpgsql;
 -- PostGreSQL: create enemy linking to npc.
 CREATE OR REPLACE FUNCTION criar_inimigo(
     IN nome VARCHAR(100),
-    IN armazenamento_id INT,
     IN descricao TEXT,
     IN elemento TEXT,
     IN vida_maxima INT,
@@ -113,7 +112,6 @@ BEGIN
 
     INSERT INTO inimigo (
         id,
-        armazenamento_id,
         descricao,
         elemento,
         vida_maxima,
@@ -126,7 +124,6 @@ BEGIN
     )
     VALUES (
         npc_id,
-        armazenamento_id,
         descricao,
         elemento::TIPO_ELEMENTO,
         vida_maxima,
@@ -408,6 +405,8 @@ BEGIN
         energia_arcana = LEAST(energia_arcana + p_energia_arcana, energia_arcana_maxima)
     WHERE id = p_id;
 
+    -- To-do: if `xp` is equal to `xp_total`, increase `nivel` by 1 and set `xp` to 0, and update attributes.
+
     -- Get items that can be dropped from this enemy.
     SELECT
         a.item_id,
@@ -433,7 +432,7 @@ BEGIN
 
     -- Add to the table `combate`: inimigo_instancia_id, personagem_id, dano_cauisad, dano_recebido.
     INSERT INTO combate (inimigo_instancia_id, personagem_id, dano_causado, dano_recebido)
-    VALUES (ei_id, p_personagem_id, p_dano_causado, p_dano_recebido);
+    VALUES (ei_id, p_id, p_dano_causado, p_dano_recebido);
 
     RETURN list_items;
 END;

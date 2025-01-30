@@ -10,6 +10,8 @@ def create_enemy_instances(db: Database):
         enemy_instances = [
             # Floresta Eterna
             (4, 1, 50),  # TESTE
+            (4, 1, 50),  # TESTE
+            (4, 1, 50),  # TESTE
             (4, 5, 50),  # Lobo Sombrio - Clareira dos Espíritos
             (5, 5, 40),  # Espírito da Clareira - Clareira dos Espíritos
             (6, 6, 70),  # Ent Ancião - Bosque Sombrio
@@ -41,6 +43,26 @@ def create_enemy_instances(db: Database):
 
             # Caverna Soterrada
             (24, 25, 200),  # Dragão da Devastação - Vila Esquecida
+
+            # Clareira dos Espíritos - Grupo de 3
+            (4, 5, 50), 
+            (5, 5, 40), 
+            (2, 5, 25),
+
+            # Santuário Perdido - Grupo de 3
+            (13, 12, 150), 
+            (14, 12, 80), 
+            (12, 12, 70),
+
+            # Núcleo Cristalino - Grupo de 3
+            (21, 18, 50), 
+            (7, 18, 80), 
+            (17, 18, 80),
+
+            # Cemitério - Grupo de 3 com Boss
+            (24, 32, 200), 
+            (19, 32, 70), 
+            (20, 32, 60),
 
             # Bosses
             (25, 9, 150), # Abgail -> Fenda do Abismo

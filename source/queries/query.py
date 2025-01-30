@@ -43,7 +43,7 @@ def list_enemys_subregion(conn, sub_regiao_id):
     with conn.cursor() as cur:
         cur.execute(
             """            
-            SELECT n.id, n.nome, i.descricao, i.elemento
+            SELECT ii.id, n.nome, i.descricao, i.elemento, ii.vida, i.vida_maxima, i.xp_obtido, i.inteligencia, i.moedas_obtidas, i.conhecimento_arcano, i.energia_arcana_maxima, i.dialogo
             FROM npc n
             JOIN inimigo i ON n.id = i.id
             JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
@@ -152,3 +152,23 @@ def get_civilian_info(conn, npc_name):
             'nome': result[0],
             'descricao': result[1]
         }
+
+# Function to get all spells
+def get_spells(conn, character_id):
+    with conn.cursor() as cur:
+       cur.execute("""
+           SELECT feitico.descricao, feitico.energia_arcana
+           FROM inventario
+           JOIN feitico_aprendido ON inventario.id = feitico_aprendido.inventario_id
+           JOIN feitico ON feitico_aprendido.feitico_id = feitico.id
+           WHERE inventario.personagem_id = %s;
+       """, (character_id,))
+       
+       return cur.fetchall()
+
+# function to change subregion
+def fetch_subregion_id_by_name(name, conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT DISTINCT id FROM sub_regiao WHERE nome = %s", (name,))
+        result = cur.fetchone()
+        return result[0] if result else None

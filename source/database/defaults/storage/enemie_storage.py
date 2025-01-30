@@ -47,7 +47,7 @@ def enemie_storage(db: Database):
         )
 
         db.conn.commit()
-        debug(f"default: {table_name} updated successfully!")
+        debug(f"default: {len(valores_insercao)} {table_name} updated successfully!")
 
         return len(valores_insercao)
 

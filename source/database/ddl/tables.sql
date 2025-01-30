@@ -222,7 +222,6 @@ CREATE TABLE pocao_efeito (
 
 CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT REFERENCES armazenamento(id), -- To-do: change to not null
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),

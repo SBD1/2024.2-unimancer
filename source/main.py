@@ -1,30 +1,26 @@
 import sys
 from database.Database import Database
-from create_character import Character
 from default import populate_database
-from interface import game_loop
+import logic
 from utils import debug
 
-sql = {
-    "types": "./source/database/ddl/types.sql",
-    "init": "./source/database/ddl/tables.sql",
-    "procedures": "./source/database/ddl/procedures.sql",
-    "triggers": "./source/database/ddl/triggers.sql"
+sqls = {
+    "./source/database/ddl/types.sql",
+    "./source/database/ddl/tables.sql",
+    "./source/database/ddl/procedures.sql",
+    "./source/database/ddl/triggers.sql"
 }
 
 db = Database("localhost", "postgres", "postgres", "123456")
 
-# Get all table names from the database.
-def get_table_names() -> list:
+def table_length() -> list:
     db.cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public'")
     tables = db.cur.fetchall()
-    return [table[0] for table in tables]
+    return len(tables)
 
 def init_database():
-    db.execute_file(sql["types"])
-    db.execute_file(sql["init"])
-    db.execute_file(sql["procedures"])
-    db.execute_file(sql["triggers"])
+    for sql in sqls:
+        db.execute_file(sql)
     debug("")
     populate_database(db)
 
@@ -37,9 +33,16 @@ if len(sys.argv) > 1:
             init_database()
     exit(0)
 
-if len(get_table_names()) == 0:
+if table_length() == 0:
     debug("Nenhuma tabela encontrada. Criando banco de dados...")
     debug("Banco de dados e tabelas criados com sucesso!")
     init_database()
 
-game_loop(db.conn)
+while True:
+    character = logic.main_menu(db.conn)
+    if not character:
+        debug("Nenhum personagem retornado, saindo.")
+        exit(0)
+    
+    while logic.game(db.conn, character):
+        pass

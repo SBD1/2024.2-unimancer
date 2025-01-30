@@ -39,8 +39,7 @@ def default_enemies(db: Database):
             ("Nosferus", "Antigo Unimancer que abandonou sua humanidade em busca de mais poder, e aprender a controlar outros elementos.", "Trevas", 220, 100, 125, 130, 80, 18)
         ]
         
-        # add all enemies using procedure: criar_inimigo()
-        db.cur.executemany("SELECT criar_inimigo(%s, NULL, %s, %s, %s, %s, %s, %s, %s, %s)", enemies)
+        db.cur.executemany("SELECT criar_inimigo(%s, %s, %s, %s, %s, %s, %s, %s, %s)", enemies)
 
         db.conn.commit()
         debug(f"default: {len(enemies)} {table_name} added successfully!")
