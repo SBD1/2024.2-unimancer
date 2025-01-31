@@ -48,7 +48,8 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
         display.list_options(options)
     ])
 
-    if option == 1:  # change current location
+    # change current location
+    if option == 1:
         if subregions:
             choice = int(input("\nEscolha uma direção: "))
             if 1 <= choice <= len(subregions):
@@ -63,14 +64,14 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
         else:
             print("Nenhuma sub-região para navegar.")
             
-    elif option == 2:  # Interact with npcs
+    # Interact with npcs
+    elif option == 2:
+        npcs = display.list_npcs_subregion(conn, character.sub_regiao_id)  
         if npcs:
             npc_choice = int(input("Escolha um personagem (número): "))
             if 1 <= npc_choice <= len(npcs):
-                print(f"Você interagiu com {npcs[npc_choice - 1][0]}")
-                # NPCS TO INTERACT
-            else:
-                print("\nOpção inválida!")
+                npc_nome, npc_tipo = npcs[npc_choice - 1]
+                display.display_npc_info(npc_nome, npc_tipo, conn)
         else:
             print("Nenhum NPC disponível para interação.")
     
@@ -87,6 +88,8 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
                 print("\nOpção inválida!")
         else:
             print("Nenhum inimigo disponível para combate.")
+            
+    # Go back a page.
     else:
         return False
         
