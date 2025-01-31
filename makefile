@@ -1,6 +1,6 @@
 .PHONY: config build start stop rmv interface
 
-VENV_DIR := .venv 
+VENV_DIR := ./.venv
 
 config:
 	@cp .env.template .env
