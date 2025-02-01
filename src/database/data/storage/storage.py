@@ -31,18 +31,25 @@ def storage(item_name: str, quantity: int, db: Database) -> int:
 
 def populate_storage(db: Database):
     
+    default_quantity = 9999
+    
     table_name = Style.BRIGHT + "ARMAZENAMENTO" + Style.NORMAL
    
     try:
-        db.cur.execute("SELECT nome FROM item;")
+        db.cur.execute(f"""
+            SELECT id FROM item
+        """)
         items = db.cur.fetchall()  
 
         if not items:
             debug("Nenhum item encontrado no banco de dados.")
             return
 
-        for (item_name,) in items:
-            storage(item_name, 9999, db)
+        for (id,) in items:
+            db.cur.execute(f"""
+                INSERT INTO armazenamento(item_id, quantidade)
+                VALUES ({id}, {default_quantity});
+            """)
 
         db.conn.commit()
         debug(f"default: {len(table_name)} {table_name} added successfully!")

@@ -58,12 +58,12 @@ def populate_database(db: Database):
         writted_scroll.writted_scrolls(db, scrolls_id_start)
         
         storage.populate_storage(db)
-        enemie_storage.enemie_storage(db)
-        quest.quests(db)
-
-        #potions
-        potions.potions(db)
-        potion_effect.potion_effect(db)
+        #enemie_storage.enemie_storage(db)
+        #quest.quests(db)
+#
+        ##potions
+        #potions.potions(db)
+        #potion_effect.potion_effect(db)
 
 
         db.conn.commit()

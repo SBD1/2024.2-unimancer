@@ -5,13 +5,14 @@ import logic
 import utils
 
 def main():
+    print("lol")
 
-    sqls = {
-        "./source/database/ddl/types.sql",
-        "./source/database/ddl/tables.sql",
-        "./source/database/dml/procedures.sql",
-        "./source/database/dml/triggers.sql"
-    }
+    sqls = [
+        "./src/database/ddl/types.sql",
+        "./src/database/ddl/tables.sql",
+        "./src/database/dml/procedures.sql",
+        "./src/database/dml/triggers.sql"
+    ]
     
     db = Database("localhost", "postgres", "postgres", "123456")
     
@@ -48,3 +49,5 @@ def main():
         
         while logic.game(db.conn, character):
             pass
+        
+main()

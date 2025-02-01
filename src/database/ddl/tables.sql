@@ -1,13 +1,6 @@
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
-    tipo TIPO_ITEM NOT NULL,
-    descricao TEXT NOT NULL,
-    -- É o numero de inimigos que você tem que matar para conseguir o item.
-    -- Chance de drop: O cálculo é: 1 / drop_inimigos_media.
-	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
-	nome VARCHAR(200) NOT NULL,
-	peso INT NOT NULL CHECK (peso >= 0),
-	preco INT NOT NULL CHECK (preco >= 0)
+    tipo TIPO_ITEM NOT NULL
 );
 
 CREATE TABLE armazenamento (
@@ -63,21 +56,21 @@ CREATE TABLE inventario (
 
 CREATE TABLE npc (
     id SERIAL PRIMARY KEY,
-	nome VARCHAR(100) NOT NULL,
     tipo TIPO_NPC NOT NULL
 );
 
 CREATE TABLE civil (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-    descricao TEXT NOT NULL,
-    tipo TIPO_CIVIL NOT NULL
+    tipo TIPO_CIVIL NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT NOT NULL
 );
 
 CREATE TABLE quester (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    dialogo TEXT NOT NULL,
-    num_quests INT NOT NULL CHECK (num_quests >= 0)
+    num_quests INT NOT NULL CHECK (num_quests >= 0),
+    dialogo TEXT NOT NULL
 );
 
 CREATE TABLE quest (
@@ -97,15 +90,8 @@ CREATE TABLE quest_instancia (
     completed BOOLEAN NOT NULL
 );
 
-CREATE TABLE item_instancia (
-    id SERIAL PRIMARY KEY,
-    item_id INT NOT NULL REFERENCES item(id),
-    inventario_id INT NOT NULL REFERENCES inventario(id)
-);
-
 CREATE TABLE mercador (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT REFERENCES armazenamento(id),
     dialogo TEXT NOT NULL
 );
 
@@ -127,13 +113,14 @@ CREATE TABLE mochila (
 	peso_total INT NOT NULL CHECK (peso_total >= 0)
 );
 
+CREATE TABLE item_instancia (
+    id SERIAL PRIMARY KEY,
+    item_id INT NOT NULL REFERENCES item(id),
+    mochila_id INT NOT NULL REFERENCES mochila(id)
+);
+
 CREATE TABLE feitico (
     id SERIAL PRIMARY KEY,
-    descricao TEXT NOT NULL,
-    elemento TIPO_ELEMENTO NOT NULL,
-    countdown INT NOT NULL CHECK (countdown >= 0),
-    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
-    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
     tipo TIPO_FEITICO NOT NULL
 );
 
@@ -144,18 +131,33 @@ CREATE TABLE feitico_requerimento (
 
 CREATE TABLE feitico_dano (
     id INT PRIMARY KEY REFERENCES feitico(id),
-    dano_total INT NOT NULL CHECK (dano_total >= 0)
+    dano_total INT NOT NULL CHECK (dano_total >= 0),
+    descricao TEXT NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
+    countdown INT NOT NULL CHECK (countdown >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
 );
 
 CREATE TABLE feitico_dano_area (
     id INT PRIMARY KEY REFERENCES feitico(id),
     dano INT NOT NULL CHECK (dano >= 0),
-    qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0)
+    qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0),
+    descricao TEXT NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
+    countdown INT NOT NULL CHECK (countdown >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
 );
 
 CREATE TABLE feitico_cura (
     id INT PRIMARY KEY REFERENCES feitico(id),
-    qtd_cura INT NOT NULL CHECK (qtd_cura >= 0)
+    qtd_cura INT NOT NULL CHECK (qtd_cura >= 0),
+    descricao TEXT NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
+    countdown INT NOT NULL CHECK (countdown >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
 );
 
 CREATE TABLE grimorio (
@@ -171,7 +173,12 @@ CREATE TABLE feitico_aprendido (
 
 CREATE TABLE pergaminho (
     id INT PRIMARY KEY REFERENCES item(id),
-    cor VARCHAR(10) NOT NULL
+    cor VARCHAR(10) NOT NULL,
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
 CREATE TABLE feitico_escrito (
@@ -195,7 +202,12 @@ CREATE TABLE efeito (
 
 CREATE TABLE acessorio (
     id INT PRIMARY KEY REFERENCES item(id),
-    tipo TIPO_ACESSORIO NOT NULL
+    tipo TIPO_ACESSORIO NOT NULL,
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
 CREATE TABLE sub_regiao_acessorio_conexao (
@@ -212,7 +224,12 @@ CREATE TABLE acessorio_efeito (
 CREATE TABLE pocao (
     id INT PRIMARY KEY REFERENCES item(id),
     turnos INT NOT NULL CHECK (turnos >= 0),
-    usado BOOLEAN NOT NULL
+    usado BOOLEAN NOT NULL,
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
 CREATE TABLE pocao_efeito (
@@ -222,6 +239,7 @@ CREATE TABLE pocao_efeito (
 
 CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
+    nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),

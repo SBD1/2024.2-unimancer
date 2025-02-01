@@ -1,10 +1,10 @@
 import random
 from colorama import Fore, Style
 import time
-import src.logic as logic
 from utils import debug, error
 import interface.display as display
 from character import Character
+import logic
 
 # 1.4x vantagem
 # 0.6x desvantagem
@@ -132,5 +132,6 @@ class Combat:
             
             # Attack.
             if option == 1:
+                damage_caused = 10
                 # To-do: put this into `interface/display.py` file.
                 print(Style.BRIGHT + Fore.RED + f"Você atacou com força e causou {damage_caused} de dano ao inimigo!" + Style.RESET_ALL)

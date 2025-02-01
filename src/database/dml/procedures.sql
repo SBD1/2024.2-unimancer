@@ -11,24 +11,24 @@ DECLARE
     npc_id INT;
 BEGIN
 
-    INSERT INTO npc (nome, tipo)
-    VALUES (nome, 'Civil')
+    INSERT INTO npc (tipo)
+    VALUES ('Civil')
     RETURNING id INTO npc_id;
 
     INSERT INTO civil (
         id,
         sub_regiao_id,
-        descricao,
-        tipo
+        tipo,
+        nome,
+        descricao
     )
     VALUES (
         npc_id,
         sub_regiao_id,
-        descricao,
-        tipo
+        tipo::TIPO_CIVIL,
+        nome,
+        descricao
     );
-
-    -- RAISE NOTICE 'Civil inserido com id=%', npc_id;
 
     RETURN npc_id;
 END;
@@ -49,13 +49,13 @@ BEGIN
     -- create line in table `quester` linking to `npc_id`.
     INSERT INTO quester (
         id,
-        dialogo,
-        num_quests
+        num_quests,
+        dialogo
     )
     VALUES (
         npc_id,
-        dialogo,
-        0
+        0,
+        dialogo
     );
 
     RETURN npc_id;
@@ -67,7 +67,6 @@ CREATE OR REPLACE FUNCTION criar_mercador(
     IN nome VARCHAR(100),
     IN sub_regiao_id INT,
     IN descricao TEXT,
-    IN armazenamento_id INT,
     IN dialogo TEXT
 ) RETURNS INT AS $$
 DECLARE
@@ -77,12 +76,10 @@ BEGIN
 
     INSERT INTO mercador (
         id,
-        armazenamento_id,
         dialogo
     )
     VALUES (
         npc_id,
-        armazenamento_id,
         dialogo
     );
 
@@ -106,12 +103,13 @@ CREATE OR REPLACE FUNCTION criar_inimigo(
 DECLARE 
     npc_id INT;
 BEGIN
-    INSERT INTO npc (nome, tipo)
-    VALUES (nome, 'Inimigo')
+    INSERT INTO npc (tipo)
+    VALUES ('Inimigo')
     RETURNING id INTO npc_id;
 
     INSERT INTO inimigo (
         id,
+        nome,
         descricao,
         elemento,
         vida_maxima,
@@ -124,6 +122,7 @@ BEGIN
     )
     VALUES (
         npc_id,
+        nome,
         descricao,
         elemento::TIPO_ELEMENTO,
         vida_maxima,
@@ -224,12 +223,12 @@ RETURNS INT AS $$
 DECLARE
      v_item_id INT;
 BEGIN
-     INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
-     VALUES ('Acessório', descricao, drop_inimigos_media, nome, peso, preco)
+     INSERT INTO item (tipo)
+     VALUES ('Acessório')
      RETURNING id INTO v_item_id;
 
-     INSERT INTO acessorio (id, tipo)
-     VALUES (v_item_id, tipo::TIPO_ACESSORIO);
+     INSERT INTO acessorio (id, tipo, descricao, drop_inimigos_media, nome, peso, preco)
+     VALUES (v_item_id, tipo::TIPO_ACESSORIO, descricao, drop_inimigos_media, nome, peso, preco);
  
      RETURN v_item_id;
 END;
@@ -248,13 +247,13 @@ DECLARE
     v_item_id INT;
 BEGIN
     -- create item.
-    INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
-    VALUES ('Pergaminho', p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco)
+    INSERT INTO item (tipo)
+    VALUES ('Pergaminho')
     RETURNING id INTO v_item_id;
 
     -- create scroll.
-    INSERT INTO pergaminho (id, cor)
-    VALUES (v_item_id, p_cor::TIPO_COR);
+    INSERT INTO pergaminho (id, cor, descricao, drop_inimigos_media, nome, peso, preco)
+    VALUES (v_item_id, p_cor::TIPO_COR, p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco);
 
     RETURN v_item_id;
 END;
@@ -298,13 +297,13 @@ DECLARE
     v_feitico_id INT;
 BEGIN
     -- Criar o feitico
-    INSERT INTO feitico (descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana, tipo)
-    VALUES (descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana, 'Dano')
+    INSERT INTO feitico (tipo)
+    VALUES ('Dano')
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_dano
-    INSERT INTO feitico_dano (id, dano_total)
-    VALUES (v_feitico_id, dano_total);
+    INSERT INTO feitico_dano (id, dano_total, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
+    VALUES (v_feitico_id, dano_total, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
 
     RETURN v_feitico_id;
 END;
@@ -325,13 +324,13 @@ DECLARE
     v_feitico_id INT;
 BEGIN
     -- Criar o feitico
-    INSERT INTO feitico (descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana, tipo)
-    VALUES (descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana, 'Dano de área')
+    INSERT INTO feitico (tipo)
+    VALUES ('Dano de área')
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_dano_area
-    INSERT INTO feitico_dano_area (id, dano, qtd_inimigos_afetados)
-    VALUES (v_feitico_id, dano, qtd_inimigos_afetados);
+    INSERT INTO feitico_dano_area(id, dano, qtd_inimigos_afetados, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
+    VALUES (v_feitico_id, dano, qtd_inimigos_afetados, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
 
     RETURN v_feitico_id;
 END;
@@ -350,13 +349,13 @@ DECLARE
     v_feitico_id INT;
 BEGIN
     -- Criar o feitico
-    INSERT INTO feitico (descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana, tipo)
-    VALUES (descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana, 'Cura')
+    INSERT INTO feitico (tipo)
+    VALUES ('Cura')
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_cura
-    INSERT INTO feitico_cura (id, qtd_cura)
-    VALUES (v_feitico_id, qtd_cura);
+    INSERT INTO feitico_cura (id, qtd_cura, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
+    VALUES (v_feitico_id, qtd_cura, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
 
     RETURN v_feitico_id;
 END;
