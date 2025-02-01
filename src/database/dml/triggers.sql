@@ -48,14 +48,19 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL:
 -- When a quest_instancia is created, check if the character has an acessory that is in the armazenamento of the quest.
-CREATE OR REPLACE FUNCTION check_acessorio()
+CREATE OR REPLACE FUNCTION check_acessory()
 RETURNS TRIGGER AS $$
 BEGIN 
-    IF NOT EXISTS (SELECT 1 FROM item_instancia WHERE item_id IN (SELECT item_id FROM armazenamento WHERE quest_id = NEW.quest_id) AND inventario_id = NEW.inventario_id) THEN
-        RETURN NEW;
-    ELSE 
+    -- Check if the character already has the item from the quest's armazenamento
+    IF EXISTS (SELECT 1 
+               FROM item_instancia 
+               WHERE item_id IN (SELECT item_id 
+                                 FROM armazenamento 
+                                 WHERE quest_id = NEW.quest_id) 
+               AND inventario_id = NEW.inventario_id) THEN
         RAISE EXCEPTION 'Personagem already has the item';
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
