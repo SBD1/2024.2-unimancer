@@ -12,25 +12,11 @@ def questers(db: Database):
                 "Ancião",
                 3,
                 "Velho homem aborrecido com a vida.",
-                "Bem-vindo, jovem. Você deseja embarcar em uma jornada?"
-            ),
-            (
-                "Elysia",
-                2,
-                "descr",
-                "Eu vi algo estranho nas montanhas... Está disposto a investigar?"
-            ),
-            (
-                "Isolde",
-                1,
-                "Você está pronto para enfrentar o que há de mais perigoso neste mundo?",
-                "...Dialogo..."
-            ),
-            (
-                "Kael",
-                4,
-                "Tenho algumas pistas para você, mas isso vai exigir coragem.",
-                "...Dialogo..."
+                """Tsk! Malditas pragas... esses ratos estão por toda parte!
+                Entram nos celeiros, roem nossos suprimentos e nem os templos escaparam deles!
+                Se ninguém fizer nada, logo estaremos dividindo nossas camas com essa praga!
+                Se você puder nos ajudar a exterminá-los, seremos imensamente gratos. Mate-os e lhe darei uma recompensa justa!
+                """
             ),
         ]
         

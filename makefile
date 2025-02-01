@@ -1,14 +1,15 @@
 .PHONY: config build start stop rmv interface
 
-VENV_DIR := ./.venv
+VENV_DIR := $(CURDIR)/.venv
+PYTHONPATH=$(CURDIR)/source
 
 config:
 	@cp .env.template .env
 	@test -d $(VENV_DIR) || python3 -m venv $(VENV_DIR)
 	@echo "Python virtual environment criado em $(VENV_DIR)"
 	@$(VENV_DIR)/bin/pip install --upgrade pip
-	@$(VENV_DIR)/bin/pip install -r requirements.txt
 	@echo "Dependencias instaladas com sucesso."
+	@python -m pip install .
 
 build:
 	@sudo docker compose up --build

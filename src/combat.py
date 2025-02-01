@@ -1,7 +1,7 @@
 import random
 from colorama import Fore, Style
 import time
-import logic as logic
+import src.logic as logic
 from utils import debug, error
 import interface.display as display
 from character import Character

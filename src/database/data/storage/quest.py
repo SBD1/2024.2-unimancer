@@ -1,5 +1,5 @@
 from database import Database
-from database.defaults.storage.storage import storage
+from database.data.storage.storage import storage
 from utils import debug, error
 from colorama import Style
 

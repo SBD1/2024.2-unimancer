@@ -3,7 +3,7 @@ CREATE TABLE item (
     tipo TIPO_ITEM NOT NULL,
     descricao TEXT NOT NULL,
     -- É o numero de inimigos que você tem que matar para conseguir o item.
-    -- Chance de drop: O cálculo é: 1 / enemies_average.
+    -- Chance de drop: O cálculo é: 1 / drop_inimigos_media.
 	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
 	nome VARCHAR(200) NOT NULL,
 	peso INT NOT NULL CHECK (peso >= 0),

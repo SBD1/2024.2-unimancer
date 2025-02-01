@@ -1,13 +1,12 @@
 from colorama import Style, Fore
-from interface.display import clear_screen
-from queries.query import list_item_inventory
+import database.dql.query as query
 from character import Character
 
 def display(character, conn):
     print(f"Inventário de === {character.nome} ===")
     print("-" * 40)
 
-    items = list_item_inventory(conn, character.id)
+    items = query.list_item_inventory(conn, character.id)
 
     if not items:
        print("O inventário está vazio.")

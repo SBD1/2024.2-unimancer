@@ -1,19 +1,13 @@
-
-from database.defaults.item.acessory import bracelet, buckle, cane, cloack, collar, gloves, hat, ring, pants, socks, boots, key
 from utils import debug, error
 from database.Database import Database
 
-from database.defaults.npc.enemy import enemies, enemies_instances
-
-from database.defaults.npc.citizen import citizens, merchants, questers
-
-from database.defaults.storage import quest, storage, enemie_storage
-
-from database.defaults.map import regions as r, sub_regions as sr, sub_regions_connections as src
-
-from database.defaults.item.scroll import area_damage, cure, damage, scroll, writted_scroll, requirements
-
-from database.defaults.item import effects, potions, potion_effect
+from database.data.item.acessory import bracelet, buckle, cane, cloack, collar, gloves, hat, ring, pants, socks, boots, key
+from database.data.npc.enemy import enemies, enemies_instances
+from database.data.npc.citizen import citizens, merchants, questers
+from database.data.storage import quest, storage, enemie_storage
+from database.data.map import regions as r, sub_regions as sr, sub_regions_connections as src
+from database.data.item.scroll import area_damage, cure, damage, scroll, writted_scroll, requirements
+from database.data.item import effects, potions, potion_effect
 
 def populate_database(db: Database):
     

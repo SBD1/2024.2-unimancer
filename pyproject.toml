@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Unimancer-Interface"
+version = "4.0.0"
+description = "A game interface for Unimancer."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+keywords = ["setuptools", "interface", "game", "unimancer"]
+
+authors = [
+    {name = "A. Random Developer", email = "author@example.com" },
+]
+
+maintainers = [
+  { name = "A. Great Maintainer", email = "maintainer@example.com" },
+]
+
+classifiers = []
+dependencies = [
+    "psycopg2",
+    "colorama"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/SBD1/2024.2-unimancer"
+"Bug Reports" = "https://github.com/SBD1/2024.2-unimancer/issues"
+"Source" = "https://github.com/SBD1/2024.2-unimancer"
+
+[project.scripts]
+sample = "sample:main"
+
+
+[tool.setuptools]
+package-data = { }

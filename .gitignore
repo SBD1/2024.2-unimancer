@@ -3,3 +3,4 @@
 __pycache__/
 .env
 .junk
+/src/Unimancer_Interface.egg-info

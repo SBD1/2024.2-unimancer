@@ -150,8 +150,30 @@ def get_civilian_info(conn, npc_name):
         result = cur.fetchone()
         return {
             'nome': result[0],
-            'descricao': result[1]
+            'descricao': result[1],
+            'npc_id': result[2]
         }
+
+# get quest given a quester id 
+def get_quest(conn, quester_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT q.titulo, q.descricao, qu.dialogo, q.id, q.recompensa
+            FROM quest q 
+            LEFT JOIN quester qu ON qu.id = q.quester_id
+            WHERE q.quester_id = %s;
+            """, (quester_id,)
+        )
+        result = cur.fetchall()
+        return {
+            'title': result[0][0],
+            'description': result[0][1],
+            'dialog': result[0][2],
+            'quest_id': result[0][3],
+            'reward': result[0][4]
+        }
+
 
 # Function to get all spells
 def get_spells(conn, character_id):

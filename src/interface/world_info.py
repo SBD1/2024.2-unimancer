@@ -1,6 +1,6 @@
 from colorama import Fore, Style
 import psycopg2
-from queries.query import get_subregions_character, list_npcs_subregion, list_enemys_subregion
+from database.dql.query import get_subregions_character, list_npcs_subregion, list_enemys_subregion
 from character import Character
 
 # Function to get subregion description

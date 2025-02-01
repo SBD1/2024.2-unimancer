@@ -1,7 +1,7 @@
 import interface.display as display
 import interface.inventory as inventory
 import interface.world_info as world_info
-import queries.query as query
+import database.dql.query as query
 import combat as combat
 from colorama import Fore, Style
 from character import Character

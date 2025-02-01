@@ -2,7 +2,6 @@ import os
 import platform
 from colorama import Fore, Style
 import time
-import queries.query as query
 
 # Clean the terminal screen
 def clear_screen():
@@ -52,13 +51,27 @@ def display_npc_info(npc_nome, npc_tipo, conn):
     time.sleep(1)
 
     if npc_tipo == "Quester":
-        get_quest(npc_nome) 
+        show_quest(conn, npc_nome, descricao['npc_id'], character)
         input("Pressione Enter para continuar...") 
     else:
         print(Fore.RED + f"{npc_nome} não tem nada a dizer." + Style.RESET_ALL)
         print(Fore.MAGENTA + "Pressione 0 para voltar ao menu." + Style.RESET_ALL)
         input()
 
-def get_quest(npc_nome):
-    print(f"Você recebeu uma missão de {npc_nome}.")
-    # Adicione mais lógica conforme necessário
+def show_quest(conn, npc_name, npc_id, character):
+    quest = get_quest(conn, npc_id)
+    print(Fore.CYAN + f"\n Missão: {quest['title']}" + Style.RESET_ALL)
+    print(Fore.CYAN + f"{quest['description']}" + Style.RESET_ALL)
+    print('..')
+    time.sleep(1)
+    for line in quest['dialog'].split('\n'):
+        print(f"{npc_name} diz: {line}")
+        input("Pressione Enter para continuar...")
+    
+    accept_quest(conn, character.id, quest['quest_id'])
+    
+    print(Fore.GREEN + "\n--- COMPLETE A MISSÃO ---" + Style.RESET_ALL)
+    print(Fore.YELLOW + f"Descrição: {quest['description']}" + Style.RESET_ALL)
+    print(Fore.YELLOW + f"Recompensa: {quest['reward']}" + Style.RESET_ALL)
+    print(Fore.MAGENTA + "Pressione Enter para continuar..." + Style.RESET_ALL)
+    input()
