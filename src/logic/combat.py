@@ -1,3 +1,4 @@
+from ast import For
 from typing import List
 import random
 from colorama import Fore, Style
@@ -87,13 +88,16 @@ class Combat:
             selected_spell = spells[option_i - 1]
             _, _, _, energia_arcana, *_ = selected_spell
             
-    
+            # Energia_arcana != None
+            energia_arcana = energia_arcana if energia_arcana is not None else 0
+
             if energia_arcana > self.character.energia_arcana:
                 print(Fore.RED + "Energia Arcana insuficiente!" + Style.RESET_ALL)
                 display.press_enter()
                 continue
             # To-do: Add to query
-            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, energia_arcana)
+            self.character.energia_arcana -= energia_arcana
+            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, self.character.energia_arcana)
             break
         
         return selected_spell
@@ -108,7 +112,7 @@ class Combat:
         # ..
         # To-do: debug test...
         # ..
-        debug(tipo, energia_arcana)
+        debug(f" tipo do feitiço: {tipo}, qtd_energia: {energia_arcana}")
         display.press_enter()
         
         if tipo == 'Dano':
@@ -117,9 +121,10 @@ class Combat:
         
 
         elif tipo == 'Dano de área':
-            enemy = self.select_enemy()
-            debug('to-do: area damage')
-            display.press_enter()
+            # enemy = self.select_enemy()
+            # debug('to-do: area damage')
+            # display.press_enter()
+            self.apply_area_damage_spell(spell)
 
 
         elif tipo == 'Cura':
@@ -128,7 +133,7 @@ class Combat:
     # Functionality:
     #   Returns true if enemy was killed.
     def apply_damage_spell(self, spell, enemy) -> bool:
-        damage = spell[3]
+        damage = spell[4]
         
         damage *= self.advantage_element(self.character.elemento, enemy.elemento)
 
@@ -136,11 +141,22 @@ class Combat:
         
         # To-do: put this into a interface file.
         print(f"{Fore.BLUE} Foi conjurado {spell[0]} causando {damage} de dano! {Style.RESET_ALL}")
-        
         return enemy.vida <= 0
 
     # Functionality:
     #   Apply area damage spell
+    def apply_area_damage_spell(self, spell):
+        nome, _, _, _, dano, qtd_inimigos_afetados = spell
+        print(f"{Fore.MAGENTA} {nome} foi conjurado! {Style.RESET_ALL}")
+
+        # filter enemies alive and random chose enemies
+        alive_enemies = [enemy for enemy in self.enemies if enemy.vida > 0]
+        affected_enemies = random.sample(alive_enemies, min(qtd_inimigos_afetados, len(alive_enemies)))
+
+        for enemy in affected_enemies:
+            final_damage = dano * self.advantage_element(self.character.elemento, enemy.elemento)
+            enemy.vida = max(enemy.vida - final_damage, 0)
+            print(f"{Fore.BLUE} {enemy.nome} recebeu {final_damage} de dano! {Style.RESET_ALL}")
 
     # Functionality:
     #   Apply recover from healing spell 
@@ -157,6 +173,20 @@ class Combat:
         print(Style.BRIGHT + Fore.YELLOW + "..." + Style.RESET_ALL)
         time.sleep(1)
 
+    # Functionality
+    # Enemy turn
+    def enemy_turn(self):
+        print(Style.BRIGHT + Fore.YELLOW + "Os inimigos estão atacando!!!" + Style.RESET_ALL)
+        time.sleep(1)
+
+        for enemy in self.enemies:
+            if enemy.vida > 0:
+                damage = random.randint(3, 10)
+                damage *= self.advantage_element(enemy.elemento, self.character.elemento)
+                self.character.vida = max(self.character.vida - damage, 0)
+
+                print(f"{Fore.RED} {enemy.nome} te atacou e causou {damage} de dano! {Style.RESET_ALL}")
+
     # Functionality:
     #   Select and returns an enemy.
     def select_enemy(self) -> Enemy:
@@ -169,6 +199,19 @@ class Combat:
             display.interface_show_enemies(self.enemies)
         ], False)
         return self.enemies[enemy_i - 1]
+
+    # Functionality
+    # check if combat has terminated
+    def check_combat_end(self):
+        if self.character.vida <= 0:
+            print(Fore.RED + "Você foi derrotado..." + Style.RESET_ALL)
+            return True
+        
+        if all(enemy.vida <= 0 for enemy in self.enemies):
+            print(Fore.GREEN + "Todos os inimigos foram derrotados!" + Style.RESET_ALL)
+            return True
+
+        return False
 
     # Logic:
     #   True: if the player ran away or won the combat
@@ -221,17 +264,18 @@ class Combat:
                 
                 debug(self.character.energia_arcana)
                 display.press_enter()
-                
-                # to-do:
-                query.update_combat(self.conn, self.enemies, self.character)
-
 
             elif option == "Usar Poção":
                 debug("to-do: usar poção")
                 display.press_enter()
-                
-            # ---
-            # ....
-            # To-do: enemies turn.
+
+            query.update_combat(self.conn, self.enemies, self.character)
+            if self.check_combat_end():
+                return True
             
+            self.enemy_turn()
+
+            if self.check_combat_end():
+                return True
+
         return True

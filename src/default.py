@@ -61,9 +61,9 @@ def populate_database(db: Database):
         #enemie_storage.enemie_storage(db)
         #quest.quests(db)
 #
-        ##potions
-        #potions.potions(db)
-        #potion_effect.potion_effect(db)
+        #potions
+        potions.potions(db)
+        potion_effect.potion_effect(db)
 
 
         db.conn.commit()

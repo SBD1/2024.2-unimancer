@@ -164,19 +164,19 @@ class Character:
 
             with conn.cursor() as cur:
                 cur.execute("""
-                    INSERT INTO item_instancia (item_id, inventario_id)
+                    INSERT INTO item_instancia (item_id, mochila_id)
                     VALUES (%s, %s)
                     RETURNING item_id;
                 """, (elixir_da_vida_id, inventory_id))
 
                 cur.execute("""
-                    INSERT INTO item_instancia (item_id, inventario_id)
+                    INSERT INTO item_instancia (item_id, mochila_id)
                     VALUES (%s, %s)
                     RETURNING item_id;
                 """, (elixir_da_vida_id, inventory_id))
 
                 cur.execute("""
-                    INSERT INTO item_instancia (item_id, inventario_id)
+                    INSERT INTO item_instancia (item_id, mochila_id)
                     VALUES (%s, %s)
                     RETURNING item_id;
                 """, (mana_liquida_id, inventory_id))

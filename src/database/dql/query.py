@@ -1,8 +1,8 @@
-# get regions and respective elements
 from numpy import character
 from logic.enemy import Enemy
 from logic.character import Character
 
+# get regions and respective elements
 def regions(conn):
     with conn.cursor() as cur:
         cur.execute(
@@ -146,21 +146,47 @@ def list_item_inventory(conn, character_id):
         cur.execute("""
             SELECT id FROM inventario WHERE personagem_id = %s AND tipo = 'Mochila'
         """, (character_id,))
-        
+
         inventarios = cur.fetchall()
-        
+
         items = []
         for inventario in inventarios:
             inventario_id = inventario[0]
             cur.execute("""
-                SELECT item.nome, item.descricao, COUNT(item_instancia.id) as quantidade
-                FROM item_instancia
-                JOIN item ON item_instancia.item_id = item.id
-                WHERE item_instancia.inventario_id = %s
-                GROUP BY item.nome, item.descricao
+                -- Seleciona os itens que estão na mochila do personagem
+                SELECT 
+                    i.tipo,
+                    CASE 
+                        WHEN i.tipo = 'Poção' THEN p.nome
+                        WHEN i.tipo = 'Pergaminho' THEN pe.nome
+                        WHEN i.tipo = 'Acessório' THEN a.nome
+                        ELSE 'Desconhecido'
+                    END AS nome,
+                    CASE 
+                        WHEN i.tipo = 'Poção' THEN p.descricao
+                        WHEN i.tipo = 'Pergaminho' THEN pe.descricao
+                        WHEN i.tipo = 'Acessório' THEN a.descricao
+                        ELSE 'Sem descrição'
+                    END AS descricao,
+                    COUNT(ii.id) AS quantidade
+                FROM item_instancia ii
+                JOIN item i ON ii.item_id = i.id
+                LEFT JOIN pocao p ON i.id = p.id
+                LEFT JOIN pergaminho pe ON i.id = pe.id
+                LEFT JOIN acessorio a ON i.id = a.id
+                WHERE ii.mochila_id = %s
+                GROUP BY 
+                    i.tipo, 
+                    p.nome, 
+                    pe.nome, 
+                    a.nome, 
+                    p.descricao, 
+                    pe.descricao, 
+                    a.descricao
             """, (inventario_id,))
-            
+
             items.extend(cur.fetchall())
+
     return items
 
 def get_civilian_info(conn, npc_name):
@@ -281,7 +307,7 @@ def update_mp(conn, character_id, new_energia_arcana):
         cur.execute(
             f"""
                 UPDATE personagem
-                SET energia_arcana = GREATEST(0, energia_arcana - {new_energia_arcana})
+                SET energia_arcana = GREATEST(0, {new_energia_arcana})
                 WHERE id = {character_id}
             """
         )
@@ -299,12 +325,9 @@ def update_combat(conn , enemies: Enemy, character: Character):
     with conn.cursor() as cursor:
         for enemy in enemies:
             cursor.execute(
-                f"""
-                SELECT atualizar_combate (
-                    {character.id},
-                    {enemy.id},
-                    {character.vida},
-                    {enemy.vida}
-                )"""
+                """
+                SELECT atualizar_combate(%s, %s, %s, %s)
+                """,
+                (character.id, enemy.id, int(character.vida), int(enemy.vida)) 
             )
             conn.commit()

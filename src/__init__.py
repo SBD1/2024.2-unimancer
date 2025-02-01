@@ -1,3 +1,8 @@
+import os
+
+# To work on windows
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 from database.Database import Database
 from default import populate_database
 import sys

@@ -272,13 +272,13 @@ DECLARE
     v_item_id INT;
 BEGIN
     -- Criar o item da poção
-    INSERT INTO item (tipo, descricao, drop_inimigos_media, nome, peso, preco)
-    VALUES ('Poção', p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco)
+    INSERT INTO item (tipo)
+    VALUES ('Poção')
     RETURNING id INTO v_item_id;
 
     -- Criar a poção
-    INSERT INTO pocao (id, turnos, usado)
-    VALUES (v_item_id, p_turnos, FALSE);
+    INSERT INTO pocao (id, turnos, usado, descricao, drop_inimigos_media, nome, peso, preco)
+    VALUES (v_item_id, p_turnos, FALSE, p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco);
 
     RETURN v_item_id;
 END;
