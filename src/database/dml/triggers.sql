@@ -65,6 +65,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- PostGreSQL: 
+-- Update character coins and create item instances in the character's inventory
+CREATE OR REPLACE FUNCTION complete_quest()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_armazenamento RECORD;
+BEGIN
+    -- Verifica se a quest foi completada
+    IF NEW.completed THEN
+        -- Atualiza as moedas do personagem
+        UPDATE personagem
+        SET moedas = moedas + 100 -- Substitua 100 pelo valor X que você deseja adicionar
+        WHERE id = NEW.personagem_id;
+
+        -- Insere itens do armazenamento do quester na mochila do personagem
+        FOR v_armazenamento IN
+            SELECT a.item_id, a.quantidade
+            FROM armazenamento a
+            WHERE a.quester_id = (SELECT quester_id FROM quest WHERE id = NEW.quest_id)
+        LOOP
+            INSERT INTO item_instancia (item_id, inventario_id, quantidade)
+            VALUES (v_armazenamento.item_id, (SELECT id FROM inventario WHERE personagem_id = NEW.personagem_id), v_armazenamento.quantidade);
+        END LOOP;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to quest_instancia when completed is true
+CREATE TRIGGER trigger_complete_quest
+AFTER UPDATE ON quest_instancia
+FOR EACH ROW
+WHEN (NEW.completed = TRUE)
+EXECUTE FUNCTION complete_quest();
+
 -- PostGreSQL
 -- When the character reaches maximum xp, increase the level and total xp
 CREATE OR REPLACE FUNCTION update_level()
