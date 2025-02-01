@@ -1,10 +1,13 @@
+from typing import List
 import random
 from colorama import Fore, Style
 import time
 from utils import debug, error
 import interface.display as display
-from character import Character
-import logic
+from logic.character import Character
+import logic.main as main
+from logic.enemy import Enemy
+import database.dql.query as query
 
 # 1.4x vantagem
 # 0.6x desvantagem
@@ -21,23 +24,8 @@ import logic
 def perception(intelligence: int) -> bool:    
     return random.randint(1, 20) + intelligence
 
-class Enemy:
-    def __init__ (self, id, nome, descricao, elemento, vida, vida_maxima, xp_obtido, inteligencia, moedas_obtidas, conhecimento_arcano, energia_arcana_maxima, dialogo):
-        self.id = id
-        self.nome = nome
-        self.descricao = descricao
-        self.elemento = elemento
-        self.vida = vida
-        self.vida_maxima = vida_maxima
-        self.xp_obtido = xp_obtido
-        self.inteligencia = inteligencia
-        self.moedas_obtidas = moedas_obtidas
-        self.conhecimento_arcano = conhecimento_arcano
-        self.energia_arcana_maxima = energia_arcana_maxima
-        self.dialogo = None
-
 class Combat:
-    def __init__(self, character: Character, enemies : list, conn):
+    def __init__(self, character: Character, enemies : List[Enemy], conn):
         self.character = character
         self.enemies = enemies
         self.conn = conn
@@ -61,50 +49,107 @@ class Combat:
              return 1
 
     # Logic:
-    #   Returns how possible is to run from the enemy.
-    def try_to_run(self, enemy: Enemy) -> float:
+    #   Returns if it was possible to run away from enemy.
+    def can_escape(self, enemy: Enemy) -> bool:
          base_chance = 0.5
          modifier = (self.character.inteligencia - enemy.inteligencia) * 0.05
          chance_run = base_chance + modifier
-         return max(0.8, min(0.9, chance_run))
-    
-    # Logic:
-    #   Run away from enemy, updates all enemies info
-    def escape_combat(self):
-        debug(f"chance de fuga inimigo: {self.enemies[0]}")
-        chance_fuga = self.try_to_run(self, self.enemies[0])
-        if random.random() < chance_fuga:
-            self.combate_ativo = False
-            print(Style.BRIGHT + Fore.GREEN + "Você conseguiu escapar do combate!" + Style.RESET_ALL)  
-            with self.conn.cursor() as cursor:
-                
-                # To-do: put this query into the `queries/query.py` file.
-                cursor.execute("""SELECT atualizar_combate (%s, %s, %s, %s)""", 
-                            (self.personagem.id, self.inimigo.id, self.personagem.vida, self.inimigo.vida))
-                self.conn.commit()
+         return random.random() < max(0.8, min(0.9, chance_run))
 
-            input("Pressione Enter para continuar...")
-        else:
-            print(Style.BRIGHT + Fore.RED + "O inimigo bloqueou sua tentativa de fuga!" + Style.RESET_ALL)
 
-    # To-do: put this function into the `interface/display.py` file.
-    # Interface:
-    #   Print all enemies and their description and life.
-    def interface_show_enemies(self):
-        for idx, enemy in enumerate(self.enemies):
-            print(f"| {idx+1} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")
 
     # Logic:
     #   Returns the enemy that the player wants to attack.
     def attack(self, enemy: Enemy) -> int:
-        damage_caused = random.randint(50, 60) * self.personagem.nivel
-        damage_caused *= self.vantagem_elemento(self.personagem.elemento, self.inimigo.elemento)
+        damage_caused = random.randint(3, 15) * self.character.nivel
+        damage_caused *= self.advantage_element(self.character.elemento, enemy.elemento)
         damage_caused = int(damage_caused)
         return damage_caused
 
+    # Logic:
+    # List all spells and select one to cast
+    def get_spell(self) -> tuple:
+        
+        selected_spell = None
+        
+        while True:
+            spell_damage = query.get_damage_spells(self.conn, self.character.id)
+            spell_area = query.get_damage_area_spells(self.conn, self.character.id)
+            spell_healing = query.get_healing_spells(self.conn, self.character.id)
+        
+            spells = spell_damage + spell_area + spell_healing
+            
+            option_i = main.ask(spells, lambda: [
+                display.clear_screen(),
+                display.list_spells(spells)
+            ], False)
+            
+            selected_spell = spells[option_i - 1]
+            _, _, _, energia_arcana, *_ = selected_spell
+            
+    
+            if energia_arcana > self.character.energia_arcana:
+                print(Fore.RED + "Energia Arcana insuficiente!" + Style.RESET_ALL)
+                display.press_enter()
+                continue
+            # To-do: Add to query
+            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, energia_arcana)
+            break
+        
+        return selected_spell
+
+    
+    # Logic:
+    #   Apply effect spell selected and remove energy from character.
+    #   Returns True if the enemy was killed.
+    def apply_spell_effect(self, spell) -> None:
+        _, tipo, _, energia_arcana, *_ = spell
+        
+        # ..
+        # To-do: debug test...
+        # ..
+        debug(tipo, energia_arcana)
+        display.press_enter()
+        
+        if tipo == 'Dano':
+            enemy = self.select_enemy()
+            self.apply_damage_spell(spell, enemy)
+        
+
+        elif tipo == 'Dano de área':
+            enemy = self.select_enemy()
+            debug('to-do: area damage')
+            display.press_enter()
+
+
+        elif tipo == 'Cura':
+            self.apply_heal_spell(spell)
+
     # Functionality:
-    #   Combat funcionality.
-    # Enemy delay
+    #   Returns true if enemy was killed.
+    def apply_damage_spell(self, spell, enemy) -> bool:
+        damage = spell[3]
+        
+        damage *= self.advantage_element(self.character.elemento, enemy.elemento)
+
+        enemy.vida = min(enemy.vida - damage, 0)
+        
+        # To-do: put this into a interface file.
+        print(f"{Fore.BLUE} Foi conjurado {spell[0]} causando {damage} de dano! {Style.RESET_ALL}")
+        
+        return enemy.vida <= 0
+
+    # Functionality:
+    #   Apply area damage spell
+
+    # Functionality:
+    #   Apply recover from healing spell 
+    def apply_heal_spell(self, spell):
+        self.character.vida = min(self.character.vida + spell[4], self.character.vida_maxima)
+        print(f"{Fore.GREEN} Você curou {spell[4]} pontos de vida! {Style.RESET_ALL}")
+
+    # Functionality:
+    #   Enemy delay.
     def enemy_delay(self):
         print(Style.BRIGHT + Fore.YELLOW + "O inimigo está pensando..." + Style.RESET_ALL)
         print(Style.BRIGHT + Fore.YELLOW + "..." + Style.RESET_ALL)
@@ -112,6 +157,22 @@ class Combat:
         print(Style.BRIGHT + Fore.YELLOW + "..." + Style.RESET_ALL)
         time.sleep(1)
 
+    # Functionality:
+    #   Select and returns an enemy.
+    def select_enemy(self) -> Enemy:
+        
+        if len(self.enemies) == 1:
+            return self.enemies[0]
+        
+        enemy_i = main.ask(self.enemies, lambda: [
+            display.clear_screen(),
+            display.interface_show_enemies(self.enemies)
+        ], False)
+        return self.enemies[enemy_i - 1]
+
+    # Logic:
+    #   True: if the player ran away or won the combat
+    #   False: if the player died.
     def init(self):
         
         while True:
@@ -123,15 +184,54 @@ class Combat:
                "Usar Poção"
             ]
 
-            option = logic.ask(options, lambda: [
-                self.interface_show_enemies(),
+            option_i = main.ask(options, lambda: [
+                display.interface_show_enemies(self.enemies),
                 display.list_options(options)
-            ])
-
-            print(option)
+            ], False)
             
-            # Attack.
-            if option == 1:
-                damage_caused = 10
-                # To-do: put this into `interface/display.py` file.
-                print(Style.BRIGHT + Fore.RED + f"Você atacou com força e causou {damage_caused} de dano ao inimigo!" + Style.RESET_ALL)
+            option = options[option_i - 1]
+
+            
+            if option == "Atacar":
+                enemy = self.select_enemy()
+                damage_caused = self.attack(enemy)
+                enemy.vida -= damage_caused
+                debug(damage_caused)
+                display.press_enter()
+
+
+            elif option == "Fugir":
+                
+                enemy = self.enemies[0]
+                
+                if self.can_escape(enemy):
+                    print("Você conseguiu escapar do combate!")
+                    display.press_enter()
+                    display.clear_screen()
+                    return True
+                
+                print("Você não conseguiu escapar do combate!")
+                display.press_enter()   
+
+            
+            elif option == "Usar Feitiço":
+                spell = self.get_spell()
+                
+                self.apply_spell_effect(spell)
+                
+                debug(self.character.energia_arcana)
+                display.press_enter()
+                
+                # to-do:
+                query.update_combat(self.conn, self.enemies, self.character)
+
+
+            elif option == "Usar Poção":
+                debug("to-do: usar poção")
+                display.press_enter()
+                
+            # ---
+            # ....
+            # To-do: enemies turn.
+            
+        return True

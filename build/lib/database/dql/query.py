@@ -1,8 +1,4 @@
 # get regions and respective elements
-from numpy import character
-from logic.enemy import Enemy
-from logic.character import Character
-
 def regions(conn):
     with conn.cursor() as cur:
         cur.execute(
@@ -201,91 +197,60 @@ def get_quest(conn, quester_id):
 
 
 
-## function to get all LERNED spells from player
-#def get_learned_spells(conn, character_id):
-#    with conn.cursor() as cursor:
-#        cursor.execute(
-#            f"""
-#                SELECT
-#                    *
-#                FROM feitico_aprendido fa
-#                WHERE fa.inventario_id = {character_id}
-#            """
-#    )
-#        return cursor.fetchall()
+# function to get all LERNED spells from player
+def get_learned_spells(conn, character_id):
+    with conn.cursor() as cursor:
+        cursor.execute(
+            """
+                SELECT f.*, fd.*, fda.*, fc.*
+                FROM feitico_aprendido fa
+                JOIN feitico f ON fa.feitico_id = f.id
+                LEFT JOIN feitico_dano fd ON f.id = fd.id
+                LEFT JOIN feitico_dano_area fda ON f.id = fda.id
+                LEFT JOIN feitico_cura fc ON f.id = fc.id
+                WHERE fa.inventario_id = %s
+            """, (character_id))
+        return cursor.fetchall()
 
 # function to get all Character damage spells
 def get_damage_spells(conn, character_id):
     with conn.cursor() as cur:
         cur.execute(
-            f"""
-                SELECT
-                    fd.nome,
-                    f.tipo,
-                    fd.descricao, 
-                    fd.energia_arcana,
-                    fd.dano_total
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
-                JOIN feitico f ON f.id = fa.feitico_id
-                JOIN feitico_dano fd ON f.id = fd.id
-                WHERE i.personagem_id = {character_id};
             """
+                SELECT feitico_dano.nome, feitico_dano.descricao, fetico_dano.energia_arcana
+                FROM inventario
+                JOIN feitico_aprendido ON inventario.id = feitico_aprendido.inventario_id
+                JOIN feitico_dano ON feitico_aprendido.inventario_id = feitico_dano.id
+                WHERE inventario.personagem_id = %s;
+            """, (character_id)
         )
-        return cur.fetchall()
 
 # function to get all Character area damage spells
 def get_damage_area_spells(conn, character_id):
     with conn.cursor() as cur:
         cur.execute(
-            f"""
-                SELECT
-                    fda.nome,
-                    f.tipo,
-                    fda.descricao, 
-                    fda.energia_arcana,
-                    fda.dano,
-                    fda.qtd_inimigos_afetados
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
-                JOIN feitico f ON f.id = fa.feitico_id
-                JOIN feitico_dano_area fda ON f.id = fda.id
-                WHERE i.personagem_id = {character_id};
             """
+                SELECT feitico_dano_area.nome, feitico_dano_area.descricao, fetico_dano.energia_arcana
+                FROM inventario
+                JOIN feitico_aprendido ON inventario.id = feitico_aprendido.inventario_id
+                JOIN feitico_dano_area ON feitico_aprendido.inventario_id = feitico_dano_area.id
+                WHERE inventario.personagem_id = %s;
+            """, (character_id)
         )
-        return cur.fetchall()
 
 # function to get all Character healing spells
 def get_healing_spells(conn, character_id):
     with conn.cursor() as cur:
         cur.execute(
-            f"""
-                SELECT
-                    fc.nome,
-                    f.tipo,
-                    fc.descricao,
-                    fc.energia_arcana,
-                    fc.qtd_cura
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
-                JOIN feitico f ON f.id = fa.feitico_id
-                JOIN feitico_cura fc ON f.id = fc.id
-                WHERE i.personagem_id = {character_id};
             """
+                SELECT feitico_cura.nome, feitico_cura.descricao, fetico_dano.energia_arcana
+                FROM inventario
+                JOIN feitico_aprendido ON inventario.id = feitico_aprendido.inventario_id
+                JOIN feitico_cura ON feitico_aprendido.inventario_id = feitico_cura.id
+                WHERE inventario.personagem_id = %s;
+            """, (character_id)
         )
-        return cur.fetchall()
-
-# function to update `energia_arcana` after use and spell
-def update_mp(conn, character_id, new_energia_arcana):
-    with conn.cursor() as cur:
-        cur.execute(
-            f"""
-                UPDATE personagem
-                SET energia_arcana = GREATEST(0, energia_arcana - {new_energia_arcana})
-                WHERE id = {character_id}
-            """
-        )
-        conn.commit()
+    
 
 # function to change subregion
 def fetch_subregion_id_by_name(name, conn):
@@ -293,18 +258,3 @@ def fetch_subregion_id_by_name(name, conn):
         cur.execute("SELECT DISTINCT id FROM sub_regiao WHERE nome = %s", (name,))
         result = cur.fetchone()
         return result[0] if result else None
-
-# Update a combat between a caracter and an instance of enemy.
-def update_combat(conn , enemies: Enemy, character: Character):
-    with conn.cursor() as cursor:
-        for enemy in enemies:
-            cursor.execute(
-                f"""
-                SELECT atualizar_combate (
-                    {character.id},
-                    {enemy.id},
-                    {character.vida},
-                    {enemy.vida}
-                )"""
-            )
-            conn.commit()

@@ -1,14 +1,14 @@
 from database.Database import Database
 from default import populate_database
 import sys
-import logic.main as logic
+import logic.main as main
 import utils
 
 def main():
     sqls = [
-        "./database/ddl/types.sql",
-        "./database/ddl/tables.sql",
-        "./database/dml/procedures.sql",
+        "./src/database/ddl/types.sql",
+        "./src/database/ddl/tables.sql",
+        "./src/database/dml/procedures.sql",
         #"./src/database/dml/triggers.sql"
     ]
     
@@ -40,7 +40,7 @@ def main():
         init_database()
     
     while True:
-        character = logic.main_menu(db.conn)
+        character = main.main_menu(db.conn)
         if not character:
             utils.debug("Nenhum personagem retornado, saindo.")
             continue
@@ -50,7 +50,7 @@ def main():
             return 0
         
         
-        while logic.game(db.conn, character):
+        while main.game(db.conn, character):
             pass
         
 main()

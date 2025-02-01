@@ -81,7 +81,7 @@ CREATE TABLE quest (
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
     dificuldade TIPO_DIFICULDADE NOT NULL
-);
+); 
 
 CREATE TABLE quest_instancia (
     id SERIAL PRIMARY KEY,
@@ -136,7 +136,8 @@ CREATE TABLE feitico_dano (
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
     conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
-    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
+    nome VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE feitico_dano_area (
@@ -147,7 +148,8 @@ CREATE TABLE feitico_dano_area (
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
     conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
-    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
+    nome VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE feitico_cura (
@@ -157,7 +159,8 @@ CREATE TABLE feitico_cura (
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
     conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
-    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0)
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
+    nome VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE grimorio (

@@ -45,3 +45,131 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- PostGreSQL:
+-- When a quest_instancia is created, check if the character has an acessory that is in the armazenamento of the quest.
+CREATE OR REPLACE FUNCTION check_acessorio()
+RETURNS TRIGGER AS $$
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM item_instancia WHERE item_id IN (SELECT item_id FROM armazenamento WHERE quest_id = NEW.quest_id) AND inventario_id = NEW.inventario_id) THEN
+        RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'Personagem already has the item';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- PostGreSQL
+-- When the character reaches maximum xp, increase the level and total xp
+CREATE OR REPLACE FUNCTION update_level()
+RETURNS TRIGGER AS $$
+BEGIN
+    WHILE NEW.xp >= NEW.xp_total LOOP
+        NEW.nivel := NEW.nivel + 1;
+        NEW.xp_total := NEW.xp_total + 100;
+    END LOOP;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+--CREATE TRIGGER trigger_atualizar_nivel
+--BEFORE UPDATE ON personagem
+--FOR EACH ROW
+--WHEN (NEW.xp >= NEW.xp_total)
+--EXECUTE FUNCTION atualizar_nivel();
+
+
+-- PostGreSQL: Deletar instância de inimigo
+CREATE OR REPLACE FUNCTION handle_enemy_death()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_armazenatmento RECORD;
+    v_item_instacia_id INT;
+BEGIN
+    -- verifica se o inimigo morreu
+    IF NEW.vida <= 0 THEN
+        DELETE FROM inimigo_instancia WHERE id = NEW.id;
+
+        -- atualiza xp do personagem
+        UPDATE personagem
+        SET xp = xp + NEW.xp
+        WHERE id = NEW.personagem_id;
+
+        -- insere itens do inimigo no inventário do personagem
+        FOR v_armazenamento IN
+            SELECT a.item_id, a.quantidade
+            FROM armazenamento a
+            WHERE a.inimigo_id = NEW.inimigo_id
+        LOOP
+            INSERT INTO item_instancia (item_id, inventario_id, quantidade)
+            VALUES (v_armazenamento.item_id, NEW.inventario_id, v_armazenamento.quantidade);
+            RETURNING id INTO v_item_instancia_id;
+        
+            -- atualiza quantidade de itens no inventário
+            UPDATE armazenamento
+            SET quantidade = quantidade - v_armazenamento.quantidade
+            WHERE item_id = v_armazenamento.item_id AND inimigo_id = NEW.inimigo_id;
+        END LOOP;
+    END IF;
+
+    RETURN NEW;;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Criar trigger para deletar instância de inimigo
+CREATE TRIGGER trigger_handle_enemy_death
+AFTER UPDATE ON inimigo_instancia
+FOR EACH ROW
+WHEN (NEW.vida <= 0)
+EXECUTE FUNCTION handle_enemy_death();
+
+-- PostGreSQL
+-- Buff character of the same element in the region
+CREATE OR REPLACE FUNCTION aplicar_buff()
+RETURNS TRIGGER AS $$
+DECLARE
+    regiao_elemento TIPO_ELEMENTO;
+BEGIN
+    SELECT r.elemento INTO regiao_elemento
+    FROM sub_regiao sr
+    JOIN regiao r ON sr.regiao_id = r.id
+    WHERE sr.id = NEW.sub_regiao_id;
+    
+    IF regiao_elemento = NEW.elemento THEN
+        NEW.vida_maxima := CEIL(NEW.vida_maxima * 1.2);
+        NEW.energia_arcana_maxima := CEIL(NEW.energia_arcana_maxima * 1.1);
+    ELSE
+        NEW.vida_maxima := OLD.vida_maxima;
+        NEW.energia_arcana_maxima := OLD.energia_arcana_maxima;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_aplicar_buff
+BEFORE UPDATE ON personagem
+FOR EACH ROW
+WHEN (NEW.sub_regiao_id IS DISTINCT FROM OLD.sub_regiao_id)
+EXECUTE FUNCTION aplicar_buff();
+
+-- PostGreSQL
+-- When adding transaction, create item instance in merchant storage
+CREATE OR REPLACE FUNCTION criar_instancia_item()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO armazenamento_mercador (mercador_id, item_id, quantidade)
+    VALUES (NEW.mercador_id, NEW.item_id, NEW.quantidade)
+    ON CONFLICT (mercador_id, item_id) 
+    DO UPDATE SET quantidade = armazenamento_mercador.quantidade + NEW.quantidade;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_criar_instancia_item
+AFTER INSERT ON transacao
+FOR EACH ROW
+EXECUTE FUNCTION criar_instancia_item();

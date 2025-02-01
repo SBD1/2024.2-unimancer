@@ -1,6 +1,6 @@
 from colorama import Style, Fore
 import database.dql.query as query
-from logic.character import Character
+from character import Character
 
 def display(character, conn):
     print(f"Inventário de === {character.nome} ===")

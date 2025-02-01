@@ -8,8 +8,7 @@ def area_spells(db: Database):
         default_values = [
             # Água
             (
-                "Sopro Congelante",
-                "Exala um vento gelado que congela os inimigos em uma ampla área, causando dano e reduzindo sua velocidade.",
+                "Sopro Congelante: Exala um vento gelado que congela os inimigos em uma ampla área, causando dano e reduzindo sua velocidade.",
                 "Água",
                 2,
                 5,
@@ -18,8 +17,7 @@ def area_spells(db: Database):
                 3     
             ),
             (
-                "Muralha Gélida",
-                "Cria uma barreira de gelo ao redor do mago, danificando e desacelerando todos os inimigos que a atravessam.",
+                "Muralha Gélida: Cria uma barreira de gelo ao redor do mago, danificando e desacelerando todos os inimigos que a atravessam.",
                 "Água",
                 4,
                 10,
@@ -28,8 +26,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Nevasca Intensa",
-                "Invoca uma tempestade de neve que causa dano contínuo aos inimigos dentro de sua área de efeito.",
+                "Nevasca Intensa: Invoca uma tempestade de neve que causa dano contínuo aos inimigos dentro de sua área de efeito.",
                 "Água",
                 6,
                 15,
@@ -38,8 +35,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Tempestade Glacial",
-                "Desencadeia uma poderosa tempestade de gelo que atinge múltiplos inimigos, causando elevados danos e podendo congelá-los.",
+                "Tempestade Glacial: Desencadeia uma poderosa tempestade de gelo que atinge múltiplos inimigos, causando elevados danos e podendo congelá-los.",
                 "Água",
                 8,
                 20,
@@ -48,8 +44,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Dilúvio Ártico",
-                "Inunda a área com águas geladas, causando danos massivos e drenando a energia arcana dos inimigos afetados.",
+                "Dilúvio Ártico: Inunda a área com águas geladas, causando danos massivos e drenando a energia arcana dos inimigos afetados.",
                 "Água",
                 10,
                 25,
@@ -60,8 +55,7 @@ def area_spells(db: Database):
 
             # Fogo
             (
-                "Labareda Inicial",
-                "Lança chamas suaves que atingem uma área moderada, causando danos contínuos aos inimigos presentes.",
+                "Labareda Inicial: Lança chamas suaves que atingem uma área moderada, causando danos contínuos aos inimigos presentes.",
                 "Fogo",
                 2,
                 5,
@@ -70,8 +64,7 @@ def area_spells(db: Database):
                 3
             ),
             (
-                "Explosão Ígnea",
-                "Detona uma explosão de fogo que causa dano elevado a todos os inimigos em uma grande área.",
+                "Explosão Ígnea: Detona uma explosão de fogo que causa dano elevado a todos os inimigos em uma grande área.",
                 "Fogo",
                 4,
                 10,
@@ -80,8 +73,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Chamas Medonhas",
-                "Invoca chamas negras que envolvem a área alvo, causando dano constante e reduzindo a resistência dos inimigos.",
+                "Chamas Medonhas: Invoca chamas negras que envolvem a área alvo, causando dano constante e reduzindo a resistência dos inimigos.",
                 "Fogo",
                 6,
                 15,
@@ -90,8 +82,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Inferno Crescente",
-                "Desencadeia um inferno que se expande progressivamente, aumentando o dano conforme avança sobre os inimigos.",
+                "Inferno Crescente: Desencadeia um inferno que se expande progressivamente, aumentando o dano conforme avança sobre os inimigos.",
                 "Fogo",
                 8,
                 20,
@@ -100,8 +91,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Apocalipse de Fogo",
-                "Invoca uma catástrofe de chamas que devasta uma vasta área, causando danos massivos e incendiando o terreno.",
+                "Apocalipse de Fogo: Invoca uma catástrofe de chamas que devasta uma vasta área, causando danos massivos e incendiando o terreno.",
                 "Fogo",
                 10,
                 25,
@@ -112,8 +102,7 @@ def area_spells(db: Database):
 
             # Terra
             (
-                "Tremor Raso",
-                "Provoca um leve tremor que atinge todos os inimigos próximos, causando danos moderados e desequilibrando suas defesas.",
+                "Tremor Raso: Provoca um leve tremor que atinge todos os inimigos próximos, causando danos moderados e desequilibrando suas defesas.",
                 "Terra",
                 2,
                 5,
@@ -122,8 +111,7 @@ def area_spells(db: Database):
                 3
             ),
             (
-                "Ondas Sísmicas",
-                "Envia ondas de choque pelo solo, danificando e desestabilizando múltiplos inimigos na área.",
+                "Ondas Sísmicas: Envia ondas de choque pelo solo, danificando e desestabilizando múltiplos inimigos na área.",
                 "Terra",
                 4,
                 10,
@@ -132,8 +120,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Espiral Rochosa",
-                "Invoca espinhos de pedra que giram em torno do mago, atingindo todos os inimigos presentes na área de efeito.",
+                "Espiral Rochosa: Invoca espinhos de pedra que giram em torno do mago, atingindo todos os inimigos presentes na área de efeito.",
                 "Terra",
                 6,
                 15,
@@ -142,8 +129,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Avalanche Subterrânea",
-                "Desencadeia uma avalanche de pedras e terra que esmagam e causam danos severos aos inimigos na região afetada.",
+                "Avalanche Subterrânea: Desencadeia uma avalanche de pedras e terra que esmagam e causam danos severos aos inimigos na região afetada.",
                 "Terra",
                 8,
                 20,
@@ -152,8 +138,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Cataclismo Terrestre",
-                "Provoca uma devastadora ruptura na terra, causando danos massivos e alterando a topografia da área de combate.",
+                "Cataclismo Terrestre: Provoca uma devastadora ruptura na terra, causando danos massivos e alterando a topografia da área de combate.",
                 "Terra",
                 10,
                 25,
@@ -164,8 +149,7 @@ def area_spells(db: Database):
 
             # Ar
             (
-                "Vento Cortante",
-                "Lança rajadas de vento afiadas que cortam e causam danos a todos os inimigos na área alvo.",
+                "Vento Cortante: Lança rajadas de vento afiadas que cortam e causam danos a todos os inimigos na área alvo.",
                 "Ar",
                 2,
                 5,
@@ -174,8 +158,7 @@ def area_spells(db: Database):
                 3
             ),
             (
-                "Tornado Enfurecido",
-                "Invoca um tornado violento que percorre a área, causando danos constantes e desorganizando as formações inimigas.",
+                "Tornado Enfurecido: Invoca um tornado violento que percorre a área, causando danos constantes e desorganizando as formações inimigas.",
                 "Ar",
                 4,
                 10,
@@ -184,8 +167,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Furacão Impiedoso",
-                "Desencadeia um furacão devastador que arrasta e fere todos os inimigos atingidos dentro de sua vasta área de impacto.",
+                "Furacão Impiedoso: Desencadeia um furacão devastador que arrasta e fere todos os inimigos atingidos dentro de sua vasta área de impacto.",
                 "Ar",
                 6,
                 15,
@@ -194,8 +176,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Ciclone Ascendente",
-                "Cria um ciclone poderoso que sobe rapidamente, causando danos intensos e espalhando destruição por toda a área afetada.",
+                "Ciclone Ascendente: Cria um ciclone poderoso que sobe rapidamente, causando danos intensos e espalhando destruição por toda a área afetada.",
                 "Ar",
                 8,
                 20,
@@ -204,8 +185,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Tempestade Celeste",
-                "Invoca uma tempestade de ventos celestiais que atinge múltiplos inimigos com rajadas de ar cortante e relâmpagos.",
+                "Tempestade Celeste: Invoca uma tempestade de ventos celestiais que atinge múltiplos inimigos com rajadas de ar cortante e relâmpagos.",
                 "Ar",
                 10,
                 25,
@@ -216,8 +196,7 @@ def area_spells(db: Database):
 
             # Luz
             (
-                "Clarão Ofuscante",
-                "Emite um brilho intenso que cega e causa danos leves a todos os inimigos na área alvo.",
+                "Clarão Ofuscante: Emite um brilho intenso que cega e causa danos leves a todos os inimigos na área alvo.",
                 "Luz",
                 2,
                 5,
@@ -226,8 +205,7 @@ def area_spells(db: Database):
                 3
             ),
             (
-                "Arco Luminoso",
-                "Cria um arco de luz brilhante que dispara feixes de energia luminosa, danificando múltiplos inimigos.",
+                "Arco Luminoso: Cria um arco de luz brilhante que dispara feixes de energia luminosa, danificando múltiplos inimigos.",
                 "Luz",
                 4,
                 10,
@@ -236,8 +214,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Chuva Reluzente",
-                "Desce uma chuva de raios de luz que atinge uma área ampla, causando danos contínuos e curando aliados próximos.",
+                "Chuva Reluzente: Desce uma chuva de raios de luz que atinge uma área ampla, causando danos contínuos e curando aliados próximos.",
                 "Luz",
                 6,
                 15,
@@ -246,8 +223,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Brilho Divino",
-                "Envolve a área com uma aura divina que causa danos elevados aos inimigos e aumenta a resistência dos aliados.",
+                "Brilho Divino: Envolve a área com uma aura divina que causa danos elevados aos inimigos e aumenta a resistência dos aliados.",
                 "Luz",
                 8,
                 20,
@@ -256,8 +232,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Êxtase Solar",
-                "Libera um poderoso estalo de luz solar que incendeia e causa danos massivos a todos os inimigos na área de efeito.",
+                "Êxtase Solar: Libera um poderoso estalo de luz solar que incendeia e causa danos massivos a todos os inimigos na área de efeito.",
                 "Luz",
                 10,
                 25,
@@ -268,8 +243,7 @@ def area_spells(db: Database):
 
             # Trevas
             (
-                "Sussurro das Sombras",
-                "Murmura palavras sombrias que envolvem a área, causando danos leves e enfraquecendo a moral dos inimigos.",
+                "Sussurro das Sombras: Murmura palavras sombrias que envolvem a área, causando danos leves e enfraquecendo a moral dos inimigos.",
                 "Trevas",
                 2,
                 5,
@@ -278,8 +252,7 @@ def area_spells(db: Database):
                 3
             ),
             (
-                "Poço Profano",
-                "Cria um vórtice de trevas que atrai e danifica todos os inimigos que se aproximam, drenando sua energia vital.",
+                "Poço Profano: Cria um vórtice de trevas que atrai e danifica todos os inimigos que se aproximam, drenando sua energia vital.",
                 "Trevas",
                 4,
                 10,
@@ -288,8 +261,7 @@ def area_spells(db: Database):
                 5
             ),
             (
-                "Aura Maldita",
-                "Propaga uma aura de maldição que causa danos contínuos e reduz a eficácia das habilidades dos inimigos na área.",
+                "Aura Maldita: Propaga uma aura de maldição que causa danos contínuos e reduz a eficácia das habilidades dos inimigos na área.",
                 "Trevas",
                 6,
                 15,
@@ -298,8 +270,7 @@ def area_spells(db: Database):
                 6
             ),
             (
-                "Tormenta Sombria",
-                "Desencadeia uma tempestade de trevas que atinge múltiplos inimigos, causando danos intensos e drenando sua energia arcana.",
+                "Tormenta Sombria: Desencadeia uma tempestade de trevas que atinge múltiplos inimigos, causando danos intensos e drenando sua energia arcana.",
                 "Trevas",
                 8,
                 20,
@@ -308,8 +279,7 @@ def area_spells(db: Database):
                 7
             ),
             (
-                "Abismo Final",
-                "Invoca um abismo de trevas que consome tudo ao seu redor, causando danos devastadores e eliminando inimigos em grande número.",
+                "Abismo Final: Invoca um abismo de trevas que consome tudo ao seu redor, causando danos devastadores e eliminando inimigos em grande número.",
                 "Trevas",
                 10,
                 25,
@@ -321,7 +291,7 @@ def area_spells(db: Database):
 
         db.cur.executemany(
             """
-            SELECT criar_feitico_dano_area(%s, %s, %s, %s::INT, %s::INT, %s::INT, %s::INT, %s::INT)
+            SELECT criar_feitico_dano_area(%s, %s, %s::INT, %s::INT, %s::INT, %s::INT, %s::INT)
             """,
             default_values
         )

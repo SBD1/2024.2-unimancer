@@ -286,6 +286,7 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `feitico_dano`
 CREATE OR REPLACE FUNCTION criar_feitico_dano(
+    IN nome TEXT,
     IN descricao TEXT ,
     IN elemento TEXT, -- ::TIPO_ELEMENTO,
     IN countdown INT,
@@ -302,8 +303,26 @@ BEGIN
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_dano
-    INSERT INTO feitico_dano (id, dano_total, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
-    VALUES (v_feitico_id, dano_total, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
+    INSERT INTO feitico_dano (
+        id,
+        dano_total,
+        descricao,
+        elemento,
+        countdown,
+        conhecimento_arcano_necessario,
+        energia_arcana,
+        nome
+    )
+    VALUES (
+        v_feitico_id,
+        dano_total,
+        descricao,
+        elemento::TIPO_ELEMENTO,
+        countdown,
+        conhecimento_arcano_necessario,
+        energia_arcana,
+        nome
+    );
 
     RETURN v_feitico_id;
 END;
@@ -312,7 +331,8 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `feitico_dano_area`
 CREATE OR REPLACE FUNCTION criar_feitico_dano_area(
-    IN descricao TEXT ,
+    IN nome TEXT,
+    IN descricao TEXT,
     IN elemento TEXT, -- ::TIPO_ELEMENTO,
     IN countdown INT,
     IN conhecimento_arcano_necessario int,
@@ -329,8 +349,24 @@ BEGIN
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_dano_area
-    INSERT INTO feitico_dano_area(id, dano, qtd_inimigos_afetados, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
-    VALUES (v_feitico_id, dano, qtd_inimigos_afetados, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
+    INSERT INTO feitico_dano_area(id, 
+        dano, qtd_inimigos_afetados, 
+        descricao, 
+        elemento, 
+        countdown, 
+        conhecimento_arcano_necessario, 
+        energia_arcana,
+        nome
+    )
+    VALUES (v_feitico_id, 
+        dano, 
+        qtd_inimigos_afetados, 
+        descricao, 
+        elemento::TIPO_ELEMENTO, 
+        countdown, 
+        conhecimento_arcano_necessario, 
+        energia_arcana,
+        nome);
 
     RETURN v_feitico_id;
 END;
@@ -338,6 +374,7 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `feitico_cura`
 CREATE OR REPLACE FUNCTION criar_feitico_cura(
+    IN nome TEXT,
     IN descricao TEXT,
     IN elemento TIPO_ELEMENTO,
     IN countdown INT,
@@ -354,8 +391,26 @@ BEGIN
     RETURNING id INTO v_feitico_id;
 
     -- Criar a feitico_cura
-    INSERT INTO feitico_cura (id, qtd_cura, descricao, elemento, countdown, conhecimento_arcano_necessario, energia_arcana)
-    VALUES (v_feitico_id, qtd_cura, descricao, elemento::TIPO_ELEMENTO, countdown, conhecimento_arcano_necessario, energia_arcana);
+    INSERT INTO feitico_cura (
+        id,
+        qtd_cura,
+        descricao,
+        elemento,
+        countdown,
+        conhecimento_arcano_necessario,
+        energia_arcana,
+        nome
+    )
+    VALUES (
+        v_feitico_id,
+        qtd_cura,
+        descricao,
+        elemento::TIPO_ELEMENTO,
+        countdown,
+        conhecimento_arcano_necessario,
+        energia_arcana,
+        nome
+    );
 
     RETURN v_feitico_id;
 END;

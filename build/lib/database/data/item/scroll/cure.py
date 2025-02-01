@@ -8,10 +8,9 @@ def cure_spells(db: Database):
 
     try:
         default_values = [
-# Água
+            # Água
             (
-                "Cura Áquatica",
-                "Canaliza a energia das águas para restaurar a vida de aliados dentro da área de efeito.",
+                "Cura Áquatica: Canaliza a energia das águas para restaurar a vida de aliados dentro da área de efeito.",
                 "Água",
                 3,
                 8,
@@ -19,8 +18,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Manto Revitalizante",
-                "Envolve os aliados com um manto de água curativa, regenerando sua vida e energia arcana ao longo do tempo.",
+                "Manto Revitalizante: Envolve os aliados com um manto de água curativa, regenerando sua vida e energia arcana ao longo do tempo.",
                 "Água",
                 6,
                 15,
@@ -30,8 +28,7 @@ def cure_spells(db: Database):
 
             # Fogo
             (
-                "Flama Curativa",
-                "Utiliza o calor das chamas para aquecer e curar ferimentos de aliados próximos.",
+                "Flama Curativa: Utiliza o calor das chamas para aquecer e curar ferimentos de aliados próximos.",
                 "Fogo",
                 3,
                 8,
@@ -39,8 +36,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Fogo Vigoroso",
-                "Invoca chamas benéficas que envolvem os aliados, restaurando sua vida e aumentando sua resistência arcana.",
+                "Fogo Vigoroso: Invoca chamas benéficas que envolvem os aliados, restaurando sua vida e aumentando sua resistência arcana.",
                 "Fogo",
                 6,
                 15,
@@ -50,8 +46,7 @@ def cure_spells(db: Database):
 
             # Terra
             (
-                "Regeneração Terrena",
-                "Conecta-se com a energia da terra para regenerar a vida dos aliados na área afetada.",
+                "Regeneração Terrena: Conecta-se com a energia da terra para regenerar a vida dos aliados na área afetada.",
                 "Terra",
                 3,
                 8,
@@ -59,8 +54,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Escudo Vital",
-                "Forma um escudo de terra que protege e cura os aliados, absorvendo danos e restaurando sua vitalidade.",
+                "Escudo Vital: Forma um escudo de terra que protege e cura os aliados, absorvendo danos e restaurando sua vitalidade.",
                 "Terra",
                 6,
                 15,
@@ -70,8 +64,7 @@ def cure_spells(db: Database):
 
             # Ar
             (
-                "Brisa Curativa",
-                "Convoca uma brisa suave que revitaliza e cura os aliados dentro de sua trajetória.",
+                "Brisa Curativa: Convoca uma brisa suave que revitaliza e cura os aliados dentro de sua trajetória.",
                 "Ar",
                 3,
                 8,
@@ -79,8 +72,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Vórtice Revigorante",
-                "Cria um vórtice de ar que circunda os aliados, restaurando sua vida e energias arcanas continuamente.",
+                "Vórtice Revigorante: Cria um vórtice de ar que circunda os aliados, restaurando sua vida e energias arcanas continuamente.",
                 "Ar",
                 6,
                 15,
@@ -90,8 +82,7 @@ def cure_spells(db: Database):
 
             # Luz
             (
-                "Luz Restauradora",
-                "Emite uma luz pura que cura ferimentos e restaura a energia arcana dos aliados na área iluminada.",
+                "Luz Restauradora: Emite uma luz pura que cura ferimentos e restaura a energia arcana dos aliados na área iluminada.",
                 "Luz",
                 3,
                 8,
@@ -99,8 +90,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Aura Divina",
-                "Envolve os aliados com uma aura de luz celestial, proporcionando cura contínua e proteção contra energias negativas.",
+                "Aura Divina: Envolve os aliados com uma aura de luz celestial, proporcionando cura contínua e proteção contra energias negativas.",
                 "Luz",
                 6,
                 15,
@@ -110,8 +100,7 @@ def cure_spells(db: Database):
 
             # Trevas
             (
-                "Sombra Curativa",
-                "Manipula as sombras para curar os aliados, ocultando-os enquanto restaura sua vitalidade.",
+                "Sombra Curativa: Manipula as sombras para curar os aliados, ocultando-os enquanto restaura sua vitalidade.",
                 "Trevas",
                 3,
                 8,
@@ -119,8 +108,7 @@ def cure_spells(db: Database):
                 25 
             ),
             (
-                "Véu das Trevas",
-                "Cria um véu sombrio que não apenas protege os aliados, mas também cura suas feridas e renova sua energia arcana.",
+                "Véu das Trevas: Cria um véu sombrio que não apenas protege os aliados, mas também cura suas feridas e renova sua energia arcana.",
                 "Trevas",
                 6,
                 15,
@@ -131,7 +119,7 @@ def cure_spells(db: Database):
 
         db.cur.executemany(
             """
-            SELECT criar_feitico_cura(%s, %s, %s, %s, %s, %s, %s)
+            SELECT criar_feitico_cura(%s, %s, %s, %s, %s, %s)
             """,
             default_values
         )

@@ -1,7 +1,7 @@
 from colorama import Fore, Style
 import psycopg2
 import database.dql.query as query
-from logic.character import Character
+from character import Character
 
 # Function to get subregion description
 def get_subregion_description(conn, character: Character):

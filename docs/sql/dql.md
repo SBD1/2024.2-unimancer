@@ -121,7 +121,7 @@ WHERE sr1.id = %s;
 
 #### Listar NPCs em uma sub-região
 ```sql
-SELECT n.id, n.nome, n.tipo 
+SELECT n.id, , n.tipo 
 FROM npc n
 JOIN civil c ON c.id = n.id
 WHERE c.sub_regiao_id = $1;

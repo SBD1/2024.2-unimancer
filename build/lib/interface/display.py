@@ -1,10 +1,7 @@
-from typing import List
 import os
 import platform
 from colorama import Fore, Style
 import time
-
-from logic.enemy import Enemy
 
 # Clean the terminal screen
 def clear_screen():
@@ -114,14 +111,3 @@ def list_npcs(npcs) -> None:
     for idx, npc in enumerate(npcs, start=1):
         name, description, function = npc
         print(f"\n {idx}.  {name} - {function} - {description}")
-        
-# Interface:
-#   Will list the spells available to the character.
-def list_spells(spells) -> None:
-    for idx, spell in enumerate(spells):
-        print(f"{idx+1}. {spell}")
-
-# Print all enemies and their description and life.
-def interface_show_enemies(enemies: List[Enemy]) -> None:
-    for idx, enemy in enumerate(enemies):
-        print(f"| {idx+1} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")
