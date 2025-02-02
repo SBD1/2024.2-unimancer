@@ -196,7 +196,7 @@ def game(conn, character: Character) -> bool:
         display.press_enter()
     elif option == "Ver feitiços":
         display.clear_screen()
-        spells = query.get_spells(conn, character.id)
+        spells = query.get_damage_spells(conn, character.id) + query.get_damage_area_spells(conn, character.id) + query.get_healing_spells(conn, character.id) 
         inventory.list_spells(conn, spells)
 
     elif option == "Sair":
