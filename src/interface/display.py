@@ -1,7 +1,7 @@
 from typing import List
 import os
 import platform
-from colorama import Fore, Style
+from colorama import Back, Fore, Style
 import time
 
 from numpy import add
@@ -116,6 +116,13 @@ def enemy_perceives(enemy):
 #    input()
 
 # Interface:
+# Display player header information.
+def header(character) -> None:
+    terminal_width = 80  # Ajuste conforme necessário
+    print(Back.BLUE + Fore.BLACK + f"=== {character.nome} === vida: {character.vida}/{character.vida_maxima} "
+          f"energia arcana: {character.energia_arcana}/{character.energia_arcana_maxima} "
+          f"moedas: {character.moedas} xp: {character.xp}/{character.xp_total} ===".center(terminal_width) + Style.RESET_ALL)
+
 #   Will list the NPCs available in the subregion.
 def list_npcs(npcs) -> None:
     print("\nNPCs disponíveis:")

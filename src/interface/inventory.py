@@ -1,6 +1,5 @@
-from colorama import Style, Fore
+from colorama import Back, Style, Fore
 import database.dql.query as query
-from logic.character import Character
 
 def display(character, conn):
     print(Fore.GREEN + " "*30 +f"Inventário de === {character.nome} ===" + Style.RESET_ALL)
@@ -19,12 +18,6 @@ def display(character, conn):
            print(f"{tipo:<15} {nome:<20} {descricao:<30} {qtd:<10}")
     
     print("-" * 80)
-
-# Display player header information.
-def header(character: Character):
-    print(f"=== {character.nome} === vida: {character.vida}/{character.vida_maxima} "
-          f"energia arcana: {character.energia_arcana}/{character.energia_arcana_maxima} "
-          f"moedas: {character.moedas} xp: {character.xp}/{character.xp_total} ===")
 
 # Display player spells
 def list_spells(conn, spells):

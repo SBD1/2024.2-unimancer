@@ -186,7 +186,7 @@ def game(conn, character: Character) -> bool:
         navigate(conn, character)  
     elif option == "Ver status do personagem":
         display.clear_screen()
-        inventory.header(character)
+        display.header(character)
         display.press_enter()
     elif option == "Ver inventário":
         display.clear_screen()
