@@ -1,3 +1,4 @@
+import dis
 import interface.display as display
 import interface.inventory as inventory
 import interface.world_info as world_info
@@ -130,10 +131,12 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
         
         enemies_instances = [combat.Enemy(*enemy) for enemy in enemies]
         enemy_combat = combat.Combat(character, enemies_instances, conn)
+        display.press_enter()
         
         return enemy_combat.init()
     
     print(Style.BRIGHT + Fore.GREEN + "Você Passou Sorrateiramente" + Style.RESET_ALL)
+    display.press_enter()
         
     return True
 
@@ -148,6 +151,7 @@ def navigate(conn, character):
     
     while True:
         display.clear_screen() 
+        display.header(character),
         subregions = world_info.display_subregion_info(conn, character)
         enemies = world_info.show_enemies(conn, character)
         npcs = world_info.display_npcs(conn, character)
@@ -174,6 +178,7 @@ def game(conn, character: Character) -> bool:
     ]
     option_i = ask(options, lambda: [
         display.clear_screen(),
+        display.header(character),
         display.ingame_menu(),
         display.list_options(options)
     ])

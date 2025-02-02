@@ -140,6 +140,8 @@ class Combat:
 
         elif tipo == 'Cura':
             self.apply_heal_spell(spell)
+        
+        display.press_enter()
 
     # Functionality:
     #   Returns true if enemy was killed.
@@ -183,6 +185,7 @@ class Combat:
         time.sleep(1)
         print(Style.BRIGHT + Fore.YELLOW + "..." + Style.RESET_ALL)
         time.sleep(1)
+        display.press_enter()
 
     # Functionality
     # Enemy turn
@@ -197,6 +200,8 @@ class Combat:
                 self.character.vida = max(self.character.vida - damage, 0)
 
                 print(f"{Fore.RED} {enemy.nome} te atacou e causou {damage} de dano! {Style.RESET_ALL}")
+                
+        display.press_enter()
 
     # Functionality:
     #   Select and returns an enemy.
@@ -239,6 +244,8 @@ class Combat:
             ]
 
             option_i = main.ask(options, lambda: [
+                display.clear_screen(),
+                display.header(self.character),
                 display.interface_show_enemies(self.enemies),
                 display.list_options(options)
             ], False)

@@ -126,13 +126,12 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
     character_perception = 0
 
     utils.debug(f"Values perception: {character_perception}, {enemy_perception}")
-
     if (character_perception < enemy_perception):
         print(Style.BRIGHT + Fore.RED + "Você foi Percebido" + Style.RESET_ALL)
         
         enemies_instances = [combat.Enemy(*enemy) for enemy in enemies]
         enemy_combat = combat.Combat(character, enemies_instances, conn)
-        
+        display.press_enter()
         return enemy_combat.init()
     
     print(Style.BRIGHT + Fore.GREEN + "Você Passou Sorrateiramente" + Style.RESET_ALL)
@@ -172,6 +171,7 @@ def game(conn, character: Character) -> bool:
     ]
     option_i = ask(options, lambda: [
         display.clear_screen(),
+        display.header(character),
         display.ingame_menu(),
         display.list_options(options)
     ])
