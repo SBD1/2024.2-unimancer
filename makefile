@@ -24,16 +24,16 @@ rmv:
 	@sudo docker compose down -v
 
 int:
-	@export PYTHONPATH="./source/"
-	@python ./source/main.py
+	@export PYTHONPATH="./src/"
+	@python ./src/__init__.py
 
 int@delete:
-	@export PYTHONPATH="./source/"
-	@python ./source/main.py delete
+	@export PYTHONPATH="./src/"
+	@python ./src/__init__.py delete
 
 int@reset:
-	@export PYTHONPATH="./source/"
-	@python ./source/main.py reset
+	@export PYTHONPATH="./src/"
+	@python ./src/__init__.py reset
 
 mkdocs@build:
 	@mkdocs build
