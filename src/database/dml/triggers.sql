@@ -214,3 +214,32 @@ CREATE TRIGGER trigger_criar_instancia_item
 AFTER INSERT ON transacao
 FOR EACH ROW
 EXECUTE FUNCTION criar_instancia_item();
+
+CREATE OR REPLACE FUNCTION check_conclusion_quest()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_inimigos_restantes INT;
+BEGIN
+    -- Count how many enemies are still alive in the quest subregion
+    SELECT COUNT(*)
+    INTO v_inimigos_restantes
+    FROM inimigo_instancia
+    WHERE sub_regiao_id = OLD.sub_regiao_id AND vida > 0;
+
+    -- If there are no enemies remaining, mark the quest as completed
+    IF v_inimigos_restantes = 0 THEN
+        UPDATE quest_instancia
+        SET completed = TRUE
+        WHERE quest_id = (SELECT quest_id FROM quest WHERE id = OLD.inimigo_id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_check_conclusion_quest
+AFTER UPDATE ON inimigo_instancia
+FOR EACH ROW
+WHEN (NEW.vida <= 0)
+EXECUTE FUNCTION check_conclusion_quest();
