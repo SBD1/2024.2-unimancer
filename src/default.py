@@ -59,7 +59,7 @@ def populate_database(db: Database):
         
         storage.populate_storage(db)
         #enemie_storage.enemie_storage(db)
-        #quest.quests(db)
+        quest.quests(db)
 #
         #potions
         potions.potions(db)

@@ -85,20 +85,15 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
             
 
     elif option == "Interagir":
-        
         npcs = query.list_citizens_subregion(conn, character.sub_regiao_id)  
             
         npc_i = ask(npcs, lambda: [
             display.clear_screen(),
             display.list_npcs(npcs)
         ], False)
-        
-        print(npc_i)
-        display.press_enter()
-        #
-        #display.display_npc_info(npcs[npc_choice - 1], conn)
+        print(character)
+        display.display_npc_info(conn, npcs[npc_i - 1])
     
-
     elif option == "Lutar": 
         print("to-do: complete this part lutar")
         display.press_enter()

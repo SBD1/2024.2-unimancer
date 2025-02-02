@@ -193,7 +193,7 @@ def get_civilian_info(conn, npc_name):
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT c.nome, c.descricao
+            SELECT c.nome, c.descricao, c.id
             FROM civil c
             WHERE c.nome = %s;
             """, (npc_name,)

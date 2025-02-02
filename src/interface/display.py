@@ -4,7 +4,11 @@ import platform
 from colorama import Fore, Style
 import time
 
+from numpy import add
+
 from logic.enemy import Enemy
+from logic.quest import Quest
+from database.dql.query import get_quest, get_civilian_info
 
 # Clean the terminal screen
 def clear_screen():
@@ -44,21 +48,25 @@ def list_characters(characters: list) -> None:
     for idx, character in enumerate(characters, start=1):
         print(f"\n {idx}.  {character[1]} - {character[2]}") 
 
-def display_npc_info(npc_nome, npc_tipo, conn):
-    descricao = query.get_civilian_info(conn, npc_nome)
-    print(Fore.CYAN + "\n--- Ficha do Personagem ---" + Style.RESET_ALL)
-    print(Fore.GREEN + f"Nome: {descricao['nome']}" + Style.RESET_ALL)
-    print(Fore.GREEN + f"Descrição: {descricao['descricao']}" + Style.RESET_ALL)
-    print(Fore.MAGENTA + "\n.." + Style.RESET_ALL)
-    time.sleep(1)
+def display_npc_info(conn, npc):
+   quest_instance = Quest()
+   npc_nome = npc[0]
+   npc_tipo = npc[2]
+   descricao = get_civilian_info(conn, npc_nome)
+   print(Fore.CYAN + "\n--- Ficha do Personagem ---" + Style.RESET_ALL)
+   print(Fore.GREEN + f"Nome: {descricao['nome']}" + Style.RESET_ALL)
+   print(Fore.GREEN + f"Descrição: {descricao['descricao']}" + Style.RESET_ALL)
+   print(Fore.MAGENTA + "\n.." + Style.RESET_ALL)
+   time.sleep(1)
 
-    if npc_tipo == "Quester":
-        show_quest(conn, npc_nome, descricao['npc_id'], character)
-        input("Pressione Enter para continuar...") 
-    else:
-        print(Fore.RED + f"{npc_nome} não tem nada a dizer." + Style.RESET_ALL)
-        print(Fore.MAGENTA + "Pressione 0 para voltar ao menu." + Style.RESET_ALL)
-        input()
+   if npc_tipo == "Quester":
+       print(Fore.GREEN + f"{npc_nome} tem uma missão para você." + Style.RESET_ALL)
+       input("Pressione Enter para continuar...") 
+       quest_instance.show_quest(conn, npc_nome, descricao['npc_id'])
+   else:
+       print(Fore.RED + f"{npc_nome} não tem nada a dizer." + Style.RESET_ALL)
+       print(Fore.MAGENTA + "Pressione 0 para voltar ao menu." + Style.RESET_ALL)
+       input()
 
 def list_subregions(subregions) -> None:
     print(Fore.CYAN + "\n--- Sub-regiões disponíveis ---" + Style.RESET_ALL)
