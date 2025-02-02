@@ -79,6 +79,14 @@ class Combat:
             spell_healing = query.get_healing_spells(self.conn, self.character.id)
         
             spells = spell_damage + spell_area + spell_healing
+
+            # Verify if the character has enough energy to cast the spell
+            usable_spells = [spell for spell in spells if spell[3] <= (self.character.energia_arcana if self.character.energia_arcana is not None else 0)]
+
+            if not usable_spells:
+                print(Fore.RED + "Você não tem energia arcana suficiente para usar nenhum feitiço!" + Style.RESET_ALL)
+                display.press_enter()
+                return None
             
             option_i = main.ask(spells, lambda: [
                 display.clear_screen(),
@@ -108,6 +116,8 @@ class Combat:
     #   Apply effect spell selected and remove energy from character.
     #   Returns True if the enemy was killed.
     def apply_spell_effect(self, spell) -> None:
+        if spell == None:
+            return
         _, tipo, _, energia_arcana, *_ = spell
         
         # ..
