@@ -3,19 +3,22 @@ import database.dql.query as query
 from logic.character import Character
 
 def display(character, conn):
-    print(f"Inventário de === {character.nome} ===")
-    print("-" * 40)
+    print(Fore.GREEN + " "*30 +f"Inventário de === {character.nome} ===" + Style.RESET_ALL)
+    print("\n")
+    print(Fore.YELLOW + "-" * 80 + Style.RESET_ALL)
 
     items = query.list_item_inventory(conn, character.id)
 
     if not items:
        print("O inventário está vazio.")
     else:
+       print(Fore.YELLOW + f"{'Tipo':<15} {'Nome':<20} {'Descrição':<30} {'Quantidade':<10}" + Style.RESET_ALL)
+       print(Fore.YELLOW + "-" * 80 + Style.RESET_ALL)
        for item in items:
-           nome, descricao, qtd = item
-           print(f"- {nome} ({descricao}) - {qtd}")
+           tipo, nome, descricao, qtd = item
+           print(f"{tipo:<15} {nome:<20} {descricao:<30} {qtd:<10}")
     
-    print("-" * 40)
+    print("-" * 80)
 
 # Display player header information.
 def header(character: Character):
