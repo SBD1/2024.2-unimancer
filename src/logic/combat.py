@@ -90,8 +90,9 @@ class Combat:
             
             # Energia_arcana != None
             energia_arcana = energia_arcana if energia_arcana is not None else 0
+            pc_energia_acana = self.character.energia_arcana if self.character.energia_arcana is not None else 0
 
-            if energia_arcana > self.character.energia_arcana:
+            if energia_arcana > pc_energia_acana:
                 print(Fore.RED + "Energia Arcana insuficiente!" + Style.RESET_ALL)
                 display.press_enter()
                 continue
