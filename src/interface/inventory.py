@@ -29,14 +29,17 @@ def header(character: Character):
 # Display player spells
 def list_spells(conn, spells):
     print(Style.BRIGHT + Fore.CYAN + f"\n--- Feitiços Disponíveis ---\n" + Style.RESET_ALL)
+    print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
     
     if not spells:
         print(Fore.RED + "Nenhum feitiço aprendido." + Style.RESET_ALL)
     else:
-        for descricao, custo in spells:
-            print(Fore.CYAN + f"  Custo de energia: {custo}" + Style.RESET_ALL)
-            print(f"  {descricao}")
-            print("-" * 40)
-    
+        for nome, tipo, descricao, custo, dano, *_ in spells:
+            print(Fore.MAGENTA + f"{nome:<30} {tipo}" + Style.RESET_ALL)
+            print(f"{descricao}")
+            print(Fore.YELLOW + f"{'Custo de energia:':<30} {custo}" + Style.RESET_ALL)
+            print(Fore.RED + f"{'Dano:':<30} {dano}" + Style.RESET_ALL)
+            print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
+
     input("\nPressione Enter para continuar...")
 
