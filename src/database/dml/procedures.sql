@@ -578,4 +578,28 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- PostGreSQL: create `create_instance_quest`
+CREATE OR REPLACE FUNCTION create_new_instance_quest(
+    IN p_quest_id INT,
+    IN p_personagem_id INT,
+    IN p_regiao_nome VARCHAR(50)
+) RETURNS INT AS $$
+DECLARE
+    v_quest_instancia_id INT;
+BEGIN
+    INSERT INTO quest_instancia (quest_id, personagem_id, completed)
+    VALUES (p_quest_id, p_personagem_id, FALSE)
+    RETURNING id INTO v_quest_instancia_id;
 
+    -- Atualiza a situação das sub-regiões da região passada como argumento para "Passável"
+    UPDATE sub_regiao_conexao
+    SET situacao = 'Passável'
+    WHERE sub_regiao_2 IN (
+        SELECT id FROM sub_regiao WHERE regiao_id = (
+            SELECT id FROM regiao WHERE nome = p_regiao_nome
+        )
+    );
+
+    RETURN v_quest_instancia_id;
+END;
+$$ LANGUAGE plpgsql;
