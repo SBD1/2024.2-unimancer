@@ -1,4 +1,5 @@
 import dis
+from calendar import c
 import interface.display as display
 import interface.inventory as inventory
 import interface.world_info as world_info
@@ -92,8 +93,8 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
             display.clear_screen(),
             display.list_npcs(npcs)
         ], False)
-        print(character)
-        display.display_npc_info(conn, npcs[npc_i - 1])
+        
+        display.display_npc_info(conn, npcs[npc_i - 1], character.id)
     
     elif option == "Lutar": 
         print("to-do: complete this part lutar")
