@@ -130,25 +130,12 @@ class Combat:
         if spell == None:
             return
         _, tipo, _, energia_arcana, *_ = spell
-        
-        # ..
-        # To-do: debug test...
-        # ..
-        debug(f" tipo do feitiço: {tipo}, qtd_energia: {energia_arcana}")
-        display.press_enter()
-        
+    
         if tipo == 'Dano':
             enemy = self.select_enemy()
             self.apply_damage_spell(spell, enemy)
-        
-
         elif tipo == 'Dano de área':
-            # enemy = self.select_enemy()
-            # debug('to-do: area damage')
-            # display.press_enter()
             self.apply_area_damage_spell(spell)
-
-
         elif tipo == 'Cura':
             self.apply_heal_spell(spell)
         
@@ -257,7 +244,6 @@ class Combat:
 
             option_i = main.ask(options, lambda: [
                 display.clear_screen(),
-                debug(self.character.energia_arcana),
                 display.header(self.character),
                 display.interface_show_enemies(self.enemies),
                 display.list_options(options)
@@ -270,7 +256,6 @@ class Combat:
                 enemy = self.select_enemy()
                 damage_caused = self.attack(enemy)
                 enemy.vida -= damage_caused
-                debug(damage_caused)
                 display.press_enter()
 
 

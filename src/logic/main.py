@@ -97,15 +97,12 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
         display.display_npc_info(conn, npcs[npc_i - 1], character.id)
     
     elif option == "Lutar": 
-        print("to-do: complete this part lutar")
+        enemies_instances = [combat.Enemy(*enemy) for enemy in enemies]
+        combat_instance = combat.Combat(character, enemies_instances, conn)
+        alive = combat_instance.init()
+        if not alive:
+            return False  # Player died
         display.press_enter()
-        #result = int(input("Escolha um inimigo: "))
-        #if result != 0 and 1 <= result <= len(enemies):
-        #    enemy_id = enemies[result - 1][0]
-        #    enemy_info = get_enemy_info(conn, enemy_id)
-        #    combat = combat.Com(character, enemy_info, conn)
-        #    combat.init
-
         
     return True
 
