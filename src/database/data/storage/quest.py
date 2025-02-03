@@ -72,7 +72,7 @@ def quests(db: Database):
             (
                 ancient_id,
                 storage_id_2,
-                "Ruínas do Abismo Atterrorizada",
+                "Ruínas do Abismo Aterrorizada",
                 "Expulse o chefe que está aterrorizando os mercadores!",
                 250,
                 "Fácil"

@@ -10,7 +10,7 @@ class Quest:
         self.conn = conn  # Store the database connection
         self.quest_region_map = {  # Mapeamento de quests para regiões
             'Peste de Ratos': 'Floresta Eterna',
-            'Ruínas do Abismo Atterrorizada': 'Ruínas do Abismo',
+            'Ruínas do Abismo Aterrorizada': 'Ruínas do Abismo',
             # ... add mais quests e regiões conforme necessário, lembrar de atualizar instancia de inimigo na regiao
         }
 
@@ -23,16 +23,14 @@ class Quest:
         for line in quest['dialog'].split('\n'):
             print(f"{npc_name} diz: {line}")
             input("Pressione Enter para continuar...")
-        self.add_quest(quest['quest_id'], character_id)
+        self.add_quest(quest['quest_id'], character_id, quest['title'])
 
-    def add_quest(self, quest_id, character_id):
+    def add_quest(self, quest_id, character_id, quest_title):
         try:
             with self.conn.cursor() as cur:
-                quest_title = get_quest(self.conn, quest_id)['title']
                 region = self.quest_region_map.get(quest_title)
-                cur.execute("SELECT create_new_instance_quest(%s::INT, %s::INT, %s)", (quest_id, character_id, region))
+                cur.execute("SELECT create_new_instance_quest(%s::INT, %s::INT, %s::VARCHAR)", (quest_id, character_id, region))
                 self.conn.commit()
-                print(f"Quest {quest_title} adicionada com sucesso!")
                 return self
         except Exception as e:
             self.conn.rollback()
