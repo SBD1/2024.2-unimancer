@@ -57,8 +57,6 @@ class Combat:
          chance_run = base_chance + modifier
          return random.random() < max(0.8, min(0.9, chance_run))
 
-
-
     # Logic:
     #   Returns the enemy that the player wants to attack.
     def attack(self, enemy: Enemy) -> int:
@@ -106,12 +104,11 @@ class Combat:
                 continue
             # To-do: Add to query
             self.character.energia_arcana -= energia_arcana
-            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, self.character.energia_arcana)
+            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, max(self.character.energia_arcana, 0))
             break
-        
+
         return selected_spell
 
-    
     # Logic:
     #   Apply effect spell selected and remove energy from character.
     #   Returns True if the enemy was killed.
@@ -245,6 +242,7 @@ class Combat:
 
             option_i = main.ask(options, lambda: [
                 display.clear_screen(),
+                debug(self.character.energia_arcana),
                 display.header(self.character),
                 display.interface_show_enemies(self.enemies),
                 display.list_options(options)

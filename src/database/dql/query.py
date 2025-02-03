@@ -302,16 +302,13 @@ def get_healing_spells(conn, character_id):
         return cur.fetchall()
 
 # function to update `energia_arcana` after use and spell
-def update_mp(conn, character_id, new_energia_arcana):
-    with conn.cursor() as cur:
-        cur.execute(
-            f"""
-                UPDATE personagem
-                SET energia_arcana = GREATEST(0, {new_energia_arcana})
-                WHERE id = {character_id}
-            """
-        )
-        conn.commit()
+def update_mp(conn, character_id, new_value):
+    cursor = conn.cursor()
+    cursor.execute("UPDATE personagem SET energia_arcana = %s WHERE id = %s RETURNING energia_arcana", (new_value, character_id))
+    result = cursor.fetchone()
+    conn.commit()
+    cursor.close()
+    return result[0] if result else None
 
 # function to change subregion
 def fetch_subregion_id_by_name(name, conn):
