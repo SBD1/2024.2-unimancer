@@ -65,6 +65,7 @@ def quests(db: Database):
             (
                 ancient_id,
                 storage_id_1,
+                7,
                 "Peste de Ratos",
                 "Elimine os ratos que estão infestando a região!",
                 50,
@@ -73,6 +74,7 @@ def quests(db: Database):
             (
                 ancient_id,
                 storage_id_2,
+                25,
                 "Ruínas do Abismo Aterrorizada",
                 "Expulse o chefe que está aterrorizando os mercadores!",
                 250,
@@ -81,7 +83,7 @@ def quests(db: Database):
         ]
         db.cur.executemany(
             """
-            INSERT INTO quest(quester_id, armazenamento_id, titulo, descricao, recompensa, dificuldade)
+            INSERT INTO quest(quester_id, armazenamento_id, sub_regiao_id, titulo, descricao, recompensa, dificuldade)
             VALUES (%s, %s, %s, %s, %s, %s)
             """, values
         )

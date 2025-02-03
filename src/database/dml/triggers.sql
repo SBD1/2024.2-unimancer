@@ -213,6 +213,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER trigger_check_conclusion_quest
+AFTER UPDATE ON inimigo_instancia
+FOR EACH ROW
+WHEN (NEW.vida <= 0)
+EXECUTE FUNCTION check_conclusion_quest();
+
 -- Potion:
 --  When an "instance of item" that is an "item" of type "potion" is marked as used:
 --  Update character's fields multiplying by each potion's effect field multiplier.
@@ -246,9 +252,5 @@ $$ LANGUAGE plpgsql;
 --$$ LANGUAGE plpgsql;
 --
 --
---CREATE TRIGGER trigger_check_conclusion_quest
---AFTER UPDATE ON inimigo_instancia
---FOR EACH ROW
---WHEN (NEW.vida <= 0)
---EXECUTE FUNCTION check_conclusion_quest();
+
 --

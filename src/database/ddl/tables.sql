@@ -77,11 +77,12 @@ CREATE TABLE quest (
     id SERIAL PRIMARY KEY,
     quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
     titulo VARCHAR(200) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
     dificuldade TIPO_DIFICULDADE NOT NULL
-); 
+);
 
 CREATE TABLE quest_instancia (
     id SERIAL PRIMARY KEY,
