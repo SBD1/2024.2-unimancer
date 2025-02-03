@@ -4,11 +4,10 @@ import platform
 from colorama import Back, Fore, Style
 import time
 
-from numpy import add, character
-
 from logic.enemy import Enemy
 from logic.quest import Quest
 from database.dql.query import get_quest, get_civilian_info
+from logic.character import Character
 
 # Clean the terminal screen
 def clear_screen():

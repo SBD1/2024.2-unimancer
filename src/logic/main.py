@@ -79,6 +79,7 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
         ])
         destiny_name, _, status = subregions[direction - 1]
         if status == "Passável":
+            query.reset_enemies(conn, character.sub_regiao_id)
             print(f"\nVocê se moveu para: {subregions[direction - 1]} ({direction}).")
             character.sub_regiao_id = query.fetch_subregion_id_by_name(destiny_name, conn)
             perceived_subregion = False
@@ -101,7 +102,7 @@ def handle_player_choice(conn, character, subregions, npcs, enemies):
         combat_instance = combat.Combat(character, enemies_instances, conn)
         alive = combat_instance.init()
         if not alive:
-            return False  # Player died
+            return False
         display.press_enter()
         
     return True
@@ -228,7 +229,7 @@ def main_menu(conn) -> int:
     
     # Go back one menu.
     if option_i == 0:
-        return -1
+        return 0
     
     option = options[option_i - 1]
 
@@ -244,12 +245,17 @@ def main_menu(conn) -> int:
             display.clear_screen()
             print(Fore.RED + "Nenhum personagem encontrado" + Style.RESET_ALL)
             display.press_enter()
-            return character
+            return 0
         else:
             character_id = ask(characters, lambda: [
                 display.clear_screen(),
                 display.list_characters(characters)
             ])
+            
+            # If a character was not selected.
+            if character_id == 0:
+                return 0
+            
             character = Character(conn, character_id)
             utils.debug(f"Personagem {character.nome} selecionado com sucesso!")
             display.press_enter()
@@ -257,10 +263,16 @@ def main_menu(conn) -> int:
 
     if option == "Criar personagem": 
         character = Character(conn)
+        
+        # If character was not created.
+        if character.nome == "":
+            return 0
+
         character.add_database()
         character.define_initial_spells(conn)
         character.add_initial_items(conn)
         utils.debug(f"Personagem {character.nome} criado com sucesso!")
+        display.press_enter()
 
 
     return character

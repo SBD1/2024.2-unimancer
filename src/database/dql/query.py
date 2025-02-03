@@ -1,6 +1,7 @@
 from numpy import character
 from logic.enemy import Enemy
 from logic.character import Character
+from typing import List, Tuple
 
 # get regions and respective elements
 def regions(conn):
@@ -130,7 +131,7 @@ def get_npc_details(conn, type):
 # List all characters 
 def list_all_characters(conn):
     with conn.cursor() as cur:
-        cur.execute("SELECT id, nome, elemento FROM personagem")
+        cur.execute("SELECT id, nome, elemento FROM personagem WHERE vida > 0")
         result = cur.fetchall()
         return result
     
@@ -282,7 +283,7 @@ def get_damage_area_spells(conn, character_id):
         return cur.fetchall()
 
 # function to get all Character healing spells
-def get_healing_spells(conn, character_id):
+def get_healing_spells(conn, character_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -301,30 +302,130 @@ def get_healing_spells(conn, character_id):
         )
         return cur.fetchall()
 
-# function to update `energia_arcana` after use and spell
-def update_mp(conn, character_id, new_value):
-    cursor = conn.cursor()
-    cursor.execute("UPDATE personagem SET energia_arcana = %s WHERE id = %s RETURNING energia_arcana", (new_value, character_id))
-    result = cursor.fetchone()
-    conn.commit()
-    cursor.close()
-    return result[0] if result else None
+# function to get all Character potions
+def get_potions(conn, character_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT p.id, p.nome, p.descricao, p.turnos, p.usado
+            FROM pocao p
+            JOIN item_instancia ii ON p.id = ii.item_id
+            JOIN inventario inv ON ii.mochila_id = inv.id
+            WHERE inv.personagem_id = %s;
+        """, (character_id,))
+        return cur.fetchall()
+
+# function to set potion as used
+def apply_potion_effect(conn, potion_id: int) -> int:
+    with conn.cursor() as cur:
+        cur.execute(f"""
+            UPDATE pocao
+            SET usado = TRUE
+            WHERE id = {potion_id};
+        """)
+        conn.commit()
+
+# Update `energia_arcana` after using spell.
+def get_character_mp(conn, character_id: int, spell_value: int) -> int:
+    with conn.cursor() as cur:
+        cur.execute(f"""
+            UPDATE personagem
+            SET energia_arcana = energia_arcana - {spell_value}
+            WHERE id = {character_id}
+            RETURNING energia_arcana;
+        """)
+        result = cur.fetchone()
+        conn.commit()
+        return result[0]
+    
+    return None
+
+# function to reset enemies
+def reset_enemies(conn, subregiao_id) -> None:
+    with conn.cursor() as cur:
+        cur.execute(f"""
+            UPDATE inimigo_instancia
+            SET vida = inimigo.vida_maxima
+            FROM inimigo
+            WHERE inimigo_instancia.inimigo_id = inimigo_id AND inimigo_instancia.sub_regiao_id = {subregiao_id}
+        """)
+        conn.commit()
 
 # function to change subregion
-def fetch_subregion_id_by_name(name, conn):
+def fetch_subregion_id_by_name(name, conn) -> int:
     with conn.cursor() as cur:
         cur.execute("SELECT DISTINCT id FROM sub_regiao WHERE nome = %s", (name,))
         result = cur.fetchone()
         return result[0] if result else None
 
-# Update a combat between a caracter and an instance of enemy.
-def update_combat(conn , enemies: Enemy, character: Character):
+# Update a combat between a caracter and enemies.
+def update_combat(conn , enemies: List[Enemy], character: Character) -> None:
     with conn.cursor() as cursor:
         for enemy in enemies:
             cursor.execute(
+                f"""
+                SELECT atualizar_combate(
+                    {character.id},
+                    {enemy.id},
+                    {int(character.vida)},
+                    {enemy.vida}
+                );
                 """
-                SELECT atualizar_combate(%s, %s, %s, %s)
-                """,
-                (character.id, enemy.id, int(character.vida), int(enemy.vida)) 
             )
-            conn.commit()
+        conn.commit()
+
+# Get character's info.
+def get_character_info(conn, id: int) -> Tuple:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT *
+            FROM personagem
+            WHERE id = {id};
+            """)
+        result = cur.fetchone()
+
+        return result
+
+# Get the inventory id of a character.
+def get_inventory(conn, type: str, character_id: int) -> int:
+
+    if type != 'mochila' and type != 'grimorio':
+        raise ValueError("Invalid type. Must be 'mochila' or 'grimorio'.")
+    
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT
+                inventario.id
+            FROM {type}
+            JOIN inventario ON personagem_id = {character_id};
+            """
+        )
+        result = cur.fetchone()[0]
+        return result
+
+# Add a spell to a character spellbook.
+def add_learned_spells(conn, spellbook_id: int, spells_ids: List[int]) -> None:
+    with conn.cursor() as cur:
+        for spell_id in spells_ids:
+            cur.execute(
+                f"""
+                INSERT INTO feitico_aprendido (inventario_id, feitico_id)
+                VALUES ({spellbook_id}, {spell_id});
+                """
+            )
+        conn.commit()
+    
+# Add an instance of item in a backpack.
+def add_items_instance(conn, backpack_id: int, item_ids: List[int]) -> None:
+    with conn.cursor() as cur:
+        for item_id in item_ids:
+            cur.execute(
+                f"""
+                INSERT INTO item_instancia (item_id, mochila_id)
+                VALUES ({item_id}, {backpack_id})
+                RETURNING item_id;
+                """
+            )
+        conn.commit()
+    

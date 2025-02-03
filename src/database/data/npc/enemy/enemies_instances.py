@@ -16,7 +16,6 @@ def create_enemy_instances(db: Database):
             (5, 5, 40),  # Espírito da Clareira - Clareira dos Espíritos
             (6, 6, 70),  # Ent Ancião - Bosque Sombrio
             (7, 6, 80),  # Guardião de Pedra - Bosque Sombrio
-            (8, 7, 60),  # Serpente das Sombras - Lago da Serenidade
             (9, 8, 50),  # Espectro do Abismo - Ruínas Perdidas
             (1, 7, 20), # Rato - Lago da Serenidade
             (1, 7, 20), # Rato - Lago da Serenidade

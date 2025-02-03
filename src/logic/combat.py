@@ -3,6 +3,7 @@ from typing import List
 import random
 from colorama import Fore, Style
 import time
+import interface.inventory as inventory
 from utils import debug, error
 import interface.display as display
 from logic.character import Character
@@ -86,39 +87,36 @@ class Combat:
         selected_spell = None
         
         while True:
-            spell_damage = query.get_damage_spells(self.conn, self.character.id)
-            spell_area = query.get_damage_area_spells(self.conn, self.character.id)
-            spell_healing = query.get_healing_spells(self.conn, self.character.id)
         
-            spells = spell_damage + spell_area + spell_healing
+            spells = [
+                *query.get_damage_spells(self.conn, self.character.id),
+                *query.get_damage_area_spells(self.conn, self.character.id),
+                *query.get_healing_spells(self.conn, self.character.id)
+            ]
 
-            # Verify if the character has enough energy to cast the spell
-            usable_spells = [spell for spell in spells if spell[3] <= (self.character.energia_arcana if self.character.energia_arcana is not None else 0)]
-
+            # Filter spells that the character has enough mana to cast.
+            usable_spells = [
+                spell for spell in spells if spell[3] <= self.character.energia_arcana
+            ]
             if not usable_spells:
-                print(Fore.RED + "Você não tem energia arcana suficiente para usar nenhum feitiço!" + Style.RESET_ALL)
+                print(
+                    Fore.RED +
+                    "Você não tem energia arcana suficiente para usar nenhum feitiço!" +
+                    Style.RESET_ALL
+                )
                 display.press_enter()
                 return None
             
-            option_i = main.ask(spells, lambda: [
+            # Select a spell from the ones that the character can cast.
+            option_i = main.ask(usable_spells, lambda: [
                 display.clear_screen(),
-                display.list_spells(spells)
+                inventory.list_spells(usable_spells)
             ], False)
             
-            selected_spell = spells[option_i - 1]
+            selected_spell = usable_spells[option_i - 1]
             _, _, _, energia_arcana, *_ = selected_spell
-            
-            # Energia_arcana != None
-            energia_arcana = energia_arcana if energia_arcana is not None else 0
-            pc_energia_acana = self.character.energia_arcana if self.character.energia_arcana is not None else 0
 
-            if energia_arcana > pc_energia_acana:
-                print(Fore.RED + "Energia Arcana insuficiente!" + Style.RESET_ALL)
-                display.press_enter()
-                continue
-            # To-do: Add to query
-            self.character.energia_arcana -= energia_arcana
-            self.character.energia_arcana = query.update_mp(self.conn, self.character.id, max(self.character.energia_arcana, 0))
+            self.character.energia_arcana = query.get_character_mp(self.conn, self.character.id, energia_arcana)
             break
 
         return selected_spell
@@ -129,7 +127,7 @@ class Combat:
     def apply_spell_effect(self, spell) -> None:
         if spell == None:
             return
-        _, tipo, _, energia_arcana, *_ = spell
+        _, tipo, *_ = spell
     
         if tipo == 'Dano':
             enemy = self.select_enemy()
@@ -138,8 +136,6 @@ class Combat:
             self.apply_area_damage_spell(spell)
         elif tipo == 'Cura':
             self.apply_heal_spell(spell)
-        
-        display.press_enter()
 
     # Functionality:
     #   Returns true if enemy was killed.
@@ -152,23 +148,35 @@ class Combat:
         enemy.vida = min(enemy.vida - damage, 0)
         
         # To-do: put this into a interface file.
-        print(f"{Fore.BLUE} Foi conjurado {spell[0]} causando {damage} de dano! {Style.RESET_ALL}")
+        print(
+            Fore.BLUE +
+            f"Foi conjurado {spell[0]} causando {damage} de dano!" +
+            Style.RESET_ALL
+        )
         return enemy.vida <= 0
 
     # Functionality:
     #   Apply area damage spell
     def apply_area_damage_spell(self, spell):
         nome, _, _, _, dano, qtd_inimigos_afetados = spell
-        print(f"{Fore.MAGENTA} {nome} foi conjurado! {Style.RESET_ALL}")
+        
+        print(
+            Fore.MAGENTA +
+            f"{nome} foi conjurado!" +
+            Style.RESET_ALL
+        )
 
-        # filter enemies alive and random chose enemies
         alive_enemies = [enemy for enemy in self.enemies if enemy.vida > 0]
         affected_enemies = random.sample(alive_enemies, min(qtd_inimigos_afetados, len(alive_enemies)))
 
         for enemy in affected_enemies:
             final_damage = dano * self.advantage_element(self.character.elemento, enemy.elemento)
             enemy.vida = max(enemy.vida - final_damage, 0)
-            print(f"{Fore.BLUE} {enemy.nome} recebeu {final_damage} de dano! {Style.RESET_ALL}")
+            print(
+                Fore.BLUE +
+                f"{enemy.nome} recebeu {final_damage} de dano!" +
+                Style.RESET_ALL
+            )
 
     # Functionality:
     #   Apply recover from healing spell 
@@ -177,8 +185,32 @@ class Combat:
         print(f"{Fore.GREEN} Você curou {spell[4]} pontos de vida! {Style.RESET_ALL}")
 
     # Functionality:
+    #   Returns the potion selected by the player.
+    def get_potion(self) -> tuple:
+        potions = query.get_potions(self.conn, self.character.id)
+
+        if not potions:
+            print(Fore.RED + "Você não tem poções disponíveis!" + Style.RESET_ALL)
+            display.press_enter()
+            return None
+
+        option_i = main.ask(potions, lambda: [
+            display.clear_screen(),
+            inventory.list_potions(potions)
+        ], False)
+
+        return potions[option_i - 1]
+
+    # Functionality:
+    #   Apply potion effect selected by the player.
+    def apply_potion_effect(self, potion) -> None:
+        id, nome = potion
+        query.use_potion(self.conn, id)
+        print(f"{Fore.GREEN} Você usou a poção {nome}! {Style.RESET_ALL}")
+
+    # Functionality:
     #   Enemy delay.
-    def enemy_delay(self):
+    def enemies_delay(self):
         print(Style.BRIGHT + Fore.YELLOW + "O inimigo está pensando..." + Style.RESET_ALL)
         print(Style.BRIGHT + Fore.YELLOW + "..." + Style.RESET_ALL)
         time.sleep(1)
@@ -186,42 +218,59 @@ class Combat:
         time.sleep(1)
         display.press_enter()
 
-    # Functionality
-    # Enemy turn
-    def enemy_turn(self):
-        print(Style.BRIGHT + Fore.YELLOW + "Os inimigos estão atacando!!!" + Style.RESET_ALL)
-        time.sleep(1)
-
+    # Functionality:
+    #   Enemy turn.
+    def enemies_turn(self):        
+        
+        alive_enemies = 0
+            
         for enemy in self.enemies:
             if enemy.vida > 0:
-                damage = random.randint(3, 10)
-                damage *= self.advantage_element(enemy.elemento, self.character.elemento)
-                self.character.vida = max(self.character.vida - damage, 0)
-
-                print(f"{Fore.RED} {enemy.nome} te atacou e causou {damage} de dano! {Style.RESET_ALL}")
                 
-        display.press_enter()
+                alive_enemies += 1
+                    
+                # To-do: implement "enemy_attack()"
+                damage = random.randint(3, 10)
+                    
+                damage *= self.advantage_element(enemy.elemento, self.character.elemento)
+                    
+                self.character.vida = self.character.vida - damage
+                    
+                print(
+                    Fore.RED +
+                    f"{enemy.nome} te atacou e causou {damage} de dano!" +
+                    Style.RESET_ALL
+                )
+                
+        if alive_enemies > 0:
+            display.press_enter()
+
 
     # Functionality:
     #   Select and returns an enemy.
     def select_enemy(self) -> Enemy:
         
-        if len(self.enemies) == 1:
-            return self.enemies[0]
-        
-        enemy_i = main.ask(self.enemies, lambda: [
+        alive_enemies = [enemy for enemy in self.enemies if enemy.vida > 0 and enemy.vida != 0]
+        if not alive_enemies:
+            return None
+        if len(alive_enemies) == 1:
+            return alive_enemies[0]
+        enemy_i = main.ask(alive_enemies, lambda: [
             display.clear_screen(),
-            display.interface_show_enemies(self.enemies)
+            display.interface_show_enemies(alive_enemies)
         ], False)
-        return self.enemies[enemy_i - 1]
+        return alive_enemies[enemy_i - 1]
 
     # Functionality
-    # check if combat has terminated
-    def check_combat_end(self):
+    #   Check if combat has terminated.
+    def check_combat_end(self) -> bool:
         if self.character.vida <= 0:
             print(Fore.RED + "Você foi derrotado..." + Style.RESET_ALL)
-            return True
+            print(Fore.RED + "Seus esforços foram em vão, assim como sua estadia nesse mundo, seja apagado da realidade..." + Style.RESET_ALL)
+            display.press_enter()
+            return None
         
+        # Check if all enemies are dead.
         if all(enemy.vida <= 0 for enemy in self.enemies):
             print(Fore.GREEN + "Todos os inimigos foram derrotados!" + Style.RESET_ALL)
             return True
@@ -235,12 +284,15 @@ class Combat:
         
         while True:
 
+            # To-do: if there are potions, add the option to use a potion.
             options = [
-               "Atacar",
-               "Fugir",
-               "Usar Feitiço",
-               "Usar Poção"
+                "Atacar",
+                "Fugir",
+                "Usar Feitiço"
             ]
+            
+            if len(query.get_potions(self.conn, self.character.id)) > 0:
+                options.append("Usar Poção")
 
             option_i = main.ask(options, lambda: [
                 display.clear_screen(),
@@ -278,20 +330,24 @@ class Combat:
                 
                 self.apply_spell_effect(spell)
                 
-                debug(self.character.energia_arcana)
-                display.press_enter()
+                # debug(self.character.energia_arcana)
+                # display.press_enter()
 
             elif option == "Usar Poção":
-                debug("to-do: usar poção")
-                display.press_enter()
+                potion = self.get_potion()
+                if potion is None:
+                    continue
+                self.apply_potion_effect(potion)
 
+            self.enemies_turn()
             query.update_combat(self.conn, self.enemies, self.character)
-            if self.check_combat_end():
+            
+            result_combat = self.check_combat_end()
+            
+            # Character killed all enemies.
+            if result_combat:
                 return True
             
-            self.enemy_turn()
-
-            if self.check_combat_end():
-                return True
-
-        return True
+            # Character has died.
+            elif result_combat == None:
+                return result_combat

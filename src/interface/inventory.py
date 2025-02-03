@@ -20,19 +20,38 @@ def display(character, conn):
     print("-" * 80)
 
 # Display player spells
-def list_spells(conn, spells):
+def list_spells(spells):
     print(Style.BRIGHT + Fore.CYAN + f"\n--- Feitiços Disponíveis ---\n" + Style.RESET_ALL)
     print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
     
     if not spells:
         print(Fore.RED + "Nenhum feitiço aprendido." + Style.RESET_ALL)
     else:
-        for nome, tipo, descricao, custo, dano, *_ in spells:
-            print(Fore.MAGENTA + f"{nome:<30} {tipo}" + Style.RESET_ALL)
+        for idx, spell in enumerate(spells):
+            nome, tipo, descricao, custo, dano, *_ = spell
+            print(Fore.MAGENTA + f"{idx+1}. {nome} ({tipo})" + Style.RESET_ALL)
             print(f"{descricao}")
-            print(Fore.YELLOW + f"{'Custo de energia:':<30} {custo}" + Style.RESET_ALL)
-            print(Fore.RED + f"{'Dano:':<30} {dano}" + Style.RESET_ALL)
+            print(f"{'Custo de energia: '}" + Fore.GREEN + f"{custo}" + Style.RESET_ALL)
+            print(f"{'Dano: '}" + Fore.RED + f"{dano}" + Style.RESET_ALL)
+            print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
+
+    input(Fore.CYAN + "\nPressione Enter para continuar..." + Style.RESET_ALL)
+
+# Display player potions
+def list_potions(potions):
+    print(Style.BRIGHT + Fore.CYAN + f"\n--- Poções Disponíveis ---\n" + Style.RESET_ALL)
+    print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
+
+    if not potions:
+        print(Fore.RED + "Nenhuma poção disponível." + Style.RESET_ALL)
+    else:
+        for idx, potion in enumerate(potions):
+            id, nome, descricao, turnos, usado = potion
+            usado_color = Fore.GREEN if not usado else Fore.RED
+            print(Fore.MAGENTA + f"{idx+1}. {nome:<30}" + Style.RESET_ALL)
+            print(f"{descricao}")
+            print(f"{'Turnos:':<30} {turnos}")
+            print(f"{'Usado:':<30}" + usado_color + f"{usado}" + Style.RESET_ALL)
             print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)
 
     input("\nPressione Enter para continuar...")
-

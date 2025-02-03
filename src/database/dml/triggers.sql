@@ -65,42 +65,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- PostGreSQL: 
--- Update character coins and create item instances in the character's inventory
-CREATE OR REPLACE FUNCTION complete_quest()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_armazenamento RECORD;
-BEGIN
-    -- Verifica se a quest foi completada
-    IF NEW.completed THEN
-        -- Atualiza as moedas do personagem
-        UPDATE personagem
-        SET moedas = moedas + 100 -- Substitua 100 pelo valor X que você deseja adicionar
-        WHERE id = NEW.personagem_id;
-
-        -- Insere itens do armazenamento do quester na mochila do personagem
-        FOR v_armazenamento IN
-            SELECT a.item_id, a.quantidade
-            FROM armazenamento a
-            WHERE a.quester_id = (SELECT quester_id FROM quest WHERE id = NEW.quest_id)
-        LOOP
-            INSERT INTO item_instancia (item_id, inventario_id, quantidade)
-            VALUES (v_armazenamento.item_id, (SELECT id FROM inventario WHERE personagem_id = NEW.personagem_id), v_armazenamento.quantidade);
-        END LOOP;
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger to quest_instancia when completed is true
-CREATE TRIGGER trigger_complete_quest
-AFTER UPDATE ON quest_instancia
-FOR EACH ROW
-WHEN (NEW.completed = TRUE)
-EXECUTE FUNCTION complete_quest();
-
 -- PostGreSQL
 -- When the character reaches maximum xp, increase the level and total xp
 CREATE OR REPLACE FUNCTION update_level()
@@ -123,48 +87,48 @@ $$ LANGUAGE plpgsql;
 
 
 -- PostGreSQL: Deletar instância de inimigo
-CREATE OR REPLACE FUNCTION handle_enemy_death()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_armazenatmento RECORD;
-    v_item_instacia_id INT;
-BEGIN
-    -- verifica se o inimigo morreu
-    IF NEW.vida <= 0 THEN
-        DELETE FROM inimigo_instancia WHERE id = NEW.id;
-
-        -- atualiza xp do personagem
-        UPDATE personagem
-        SET xp = xp + NEW.xp
-        WHERE id = NEW.personagem_id;
-
-        -- insere itens do inimigo no inventário do personagem
-        FOR v_armazenamento IN
-            SELECT a.item_id, a.quantidade
-            FROM armazenamento a
-            WHERE a.inimigo_id = NEW.inimigo_id
-        LOOP
-            INSERT INTO item_instancia (item_id, inventario_id, quantidade)
-            VALUES (v_armazenamento.item_id, NEW.inventario_id, v_armazenamento.quantidade);
-            RETURNING id INTO v_item_instancia_id;
-        
-            -- atualiza quantidade de itens no inventário
-            UPDATE armazenamento
-            SET quantidade = quantidade - v_armazenamento.quantidade
-            WHERE item_id = v_armazenamento.item_id AND inimigo_id = NEW.inimigo_id;
-        END LOOP;
-    END IF;
-
-    RETURN NEW;;
-END;
-$$ LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION handle_enemy_death()
+-- RETURNS TRIGGER AS $$
+-- DECLARE
+--     v_armazenatmento RECORD;
+--     v_item_instacia_id INT;
+-- BEGIN
+--     -- verifica se o inimigo morreu
+--     IF NEW.vida <= 0 THEN
+--         DELETE FROM inimigo_instancia WHERE id = NEW.id;
+-- 
+--         -- atualiza xp do personagem
+--         UPDATE personagem
+--         SET xp = xp + NEW.xp
+--         WHERE id = NEW.personagem_id;
+-- 
+--         -- insere itens do inimigo no inventário do personagem
+--         FOR v_armazenamento IN
+--             SELECT a.item_id, a.quantidade
+--             FROM armazenamento a
+--             WHERE a.inimigo_id = NEW.inimigo_id
+--         LOOP
+--             INSERT INTO item_instancia (item_id, inventario_id, quantidade)
+--             VALUES (v_armazenamento.item_id, NEW.inventario_id, v_armazenamento.quantidade);
+--             RETURNING id INTO v_item_instancia_id;
+--         
+--             -- atualiza quantidade de itens no inventário
+--             UPDATE armazenamento
+--             SET quantidade = quantidade - v_armazenamento.quantidade
+--             WHERE item_id = v_armazenamento.item_id AND inimigo_id = NEW.inimigo_id;
+--         END LOOP;
+--     END IF;
+-- 
+--     RETURN NEW;;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
 -- Criar trigger para deletar instância de inimigo
-CREATE TRIGGER trigger_handle_enemy_death
-AFTER UPDATE ON inimigo_instancia
-FOR EACH ROW
-WHEN (NEW.vida <= 0)
-EXECUTE FUNCTION handle_enemy_death();
+-- CREATE TRIGGER trigger_handle_enemy_death
+-- AFTER UPDATE ON inimigo_instancia
+-- FOR EACH ROW
+-- WHEN (NEW.vida <= 0)
+-- EXECUTE FUNCTION handle_enemy_death();
 
 -- PostGreSQL
 -- Buff character of the same element in the region
@@ -219,27 +183,73 @@ CREATE OR REPLACE FUNCTION check_conclusion_quest()
 RETURNS TRIGGER AS $$
 DECLARE
     v_inimigos_restantes INT;
+    v_personagem_id INT;  -- Variable to store the personagem_id
 BEGIN
     -- Count how many enemies are still alive in the quest subregion
     SELECT COUNT(*)
     INTO v_inimigos_restantes
     FROM inimigo_instancia
-    WHERE sub_regiao_id = OLD.sub_regiao_id AND vida > 0;
+    WHERE sub_regiao_id = NEW.sub_regiao_id AND vida > 0;
 
     -- If there are no enemies remaining, mark the quest as completed
     IF v_inimigos_restantes = 0 THEN
+        -- Mark the quest as completed
         UPDATE quest_instancia
         SET completed = TRUE
-        WHERE quest_id = (SELECT quest_id FROM quest WHERE id = OLD.inimigo_id);
+        WHERE sub_regiao_id = NEW.sub_regiao_id;
+
+        -- Retrieve the personagem_id associated with the quest
+        SELECT personagem_id
+        INTO v_personagem_id
+        FROM quest_instancia
+        where completed = TRUE;
+
+        -- Update character coins
+        UPDATE personagem
+        SET moedas = moedas + 100
+        WHERE id = v_personagem_id;
     END IF;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE TRIGGER trigger_check_conclusion_quest
-AFTER UPDATE ON inimigo_instancia
-FOR EACH ROW
-WHEN (NEW.vida <= 0)
-EXECUTE FUNCTION check_conclusion_quest();
+-- Potion:
+--  When an "instance of item" that is an "item" of type "potion" is marked as used:
+--  Update character's fields multiplying by each potion's effect field multiplier.
+--CREATE OR REPLACE FUNCTION use_potion()
+--RETURNS TRIGGER AS $$
+--DECLARE
+--    v_inimigos_restantes INT;
+--BEGIN
+--    -- Count how many enemies are still alive in the quest subregion
+--    SELECT COUNT(*)
+--    INTO v_inimigos_restantes
+--    FROM inimigo_instancia
+--    WHERE sub_regiao_id = OLD.sub_regiao_id AND vida > 0;
+--
+--    -- If there are no enemies remaining, mark the quest as completed
+--    IF v_inimigos_restantes = 0 THEN
+--        UPDATE quest_instancia
+--        SET completed = TRUE;
+--    END IF;
+--
+--    -- Update character coins
+--    UPDATE personagem
+--    SET moedas = moedas + 100
+--    WHERE id = NEW.personagem_id;
+--
+--    -- Give to character the quest armazenamento items
+--    
+--
+--    RETURN NEW;
+--END;
+--$$ LANGUAGE plpgsql;
+--
+--
+--CREATE TRIGGER trigger_check_conclusion_quest
+--AFTER UPDATE ON inimigo_instancia
+--FOR EACH ROW
+--WHEN (NEW.vida <= 0)
+--EXECUTE FUNCTION check_conclusion_quest();
+--

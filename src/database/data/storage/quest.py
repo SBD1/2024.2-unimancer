@@ -52,6 +52,7 @@ def quests(db: Database):
 
     try:
         ancient_id = quester("Ancião", db)
+        
 
         storage_id_1 = storage("Chapéu do Vento Frio", 1, db)
         storage_id_2 = storage("Manto de Neve Encantado", 2, db)

@@ -1,4 +1,8 @@
 from utils import debug
+import database.dql.query as query
+import interface.display as display
+import logic.main as logic
+import utils
 
 elements = ["Fogo", "Água", "Terra", "Ar", "Trevas", "Luz"]
 
@@ -44,7 +48,7 @@ class Character:
         self.elemento = None
         self.sub_regiao_id = 1
         self.conhecimento_arcano = 10
-        self.vida = 100
+        self.vida = 1
         self.vida_maxima = 100
         self.xp = 0
         self.xp_total = 10
@@ -56,7 +60,7 @@ class Character:
         if not id:
             self.get_information()
         else:
-            character_info = self.get_character_info(conn, id)
+            character_info = query.get_character_info(conn, id)
             self.id = character_info[0]
             self.sub_regiao_id = character_info[1]
             self.nome = character_info[2]
@@ -72,20 +76,30 @@ class Character:
             self.moedas = character_info[12]
             self.nivel = character_info[13]
 
-    def get_information(self):
+    # Get the character's information.
+    def get_information(self) -> None:
         print("\n === Criação de Personagem === ")
-        self.nome = input("Digite o nome do personagem: ")
+        self.nome = input("Digite o nome do personagem, digite nada para voltar: ")
+        
+        if not self.nome:
+            return
 
         def ask():
             return input(f"Escolha o elemento ({', '.join(elements)}): ").lower()
 
-        elemento = ask()
-        lower_case_elements = [elemento.lower() for elemento in elements]
-        while elemento not in lower_case_elements:
-            print("Elemento inválido.")
-            elemento = ask()
-
-        self.elemento = elemento.capitalize()
+        element_i = logic.ask(elements, lambda: [
+            display.clear_screen(),
+            print(f"Nome: {self.nome}"),
+            display.list_options(elements)
+        ])
+        
+        # If player chooses to go back, then clear name to go back one menu.
+        if not element_i:
+            self.nome = ""
+            return
+            
+        self.elemento = elements[element_i - 1]
+            
 
     def add_database(self):
         try:
@@ -103,86 +117,33 @@ class Character:
         except Exception as e:
             debug(f"Character: Erro ao adicionar personagem: {e}")
 
-    def get_character_info(self, conn, id):
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT *
-                FROM personagem
-                WHERE id = %s
-            """, (id,))
-            result = cur.fetchone()
-            return result
-
-    def create_inventory_if_not_exists(self, conn):
-        with conn.cursor() as cur:
-            cur.execute(
-                "SELECT id FROM inventario WHERE personagem_id = %s", (self.id,)
-            )
-            result = cur.fetchone()
-
-            if not result:  # if not exist, create new inventory
-                cur.execute(
-                    "INSERT INTO inventario (personagem_id) VALUES (%s) RETURNING id",
-                    (self.id,)
-                )
-                inventory_id = cur.fetchone()[0]
-                conn.commit()
-                print(f"Inventário criado para {self.nome} (ID {inventory_id})")
-            else:
-                inventory_id = result[0]
-            
-            return inventory_id
-
-
+    # Define the initial spells for the character.
     def define_initial_spells(self, conn):
         print(f"Definindo feitiços iniciais para {self.nome}...")  
         try:
-            inventory_id = self.create_inventory_if_not_exists(conn)  
-            spells = initial_spells[self.elemento]
-
-            with conn.cursor() as cur:
-                for spell in spells:
-                    spell_id = spell[0]
-                    # print(f"Inserindo feitiço {spell_id} no inventário {inventory_id}")  # Debug
-                    cur.execute(
-                        """
-                        INSERT INTO feitico_aprendido (inventario_id, feitico_id)
-                        VALUES (%s, %s);
-                        """, (inventory_id, spell_id)
-                    )
-            conn.commit()
+            spellbook_id = query.get_inventory(conn, "grimorio", self.id)
+            spells = [spell[0] for spell in initial_spells[self.elemento]]
+            query.add_learned_spells(conn, spellbook_id, spells)
+            
         except Exception as e:
             print(f"Erro ao definir feitiços iniciais: {e}")
             conn.rollback()
 
+    # Add initial items to the character's backpack.
     def add_initial_items(self, conn):
         try:
-            inventory_id = self.create_inventory_if_not_exists(conn)
+            backpack_id = query.get_inventory(conn, "mochila", self.id)
 
             elixir_da_vida_id = 133  
             mana_liquida_id = 134  
 
-            with conn.cursor() as cur:
-                cur.execute("""
-                    INSERT INTO item_instancia (item_id, mochila_id)
-                    VALUES (%s, %s)
-                    RETURNING item_id;
-                """, (elixir_da_vida_id, inventory_id))
+            query.add_items_instance(conn, backpack_id, [
+                elixir_da_vida_id,
+                elixir_da_vida_id,
+                mana_liquida_id
+            ])
+            utils.debug(f"Elixir da Vida e Mana Líquida adicionados ao inventário de {self.nome}.")
 
-                cur.execute("""
-                    INSERT INTO item_instancia (item_id, mochila_id)
-                    VALUES (%s, %s)
-                    RETURNING item_id;
-                """, (elixir_da_vida_id, inventory_id))
-
-                cur.execute("""
-                    INSERT INTO item_instancia (item_id, mochila_id)
-                    VALUES (%s, %s)
-                    RETURNING item_id;
-                """, (mana_liquida_id, inventory_id))
-
-            conn.commit()
-            print(f"Elixir da Vida e Mana Líquida adicionados ao inventário de {self.nome}.")
         except Exception as e:
             print(f"Erro ao adicionar itens iniciais: {e}")
             conn.rollback()

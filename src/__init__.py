@@ -14,7 +14,7 @@ def main():
         "./database/ddl/types.sql",
         "./database/ddl/tables.sql",
         "./database/dml/procedures.sql",
-        #"./src/database/dml/triggers.sql"
+        "./database/dml/triggers.sql"
     ]
     
     db = Database("localhost", "postgres", "postgres", "123456")
