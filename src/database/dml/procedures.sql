@@ -121,6 +121,7 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create enemy linking to npc.
 CREATE OR REPLACE FUNCTION criar_inimigo(
+    IN emoji TEXT,
     IN nome VARCHAR(100),
     IN descricao TEXT,
     IN elemento TEXT,
@@ -129,7 +130,8 @@ CREATE OR REPLACE FUNCTION criar_inimigo(
     IN inteligencia INT,
     IN moedas_obtidas INT,
     IN conhecimento_arcano INT,
-    IN energia_arcana_maxima INT
+    IN energia_arcana_maxima INT,
+    IN dialogo TEXT
 ) RETURNS INT AS $$
 DECLARE 
     npc_id INT;
@@ -140,6 +142,7 @@ BEGIN
 
     INSERT INTO inimigo (
         id,
+        emoji,
         nome,
         descricao,
         elemento,
@@ -153,6 +156,7 @@ BEGIN
     )
     VALUES (
         npc_id,
+        emoji,
         nome,
         descricao,
         elemento::TIPO_ELEMENTO,
@@ -162,7 +166,7 @@ BEGIN
         moedas_obtidas,
         conhecimento_arcano,
         energia_arcana_maxima,
-        NULL
+        dialogo
     );
     RETURN npc_id;
 END;
@@ -170,19 +174,8 @@ $$ LANGUAGE plpgsql;
 
 -- PostGreSQL: create `personagem`
 CREATE OR REPLACE FUNCTION criar_personagem(
-    IN p_sub_regiao_id INT,
     IN p_nome VARCHAR(20),
-    IN p_elemento TEXT,
-    IN p_conhecimento_arcano INT,
-    IN p_vida INT,
-    IN p_vida_maxima INT,
-    IN p_xp INT,
-    IN p_xp_total INT,
-    IN p_energia_arcana INT,
-    IN p_energia_arcana_maxima INT,
-    IN p_inteligencia INT,
-    IN p_moedas INT,
-    IN p_nivel INT
+    IN p_elemento TEXT
 ) RETURNS INT AS $$
 DECLARE
     v_personagem_id INT;
@@ -205,19 +198,19 @@ BEGIN
         nivel
     )
     VALUES (
-        p_sub_regiao_id,
+        1,
         p_nome,
         p_elemento::TIPO_ELEMENTO,
-        p_conhecimento_arcano,
-        p_vida,
-        p_vida_maxima,
-        p_xp,
-        p_xp_total,
-        p_energia_arcana,
-        p_energia_arcana_maxima,
-        p_inteligencia,
-        p_moedas,
-        p_nivel
+        10,
+        1,
+        100,
+        0,
+        10,
+        50,
+        50,
+        1,
+        15,
+        1
     )
     RETURNING id INTO v_personagem_id;
     -- Criar o inventário do tipo Mochila

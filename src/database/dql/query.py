@@ -3,6 +3,20 @@ from logic.enemy import Enemy
 from logic.character import Character
 from typing import List, Tuple
 
+# Create a character.
+def add_character(conn, nome: str, elemento: str) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT criar_personagem(
+                '{nome}',
+                '{elemento}'
+            )"""
+        )
+        result = cur.fetchone()
+        conn.commit()
+        return result[0]
+
 # get regions and respective elements
 def regions(conn):
     with conn.cursor() as cur:
@@ -29,22 +43,26 @@ def subregions(conn, region_id):
         return result
 
 # get subregions where character can go
-def get_subregions_character(conn, sub_regiao_id):
+def get_subregions_character(conn, sub_regiao_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute(
-            """
-            SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
+            f"""
+            SELECT
+                sr2.id,
+                sr2.nome,
+                src.direcao,
+                src.situacao
             FROM sub_regiao_conexao src
             JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
             JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-            WHERE sr1.id = %s;
-            """, (sub_regiao_id,)
+            WHERE sr1.id = {sub_regiao_id};
+            """
         )
         result = cur.fetchall()
         return result
 
 # List enemys from a subregion
-def list_alive_enemys_subregion(conn, sub_regiao_id):
+def get_alive_enemies_subregion(conn, sub_region_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -60,43 +78,60 @@ def list_alive_enemys_subregion(conn, sub_regiao_id):
                 i.moedas_obtidas,
                 i.conhecimento_arcano,
                 i.energia_arcana_maxima,
-                i.dialogo
+                i.dialogo,
+                i.emoji
             FROM inimigo i
             JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
             JOIN sub_regiao sr ON ii.sub_regiao_id = sr.id
-            WHERE ii.sub_regiao_id = {sub_regiao_id} AND ii.vida > 0;
+            WHERE ii.sub_regiao_id = {sub_region_id} AND ii.vida > 0;
             """
         )
         result = cur.fetchall()
-        return result
+    
+    return result
 
 # get enemy info 
-def get_enemy_info(conn, enemy_id):
+#def get_enemy_info(conn, enemy_id):
+#    with conn.cursor() as cur:
+#        cur.execute(
+#            f"""
+#            SELECT
+#                i.nome,
+#                ii.id,
+#                i.descricao,
+#                i.elemento,
+#                ii.vida,
+#                i.vida_maxima,
+#                i.xp_obtido,
+#                i.inteligencia,
+#                i.moedas_obtidas,
+#                i.conhecimento_arcano,
+#                i.energia_arcana_maxima,
+#                i.emoji
+#            FROM inimigo i
+#            JOIN inimigo_instancia ii ON ii.inimigo_id = i.id
+#            WHERE n.id = {enemy_id};
+#            """
+#        )
+#        result = cur.fetchone()
+#        return result
+
+# Function to get subregion description
+def get_subregion_info(conn, sub_region_id: int):
     with conn.cursor() as cur:
         cur.execute(
             f"""
             SELECT
-                i.nome,
-                ii.id,
-                i.descricao,
-                i.elemento,
-                ii.vida,
-                i.vida_maxima,
-                i.xp_obtido,
-                i.inteligencia,
-                i.moedas_obtidas,
-                i.conhecimento_arcano,
-                i.energia_arcana_maxima
-            FROM inimigo i
-            JOIN inimigo_instancia ii ON ii.inimigo_id = i.id
-            WHERE n.id = {enemy_id};
+                descricao,
+                nome
+            FROM sub_regiao WHERE id = {sub_region_id}
             """
         )
         result = cur.fetchone()
         return result
 
 # List all citizens from a subregion.
-def list_citizens_subregion(conn, sub_regiao_id):
+def get_citizens_subregion(conn, sub_regiao_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -135,8 +170,8 @@ def list_all_characters(conn):
         result = cur.fetchall()
         return result
     
-# List character with id
-def list_character_id(conn, character_id):
+# Get all information of a character.
+def get_character_info(conn, character_id):
     with conn.cursor() as cur:
         cur.execute(f"SELECT * FROM personagem WHERE id = {character_id}")
         result = cur.fetchone()
@@ -242,7 +277,7 @@ def get_quest(conn, quester_id):
 #        return cursor.fetchall()
 
 # function to get all Character damage spells
-def get_damage_spells(conn, character_id):
+def get_damage_spells(conn, character_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -252,8 +287,9 @@ def get_damage_spells(conn, character_id):
                     fd.descricao, 
                     fd.energia_arcana,
                     fd.dano_total
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
                 JOIN feitico f ON f.id = fa.feitico_id
                 JOIN feitico_dano fd ON f.id = fd.id
                 WHERE i.personagem_id = {character_id};
@@ -273,8 +309,9 @@ def get_damage_area_spells(conn, character_id):
                     fda.energia_arcana,
                     fda.dano,
                     fda.qtd_inimigos_afetados
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
                 JOIN feitico f ON f.id = fa.feitico_id
                 JOIN feitico_dano_area fda ON f.id = fda.id
                 WHERE i.personagem_id = {character_id};
@@ -293,8 +330,9 @@ def get_healing_spells(conn, character_id: int) -> List[Tuple]:
                     fc.descricao,
                     fc.energia_arcana,
                     fc.qtd_cura
-                FROM inventario i
-                JOIN feitico_aprendido fa ON i.id = fa.inventario_id
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
                 JOIN feitico f ON f.id = fa.feitico_id
                 JOIN feitico_cura fc ON f.id = fc.id
                 WHERE i.personagem_id = {character_id};
@@ -340,22 +378,34 @@ def get_character_mp(conn, character_id: int, spell_value: int) -> int:
     return None
 
 # function to reset enemies
-def reset_enemies(conn, subregiao_id) -> None:
+def reset_enemies(conn, subregiao_id: int) -> None:
     with conn.cursor() as cur:
-        cur.execute(f"""
-            UPDATE inimigo_instancia
-            SET vida = inimigo.vida_maxima
-            FROM inimigo
-            WHERE inimigo_instancia.inimigo_id = inimigo_id AND inimigo_instancia.sub_regiao_id = {subregiao_id}
-        """)
+        cur.execute(
+            f"""
+            UPDATE
+                inimigo_instancia ii
+            SET
+                vida = i.vida_maxima
+            FROM inimigo i
+            WHERE ii.inimigo_id = i.id AND ii.sub_regiao_id = {subregiao_id}
+            """
+        )
         conn.commit()
 
 # function to change subregion
-def fetch_subregion_id_by_name(name, conn) -> int:
+def update_character_subregion(conn, character_id: int, sub_region_id: int) -> int:
     with conn.cursor() as cur:
-        cur.execute("SELECT DISTINCT id FROM sub_regiao WHERE nome = %s", (name,))
-        result = cur.fetchone()
-        return result[0] if result else None
+        cur.execute(
+            f"""
+            UPDATE personagem
+                SET sub_regiao_id = {sub_region_id}
+            WHERE personagem.id = {character_id}
+            RETURNING sub_regiao_id;
+            """
+        )
+        result = cur.fetchone()[0]
+        conn.commit()
+        return result
 
 # Update a combat between a caracter and enemies.
 def update_combat(conn , enemies: List[Enemy], character: Character) -> None:
@@ -398,7 +448,7 @@ def get_inventory(conn, type: str, character_id: int) -> int:
             SELECT
                 inventario.id
             FROM {type}
-            JOIN inventario ON personagem_id = {character_id};
+            JOIN inventario ON personagem_id = {character_id} AND {type}.id = inventario.id;
             """
         )
         result = cur.fetchone()[0]
@@ -410,7 +460,7 @@ def add_learned_spells(conn, spellbook_id: int, spells_ids: List[int]) -> None:
         for spell_id in spells_ids:
             cur.execute(
                 f"""
-                INSERT INTO feitico_aprendido (inventario_id, feitico_id)
+                INSERT INTO feitico_aprendido (grimorio_id, feitico_id)
                 VALUES ({spellbook_id}, {spell_id});
                 """
             )

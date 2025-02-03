@@ -9,7 +9,6 @@ config:
 	@echo "Python virtual environment criado em $(VENV_DIR)"
 	@$(VENV_DIR)/bin/pip install --upgrade pip
 	@echo "Dependencias instaladas com sucesso."
-	@python -m pip install .
 
 build:
 	@sudo docker compose up --build

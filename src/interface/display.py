@@ -9,6 +9,15 @@ from logic.quest import Quest
 from database.dql.query import get_quest, get_civilian_info
 from logic.character import Character
 
+
+# Ask for a text.
+def ask_text(message: str) -> str:
+    return input(
+        message +
+        ": " +
+        Style.BRIGHT
+    )
+
 # Clean the terminal screen
 def clear_screen():
     if platform.system() == "Windows":
@@ -18,19 +27,27 @@ def clear_screen():
 
 # Show the title of the game
 def show_title():
-    print("")
-    print(" ██╗   ██╗███╗   ██╗██╗███╗   ███╗ █████╗ ███╗   ██╗ ██████╗███████╗██████╗ ")
-    print(" ██║   ██║████╗  ██║██║████╗ ████║██╔══██╗████╗  ██║██╔════╝██╔════╝██╔══██╗")
-    print(" ██║   ██║██╔██╗ ██║██║██╔████╔██║███████║██╔██╗ ██║██║     █████╗  ██████╔╝")
-    print(" ██║   ██║██║╚██╗██║██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗")
-    print(" ╚██████╔╝██║ ╚████║██║██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗██║  ██║")
-    print("  ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝  ╚═╝")
-    print("")
-    print(Style.BRIGHT + Fore.YELLOW + "\n--- Bem-vindo ao Unimancer! ---" + Style.RESET_ALL)
+    print_center("")
+    print_center(" ██╗   ██╗███╗   ██╗██╗███╗   ███╗ █████╗ ███╗   ██╗ ██████╗███████╗██████╗ ")
+    print_center(" ██║   ██║████╗  ██║██║████╗ ████║██╔══██╗████╗  ██║██╔════╝██╔════╝██╔══██╗")
+    print_center(" ██║   ██║██╔██╗ ██║██║██╔████╔██║███████║██╔██╗ ██║██║     █████╗  ██████╔╝")
+    print_center(" ██║   ██║██║╚██╗██║██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗")
+    print_center(" ╚██████╔╝██║ ╚████║██║██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗██║  ██║")
+    print_center("  ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝  ╚═╝")
+    print_center("")
+    print_center(
+        Style.BRIGHT +
+        Fore.YELLOW +
+        "--- Bem-vindo ao Unimancer! ---"
+    )
 
 # Show in-game menu.
 def ingame_menu() -> None:
-    print(Fore.CYAN + "\n--- Menu Principal ---" + Style.RESET_ALL)
+    print(
+        Fore.CYAN +
+        "--- Menu Principal ---" +
+        Style.RESET_ALL
+    )
 
 # Press Enter to continue.
 def press_enter() -> None:
@@ -39,7 +56,11 @@ def press_enter() -> None:
 # List simple options.
 def list_options(options: list) -> None:
     for idx, option in enumerate(options, start=1):
-            print(f"{idx}. {option}")
+        print(
+            Style.BRIGHT +
+            f"{idx}." +
+            Style.NORMAL +
+            f" {option}")
 
 # List characters' info.
 def list_characters(characters: list) -> None:
@@ -77,13 +98,60 @@ def list_subregions(subregions) -> None:
 def enemy_perceives(enemy):
     print(f"{Style.BRIGHT}{Fore.RED}Você foi Percebido por {enemy.nome}" + Style.RESET_ALL)
 
-# Interface:
-# Display player header information.
+
+# Return the terminal columns.
+def terminal_width() -> None:
+    return os.get_terminal_size().columns
+
+def print_center(text: str, width = terminal_width()) -> None:
+    print(
+        text.center(width) +
+        Style.RESET_ALL
+    )
+    
+def print_terminal_width(character: str) -> None:
+    print(
+        character * terminal_width() +
+        Style.RESET_ALL
+    )
+
+# Displays a bar with the character's life and energy.
 def header(character) -> None:
-    terminal_width = 80  # Ajuste conforme necessário
-    print(Back.BLUE + Fore.BLACK + f"=== {character.nome} === vida: {character.vida}/{character.vida_maxima} "
-          f"energia arcana: {character.energia_arcana}/{character.energia_arcana_maxima} "
-          f"moedas: {character.moedas} xp: {character.xp}/{character.xp_total} ===".center(terminal_width) + Style.RESET_ALL)
+    spacing = "  "
+    
+    def label(field: str, value: str) -> str:
+        return "".join([
+            field,
+            ": ",
+            Style.BRIGHT,
+            value,
+            Style.NORMAL
+        ])
+    
+    line = (
+        Fore.BLUE +
+        spacing +
+        Style.BRIGHT +
+        f"{character.nome} {spacing}" +
+        Style.NORMAL +
+        label("🫀", f"{character.vida}/{character.vida_maxima}") +
+        spacing +
+        label("🌀", f"{character.energia_arcana}/{character.energia_arcana_maxima}") +
+        spacing +
+        label("🪙", f"{character.moedas}") +
+        spacing +
+        label("✨", f"{character.xp}/{character.xp_total}") +
+        spacing
+    )
+    
+    separator = (
+        Back.BLACK +
+        Fore.BLUE +
+        " " * len(line)
+    )
+    
+    print()
+    print_center(line)
 
 #   Will list the NPCs available in the subregion.
 def list_npcs(npcs) -> None:
@@ -101,4 +169,4 @@ def list_spells(spells) -> None:
 # Print all enemies and their description and life.
 def interface_show_enemies(enemies: List[Enemy]) -> None:
     for idx, enemy in enumerate(enemies):
-        print(f"| {idx+1} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")
+        print(f"| {idx+1} - {enemy.emoji} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")

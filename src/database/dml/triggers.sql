@@ -4,26 +4,25 @@
 -- PostGreSQL:
 CREATE OR REPLACE FUNCTION incrementar_peso_acessorio()
 RETURNS TRIGGER AS $$
+DECLARE
+    item_peso INT;
 BEGIN
-    -- search weight in table 'item' with 'item_id'
-    DECLARE
-        item_peso NUMERIC;
-    BEGIN
-        -- get item weight
-        SELECT peso INTO item_peso
-        FROM item
-        WHERE id = NEW.item_id;
+    -- get item weight
+    SELECT COALESCE(a.peso, po.peso, pe.peso)
+    FROM acessorio a
+    LEFT JOIN pocao po ON po.id = NEW.item_id
+    LEFT JOIN pergaminho pe ON pe.id = NEW.item_id
+    INTO item_peso;
 
-        UPDATE mochila
-        SET peso = peso + item_peso
-        WHERE id = NEW.inventario_id;
+    UPDATE mochila
+    SET peso = peso + item_peso
+    WHERE id = NEW.mochila_id;
+    
+    IF (SELECT peso FROM mochila WHERE id = NEW.mochila_id) > (SELECT peso_total FROM mochila WHERE id = NEW.mochila_id) THEN
+        RAISE EXCEPTION 'Peso total da mochila excedido';
+    END IF;
 
-        IF (SELECT peso FROM mochila WHERE id = NEW.inventario_id) > (SELECT peso_total FROM mochila WHERE id = NEW.inventario_id) THEN
-            RAISE EXCEPTION 'Peso total da mochila excedido';
-        END IF;
-
-        RETURN NEW;
-    END;
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 

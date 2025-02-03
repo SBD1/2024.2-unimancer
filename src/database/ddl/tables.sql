@@ -170,7 +170,7 @@ CREATE TABLE grimorio (
 );
 
 CREATE TABLE feitico_aprendido (
-    inventario_id INT NOT NULL REFERENCES inventario(id),
+    grimorio_id INT NOT NULL REFERENCES grimorio(id),
     feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 
@@ -242,6 +242,7 @@ CREATE TABLE pocao_efeito (
 
 CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
+    emoji TEXT NOT NULL,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,

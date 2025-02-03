@@ -1,5 +1,4 @@
-from ast import For
-from typing import List
+from typing import List, Tuple
 import random
 from colorama import Fore, Style
 import time
@@ -88,11 +87,7 @@ class Combat:
         
         while True:
         
-            spells = [
-                *query.get_damage_spells(self.conn, self.character.id),
-                *query.get_damage_area_spells(self.conn, self.character.id),
-                *query.get_healing_spells(self.conn, self.character.id)
-            ]
+            spells = query.get_damage_spells(self.conn, self.character.id) + query.get_damage_area_spells(self.conn, self.character.id) + query.get_healing_spells(self.conn, self.character.id)
 
             # Filter spells that the character has enough mana to cast.
             usable_spells = [
@@ -186,18 +181,15 @@ class Combat:
 
     # Functionality:
     #   Returns the potion selected by the player.
-    def get_potion(self) -> tuple:
-        potions = query.get_potions(self.conn, self.character.id)
-
-        if not potions:
-            print(Fore.RED + "Você não tem poções disponíveis!" + Style.RESET_ALL)
-            display.press_enter()
-            return None
+    def get_potion(self, potions: List[Tuple]) -> tuple:
 
         option_i = main.ask(potions, lambda: [
             display.clear_screen(),
             inventory.list_potions(potions)
-        ], False)
+        ])
+        
+        if option_i == 0:
+            return None
 
         return potions[option_i - 1]
 
@@ -265,8 +257,16 @@ class Combat:
     #   Check if combat has terminated.
     def check_combat_end(self) -> bool:
         if self.character.vida <= 0:
-            print(Fore.RED + "Você foi derrotado..." + Style.RESET_ALL)
-            print(Fore.RED + "Seus esforços foram em vão, assim como sua estadia nesse mundo, seja apagado da realidade..." + Style.RESET_ALL)
+            print(
+                Fore.RED +
+                "Você foi derrotado..." +
+                Style.RESET_ALL
+            )
+            print(
+                Fore.RED +
+                "Seus esforços foram em vão, assim como sua estadia nesse mundo, seja apagado da realidade..." +
+                Style.RESET_ALL
+            )
             display.press_enter()
             return None
         
@@ -291,7 +291,9 @@ class Combat:
                 "Usar Feitiço"
             ]
             
-            if len(query.get_potions(self.conn, self.character.id)) > 0:
+            potions = query.get_potions(self.conn, self.character.id)
+            
+            if len(potions) > 0:
                 options.append("Usar Poção")
 
             option_i = main.ask(options, lambda: [
@@ -334,8 +336,8 @@ class Combat:
                 # display.press_enter()
 
             elif option == "Usar Poção":
-                potion = self.get_potion()
-                if potion is None:
+                potion = self.get_potion(potions)
+                if potion == None:
                     continue
                 self.apply_potion_effect(potion)
 

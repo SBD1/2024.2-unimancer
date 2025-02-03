@@ -14,11 +14,15 @@
 
 ## Sobre 
 
-Unimancer é um jogo estilo **MUD (Multi-User Dungeon)**, offline e baseado em texto. Mergulhe em um universo mágico onde você controla magos em busca de poder, conhecimento e aventuras.
+**Unimancer** é um jogo estilo **MUD (Multi-User Dungeon)**, offline e baseado em texto, onde você é lançado em um mundo mágico profundo e imersivo, em que magos lendários buscam o poder absoluto, o segredo perdido dos elementos e os mais arcanos conhecimentos.
 
-Há eras, o equilíbrio entre os elementos sustentava o mundo de **Arcanae**. Os **Unimancers** são magos que dominam apenas um desses elementos, dedicando sua vida ao estudo, criação de novas magias e desvendar runas antigas, cada mestre mago era guardião de seu conhecimento, e assim, um equilíbrio de manteve por muitos anos. Com o tempo, um antigo mago chamado **Nosferus** se cansou dessa fragmentação de conhecimento, e partiu para uma jornada em busca de pergaminhos de todos os elementos, deixados em dungeons pelo antigos magos lendários. Segundo as lendas, no monte da **Floresta do Abismo**, seus conhecimentos estão escondidos, porém, muitos tentaram, mas nunca conseguiram chegar perto.
+Há milênios, o frágil equilíbrio entre os elementos sustentava o vasto império de Arcanae. Os Unimancers, magos dedicados, eram os guardiões desse equilíbrio. Eles dominavam os elementos mais poderosos, consagrando-se ao estudo incansável, à criação de magias ancestrais e à descoberta de runas que datam da origem do mundo. Cada mago era um pilar de seu próprio elemento, zelando para que o tecido cósmico não se rasgasse.
 
-Magos especializados em um único elemento caminham pelo mundo. Sua missão é simples, mas perigosa: recuperar a sabedoria perdida, conquistar sua própria árvore de habilidades e restaurar ~~(ou corromper)~~ o equilíbrio dos elementos.
+Porém, com o tempo, o mestre mago **Nosferus** foi consumido pela insaciável sede de poder e conhecimento. Cansado das limitações impostas pelas especializações, ele partiu para uma jornada ousada e traiçoeira: reunir todos os pergaminhos arcanos deixados pelos antigos magos nas dungeons que permeiam as terras de Arcanae. Diz-se que esses pergaminhos escondem os segredos das forças elementares que controlam a própria existência. Nosferus desapareceu nas sombrias profundezas da Floresta do Abismo, onde as lendas afirmam que os maiores conhecimentos estão ocultos — protegidos por enigmas mortais e criaturas impiedosas. Muitos ousaram seguir seus passos, mas nenhum retornou.
+
+Agora, os magos, especializados em um único elemento, estão espalhados pelo mundo, buscando não só o conhecimento perdido, mas também o domínio absoluto sobre as forças que governam tudo ao seu redor. Sua missão é simples, mas mortal: recuperar a sabedoria esquecida, dominar a árvore de habilidades ancestral e, assim, restaurar ou corromper o frágil equilíbrio dos elementos. A cada passo, o destino de Arcanae está por um fio.
+
+Será você o herói que trará a harmonia de volta ou o vilão que mergulhará o mundo na ~~destruição e no caos~~? 
 
 [**Dicionário de dados**](https://sbd1.github.io/2024.2-unimancer/modelagem/dd/)
 
@@ -98,8 +102,8 @@ Agora para definitivamente embarcar nessa jornada, basta executar o programa em 
     - **Fogo**: Magias destrutivas e agressivas;
     - **Terra**: Defesa e resistência inigualáveis;
     - **Vento**: Velocidade e controle estratégico;
-    - **Luz**: Magias de suporte e cura;
-    - **Trevas**: Magias de controle.
+    - **Luz**: Magia arcana antiga, garante bençãos ao usuário;
+    - **Trevas**: Magia condenada, utilizada por magos corrompidos;
 
 ---
 
@@ -141,3 +145,84 @@ Agora para definitivamente embarcar nessa jornada, basta executar o programa em 
 #### **Salvar e Continuar**
 
 - Progresso salvo automaticamente ao descansar em áreas seguras ou concluir tarefas importantes.
+
+--- 
+
+### **Regiões do Jogo**
+
+| **ID** | **Nome**                  | Região                      |
+| :----: | ------------------------- | --------------------------- |
+|   1    | Ferraria do Albnur        | Vilarejo do Amanhecer       |
+|   2    | Praça Central             |                             |
+|   3    | Casa do Ancião            |                             |
+|   4    | Taberna da Caneca Partida |                             |
+|   5    | Clareira dos Espíritos    | Floresta Eterna             |
+|   6    | Bosque Sombrio            |                             |
+|   7    | Lago da Serenidade        |                             |
+|   8    | Ruínas Perdidas           |                             |
+|   9    | Fenda do Abismo           | Ruínas do Abismo            |
+|  10    | Praça das Estátuas        |                             |
+|  11    | Entrada da Ruína          |                             |
+|  12    | Santuário Perdido         |                             |
+|  13    | Oásis dos Mercadores      | Deserto de Areias Infinitas |
+|  14    | Vale das Serpentes        |                             |
+|  15    | Ruínas Submersas          |                             |
+|  16    | Caverna de Cristal        |                             |
+|  17    | Trono de Cristal          | Caverna Cristalizada        |
+|  18    | Núcleo Cristalino         |                             |
+|  19    | Vale da Fortuna           |                             |
+|  20    | Entrada Cristalizada      |                             |
+|  21    | Pico Congelado            | Montanha do Crepúsculo      |
+|  22    | Vilarejo dos Gigantes     |                             |
+|  23    | Ponte Suspensa            |                             |
+|  24    | Cavernas Ecoantes         |                             |
+|  25    | Vila Esquecida            | Caverna Soterrada           |
+|  26    | Bosque Perdido            |                             |
+|  27    | Monte Caído               |                             |
+|  28    | Jardim de Ossos           |                             |
+|  29    | Catedral Queimada         | Terras Devastadas           |
+|  30    | Planícies de Cinzas       |                             |
+|  31    | Fenda Arcana              |                             |
+|  32    | Cemitério                 |                             |
+
+---
+
+## Tabela de Inimigos
+
+| **ID** | **Nome**               | **Elemento** | **Vida Máxima** | **XP Obtido** | **Moedas Obtidas** | **Conhecimento Arcano** | **Energia Arcana Máxima** | **Inteligência** |
+| ------ | ---------------------- | ------------ | --------------- | ------------- | ------------------ | ----------------------- | ------------------------- | ---------------- |
+| 1      | Rato Selvagem          | Terra        | 20              | 5             | 2                  | 0                       | 0                         | 1                |
+| 2      | Corvo Guardião         | Ar           | 25              | 8             | 3                  | 0                       | 0                         | 2                |
+| 3      | Ladrão de Rua          | Trevas       | 30              | 10            | 5                  | 0                       | 0                         | 3                |
+| 4      | Lobo Sombrio           | Trevas       | 50              | 20            | 10                 | 0                       | 0                         | 4                |
+| 5      | Espírito da Clareira   | Luz          | 40              | 15            | 0                  | 10                      | 20                        | 5                |
+| 6      | Ent Ancião             | Terra        | 70              | 25            | 15                 | 5                       | 10                        | 3                |
+| 7      | Guardião de Pedra      | Terra        | 80              | 30            | 20                 | 0                       | 0                         | 2                |
+| 8      | Serpente das Sombras   | Trevas       | 60              | 25            | 10                 | 5                       | 10                        | 4                |
+| 9      | Espectro do Abismo     | Trevas       | 50              | 20            | 5                  | 20                      | 30                        | 8                |
+| 10     | Escorpião Gigante      | Terra        | 90              | 35            | 15                 | 0                       | 0                         | 3                |
+| 11     | Djin Traiçoeiro        | Fogo         | 60              | 30            | 20                 | 15                      | 40                        | 10               |
+| 12     | Caravaneiro Corrompido | Luz          | 70              | 30            | 25                 | 5                       | 10                        | 6                |
+| 13     | Golem de Cristal       | Terra        | 150             | 70            | 30                 | 5                       | 10                        | 3                |
+| 14     | Minerador Fantasma     | Trevas       | 80              | 50            | 20                 | 15                      | 30                        | 6                |
+| 15     | Afortunado             | Luz          | 100             | 60            | 40                 | 20                      | 40                        | 10               |
+| 16     | Gigante Congelado      | Água         | 120             | 50            | 30                 | 5                       | 15                        | 5                |
+| 17     | Águia do Crepúsculo    | Ar           | 80              | 40            | 20                 | 10                      | 25                        | 7                |
+| 18     | Espírito da Geada      | Água         | 70              | 35            | 10                 | 20                      | 50                        | 9                |
+| 19     | Guerreiro Esqueleto    | Trevas       | 70              | 35            | 15                 | 5                       | 0                         | 3                |
+| 20     | Feiticeiro Esqueleto   | Trevas       | 60              | 40            | 10                 | 25                      | 50                        | 12               |
+| 21     | Goblin Zumbi           | Trevas       | 50              | 20            | 5                  | 0                       | 0                         | 2                |
+| 22     | Guerreiro Corrompido   | Trevas       | 100             | 60            | 50                 | 10                      | 20                        | 7                |
+| 23     | Fera Flamejante        | Fogo         | 110             | 55            | 40                 | 15                      | 30                        | 8                |
+| 24     | Dragão da Devastação   | Trevas       | 200             | 100           | 100                | 50                      | 100                       | 20               |
+
+---
+
+## Tabela de Bosses
+
+| **ID** | **Nome**   | **Elemento** | **Vida Máxima** | **XP Obtido** | **Moedas Obtidas** | **Conhecimento Arcano** | **Energia Arcana Máxima** | **Inteligência** |
+| :----: | ---------- | ------------ | --------------- | ------------- | ------------------ | ----------------------- | ------------------------- | ---------------- |
+|   25   | Abgail     | Fogo         | 150             | 60            | 75                 | 100                     | 100                       | 12               |
+|   26   | Lumina     | Luz          | 180             | 75            | 90                 | 120                     | 90                        | 15               |
+|   27   | Necromante | Trevas       | 200             | 85            | 100                | 110                     | 120                       | 14               |
+|   28   | Nosferus   | Trevas       | 220             | 100           | 125                | 130                     | 80                        | 18               |
