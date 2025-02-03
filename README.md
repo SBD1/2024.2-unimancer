@@ -71,7 +71,11 @@ Após clonar seu repositório, certifique-se de estar com o docker e o python in
 
 Caso não tenha, acesse a documentação para instalar [docker](https://docs.docker.com/) [python](https://www.python.org/)
 
-Entrando no diretório do projeto, primeiro precisamos configurar o ambiente do docker. Existe um arquivo chamado `.env.template`, renomeie para `.env`, após isso, basta utilizar
+Entrando no diretório do projeto, primeiro precisamos configurar o ambiente para roda-lo. Para isso, execute o comando a seguir:
+
+    > make config
+
+Após isso, será necessário subir os containers, onde temos o banco de dados por trás do projeto e o PgAdmin, que é uma interface para visualizar o banco
 
     > make build
 
@@ -79,7 +83,7 @@ para gerar o docker, o arquivo está configurado para utilizar a porta **5432** 
 
 Agora para definitivamente embarcar nessa jornada, basta executar o programa em seu terminal utilizando
 
-    > make interface
+    > make int
 
 ## Outros
 ### **Mecânicas do Jogo**
