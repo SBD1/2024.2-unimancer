@@ -50,6 +50,19 @@ class Combat:
              return 1
 
     # Logic:
+    # Return the multiplier of enemy attack by life
+    def damage_modifier_by_health(self, enemy: Enemy) -> float:
+        if enemy.vida_maxima < 50:
+            return 1.1
+        elif 50 <= enemy.vida_maxima < 100:
+            return 1.2
+        elif 100 <= enemy.vida_maxima < 150:
+            return 1.4
+        elif enemy.vida_maxima >= 150:
+            return 1.6
+        return 1.1
+
+    # Logic:
     #   Returns if it was possible to run away from enemy.
     def can_escape(self, enemy: Enemy) -> bool:
          base_chance = 0.5
@@ -62,6 +75,7 @@ class Combat:
     def attack(self, enemy: Enemy) -> int:
         damage_caused = random.randint(3, 15) * self.character.nivel
         damage_caused *= self.advantage_element(self.character.elemento, enemy.elemento)
+        damage_caused *= self.damage_modifier_by_health(enemy)
         damage_caused = int(damage_caused)
         return damage_caused
 
@@ -146,6 +160,7 @@ class Combat:
         damage = spell[4]
         
         damage *= self.advantage_element(self.character.elemento, enemy.elemento)
+        damage *= self.damage_modifier_by_health(enemy)
 
         enemy.vida = min(enemy.vida - damage, 0)
         
