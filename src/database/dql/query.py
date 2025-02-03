@@ -189,8 +189,8 @@ def list_item_inventory(conn, character_id):
         for inventario in inventarios:
             inventario_id = inventario[0]
             cur.execute("""
-                -- Seleciona os itens que estão na mochila do personagem
                 SELECT 
+                    i.id AS item_id,  -- Adicione esta linha
                     i.tipo,
                     CASE 
                         WHEN i.tipo = 'Poção' THEN p.nome
@@ -212,6 +212,7 @@ def list_item_inventory(conn, character_id):
                 LEFT JOIN acessorio a ON i.id = a.id
                 WHERE ii.mochila_id = %s
                 GROUP BY 
+                    i.id,  -- Agrupe por item_id para garantir a unicidade
                     i.tipo, 
                     p.nome, 
                     pe.nome, 
@@ -223,7 +224,7 @@ def list_item_inventory(conn, character_id):
 
             items.extend(cur.fetchall())
 
-    return items
+    return items  # return: (item_id, tipo, nome, descricao, quantidade)
 
 def get_civilian_info(conn, npc_name):
     with conn.cursor() as cur:
@@ -478,4 +479,120 @@ def add_items_instance(conn, backpack_id: int, item_ids: List[int]) -> None:
                 """
             )
         conn.commit()
-    
+
+# function to get all merchant in a subregion
+def get_merchants_subregion(conn, sub_regiao_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+                SELECT m.id, c.nome
+                FROM mercador m
+                JOIN civil c ON m.id = c.id
+                WHERE c.sub_regiao_id = {sub_regiao_id} 
+            """
+        )
+        return cur.fetchall()
+
+# function to get all merchant items
+def get_merchant_items(conn, mercador_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT 
+                i.id AS item_id,
+                COALESCE(p.nome, ac.nome, po.nome) AS nome,  -- Nome do item
+                COALESCE(p.preco, ac.preco, po.preco) AS preco,  -- Preço do item
+                ar.quantidade  -- Quantidade disponível
+            FROM armazenamento_mercador am
+            JOIN armazenamento ar ON am.armazenamento_id = ar.id
+            JOIN item i ON ar.item_id = i.id
+            LEFT JOIN pergaminho p ON i.id = p.id
+            LEFT JOIN acessorio ac ON i.id = ac.id
+            LEFT JOIN pocao po ON i.id = po.id
+            WHERE am.mercador_id = %s;
+        """, (mercador_id,))
+        return cur.fetchall()
+
+# function to sell an item to merchant
+def sell_item(conn, character_id, item_id, preco_venda, merchant_id):
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            DELETE FROM item_instancia
+            WHERE id = (
+                SELECT ii.id
+                FROM item_instancia ii
+                JOIN mochila m ON ii.mochila_id = m.id
+                JOIN inventario inv ON m.id = inv.id
+                WHERE inv.personagem_id = %s AND ii.item_id = %s
+                LIMIT 1
+            )
+        """, (character_id, item_id))
+        
+        cursor.execute("""
+            INSERT INTO transacao (mercador_id, personagem_id, item_id)
+            VALUES (%s, %s, %s)
+        """, (merchant_id, character_id, item_id))
+        
+        cursor.execute("""
+            UPDATE personagem
+            SET moedas = moedas + %s
+            WHERE id = %s
+        """, (preco_venda, character_id))
+        
+        conn.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro ao vender item: {e}")
+        return False
+
+def get_item_sell_price(conn, item_id):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT preco FROM (
+            SELECT id, preco FROM pergaminho
+            UNION ALL
+            SELECT id, preco FROM acessorio
+            UNION ALL
+            SELECT id, preco FROM pocao
+        ) AS items
+        WHERE id = %s
+    """, (item_id,))
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0] if result else 0
+
+def buy_item(conn, character_id, item_id, preco):
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT moedas FROM personagem WHERE id = %s", (character_id,))
+            moedas = cur.fetchone()[0]
+            if moedas < preco:
+                raise Exception("Moedas insuficientes")
+
+            cur.execute("""
+                UPDATE armazenamento
+                SET quantidade = quantidade - 1
+                WHERE item_id = %s AND quantidade > 0
+                RETURNING id
+            """, (item_id,))
+            armazenamento_id = cur.fetchone()
+            if armazenamento_id is None:
+                raise Exception("Item não disponível no armazenamento")
+
+            cur.execute("""
+                INSERT INTO item_instancia (item_id, mochila_id)
+                VALUES (%s, (SELECT m.id FROM mochila m JOIN inventario i ON m.id = i.id WHERE i.personagem_id = %s))
+            """, (item_id, character_id))
+
+            cur.execute("""
+                UPDATE personagem
+                SET moedas = moedas - %s
+                WHERE id = %s
+            """, (preco, character_id))
+
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e

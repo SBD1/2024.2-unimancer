@@ -10,7 +10,7 @@ def merchants(db: Database):
         mercadores = [
             (
                 "Jason",
-                12,
+                2,
                 "Jason é um importante mercador de acessórios e itens mágicos.",
                 """Bem-vindo, aventureiro! O que você deseja comprar?
 Tenho uma variedade de itens mágicos e acessórios de qualidade!"""

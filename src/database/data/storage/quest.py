@@ -84,7 +84,7 @@ def quests(db: Database):
         db.cur.executemany(
             """
             INSERT INTO quest(quester_id, armazenamento_id, sub_regiao_id, titulo, descricao, recompensa, dificuldade)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, values
         )
 

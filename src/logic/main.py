@@ -1,6 +1,7 @@
 import interface.display as display
 import interface.inventory as inventory
 import interface.world_info as world_info
+import interface.merchant_interface as merchant
 import database.dql.query as query
 import logic.combat as combat
 from colorama import Fore, Style
@@ -155,14 +156,34 @@ def navigate(conn, character: Character):
 
 
         elif option == "Interagir":
-            npcs = query.get_citizens_subregion(conn, character.sub_regiao_id)  
+            npcs = query.get_citizens_subregion(conn, character.sub_regiao_id)
 
             npc_i = ask(npcs, lambda: [
                 display.clear_screen(),
                 display.list_npcs(npcs)
             ], False)
 
-            display.display_npc_info(conn, npcs[npc_i - 1], character.id)
+            if npc_i == 0:
+                return True  # Volta para o menu principal
+
+            npc = npcs[npc_i - 1]
+            npc_id, npc_nome, npc_tipo, *_ = npc  # Pegando os dados do NPC
+
+            if npc_tipo == "Mercador":
+                options = ["Negociar", "Conversar"]
+                option_trade = ask(options, lambda: [
+                    display.clear_screen(),
+                    print(Fore.YELLOW + f"Você encontrou {npc_nome}." + Style.RESET_ALL),
+                    print("O que deseja fazer?"),
+                    display.list_options(options)
+                ])
+                if option_trade == 1:
+                    merchant.trade_with_merchant(conn, character)
+                else:
+                    display.display_npc_info(conn, npc, character.id)
+            else:
+                display.display_npc_info(conn, npc, character.id)
+
 
         elif option == "Lutar": 
             enemies_instances = [combat.Enemy(*enemy) for enemy in enemies]

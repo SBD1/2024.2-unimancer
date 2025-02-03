@@ -25,7 +25,7 @@ def list_items(character, conn):
         )
         display.print_terminal_width("-")
         for item in items:
-            tipo, nome, descricao, qtd = item
+            _, tipo, nome, descricao, qtd = item
             print(f"{tipo:<15} {nome:<20} {descricao:<30} {qtd:<10}")
     
     display.print_terminal_width("-")

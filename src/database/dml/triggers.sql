@@ -164,10 +164,22 @@ EXECUTE FUNCTION aplicar_buff();
 CREATE OR REPLACE FUNCTION criar_instancia_item()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO armazenamento_mercador (mercador_id, item_id, quantidade)
-    VALUES (NEW.mercador_id, NEW.item_id, NEW.quantidade)
-    ON CONFLICT (mercador_id, item_id) 
-    DO UPDATE SET quantidade = armazenamento_mercador.quantidade + NEW.quantidade;
+    -- Verifica se a combinação mercador_id e armazenamento_id já existe
+    IF EXISTS (SELECT 1 FROM armazenamento_mercador WHERE mercador_id = NEW.mercador_id AND armazenamento_id = NEW.item_id) THEN
+        -- Atualiza a quantidade no armazenamento
+        UPDATE armazenamento
+        SET quantidade = quantidade + 1
+        WHERE id = NEW.item_id;
+    ELSE
+        -- Insere no armazenamento do mercador
+        INSERT INTO armazenamento_mercador (mercador_id, armazenamento_id)
+        VALUES (NEW.mercador_id, NEW.item_id);
+        
+        -- Inicializa a quantidade no armazenamento
+        UPDATE armazenamento
+        SET quantidade = 1
+        WHERE id = NEW.item_id;
+    END IF;
 
     RETURN NEW;
 END;
