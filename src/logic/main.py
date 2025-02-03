@@ -96,12 +96,42 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
     return True
 
 # Logic:
+#
+#
+# Get all itens from a subregion
+def pick_up_items(conn, character, items):
+    while True:
+        display.clear_screen()
+        print(Fore.GREEN + "Itens disponíveis no chão:" + Style.RESET_ALL)
+        for idx, (item_id, tipo, quantidade, nome, descricao) in enumerate(items, start=1):
+            print(f"{idx}. {nome} - x{quantidade}")
+        print("0. Voltar")
+        
+        choice = display.ask_text("Escolha um item para pegar:")
+        if choice == "0":
+            break
+        try:
+            choice = int(choice)
+            if 1 <= choice <= len(items):
+                item_id, tipo, quantidade, nome, descricao = items[choice - 1]
+                if query.can_pick_up_item(conn, character.id):
+                    query.transfer_item_to_inventory(conn, character.id, item_id, 1)  # Transfere 1 unidade
+                    print(Fore.GREEN + f"Você pegou {nome}." + Style.RESET_ALL)
+                    items = query.get_subregion_items(conn, character.sub_regiao_id)
+                else:
+                    print(Fore.RED + "Seu inventário está cheio!" + Style.RESET_ALL)
+            else:
+                print(Fore.RED + "Escolha inválida." + Style.RESET_ALL)
+        except ValueError:
+            print(Fore.RED + "Digite um número válido!" + Style.RESET_ALL)
+        display.press_enter()
+
+# Logic:
 #   Navigate through the subregion the character is.
 #   Returns:
 #       True: if the player wants to continue navigating.
 #       False: if the player died.
 def navigate(conn, character: Character):
-        
     perceived_subregion = False
     
     while True:
@@ -109,6 +139,11 @@ def navigate(conn, character: Character):
         subregions = query.get_subregions_character(conn, character.sub_regiao_id)
         npcs = query.get_citizens_subregion(conn, character.sub_regiao_id)
         enemies = query.get_alive_enemies_subregion(conn, character.sub_regiao_id)
+        items = query.get_subregion_items(conn, character.sub_regiao_id)
+        if items:
+            for item in items:
+                item_id, tipo, quantidade, nome, descricao = item
+                print(f"{nome} (x{quantidade}): {descricao}")
         
         if not perceived_subregion and len(enemies) > 0:
             alive = enemies_perception(conn, character, enemies);
@@ -122,6 +157,8 @@ def navigate(conn, character: Character):
             options.append("Interagir")
         if enemies:
             options.append("Lutar")
+        if items:  
+            options.append("Pegar itens do chão")
 
         option_i = ask(options, lambda: [
             display.clear_screen(),
@@ -129,6 +166,7 @@ def navigate(conn, character: Character):
             world_info.display_subregion_info(subregion, subregions),
             world_info.display_npcs(npcs),
             world_info.display_enemies(enemies),
+            world_info.display_items(items) if items else None,  # Mostra os itens disponíveis
             lambda: print("\nO que você deseja fazer agora?\n"),
             display.list_options(options)
         ])
@@ -138,7 +176,6 @@ def navigate(conn, character: Character):
             return False
 
         option = options[option_i - 1]
-
 
         if option == "Caminhar":
             direction = ask(subregions, lambda: [
@@ -154,7 +191,6 @@ def navigate(conn, character: Character):
             else:
                 print("\nEssa passagem está bloqueada!")
 
-
         elif option == "Interagir":
             npcs = query.get_citizens_subregion(conn, character.sub_regiao_id)
 
@@ -164,10 +200,10 @@ def navigate(conn, character: Character):
             ], False)
 
             if npc_i == 0:
-                return True  # Volta para o menu principal
+                return True  
 
             npc = npcs[npc_i - 1]
-            npc_id, npc_nome, npc_tipo, *_ = npc  # Pegando os dados do NPC
+            npc_id, npc_nome, npc_tipo, *_ = npc  
 
             if npc_tipo == "Mercador":
                 options = ["Negociar", "Conversar"]
@@ -184,14 +220,15 @@ def navigate(conn, character: Character):
             else:
                 display.display_npc_info(conn, npc, character.id)
 
-
         elif option == "Lutar": 
             enemies_instances = [combat.Enemy(*enemy) for enemy in enemies]
             combat_instance = combat.Combat(character, enemies_instances, conn)
             alive = combat_instance.init()
             if not alive:
                 return False
-        
+
+        elif option == "Pegar itens do chão":
+            pick_up_items(conn, character, items)  # pick up ites (update!!!)
     return True
 
 # Interface/Logic:

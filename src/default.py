@@ -4,7 +4,7 @@ from database.Database import Database
 from database.data.item.acessory import bracelet, buckle, cane, cloack, collar, gloves, hat, ring, pants, socks, boots, key
 from database.data.npc.enemy import enemies, enemies_instances
 from database.data.npc.citizen import citizens, merchants, questers
-from database.data.storage import quest, storage, enemie_storage
+from database.data.storage import quest, storage, enemie_storage, sub_regiao_storage
 from database.data.map import regions as r, sub_regions as sr, sub_regions_connections as src
 from database.data.item.scroll import area_damage, cure, damage, scroll, writted_scroll, requirements
 from database.data.item import effects, potions, potion_effect
@@ -59,6 +59,7 @@ def populate_database(db: Database):
         
         storage.populate_storage(db)
         #enemie_storage.enemie_storage(db)
+        sub_regiao_storage.default_subregion_itens(db)
         quest.quests(db)
 #
         #potions

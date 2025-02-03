@@ -76,3 +76,12 @@ def display_enemies(enemies: List[Tuple]) -> None:
                 Style.RESET_ALL
             )
         print("")
+
+# Display itens
+def display_items(items):
+    if items:
+        print(Fore.YELLOW + "Itens no chão:" + Style.RESET_ALL)
+        for item in items:
+            item_id, tipo, quantidade, nome, descricao = item
+            print(f"- {nome} (x{quantidade}): {descricao}")
+        print()

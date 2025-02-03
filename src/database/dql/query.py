@@ -596,3 +596,85 @@ def buy_item(conn, character_id, item_id, preco):
     except Exception as e:
         conn.rollback()
         raise e
+
+# Function to get all items in a subregion
+def get_subregion_items(conn, subregion_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT i.id, i.tipo, arm.quantidade, 
+                   COALESCE(p.nome, ac.nome, po.nome) AS nome, 
+                   COALESCE(p.descricao, ac.descricao, po.descricao) AS descricao
+            FROM armazenamento arm
+            JOIN item i ON arm.item_id = i.id
+            LEFT JOIN pergaminho p ON i.id = p.id
+            LEFT JOIN acessorio ac ON i.id = ac.id
+            LEFT JOIN pocao po ON i.id = po.id
+            WHERE arm.id IN (
+                SELECT armazenamento_id 
+                FROM sub_regiao 
+                WHERE id = %s
+            );
+            """,
+            (subregion_id,)
+        )
+        return cur.fetchall()
+
+# Check if can pickup itens
+def can_pick_up_item(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT COUNT(*) 
+            FROM item_instancia ii
+            JOIN mochila m ON ii.mochila_id = m.id
+            JOIN inventario inv ON m.id = inv.id
+            WHERE inv.personagem_id = %s;
+            """,
+            (character_id,)
+        )
+        count = cur.fetchone()[0]
+        # verify is has enough space
+        cur.execute(
+            """
+            SELECT peso_total 
+            FROM mochila m
+            JOIN inventario inv ON m.id = inv.id
+            WHERE inv.personagem_id = %s;
+            """,
+            (character_id,)
+        )
+        peso_total = cur.fetchone()[0]
+        return count < peso_total 
+
+# function to transfer itens to your inventory
+def transfer_item_to_inventory(conn, character_id, item_id, quantidade):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            UPDATE armazenamento
+            SET quantidade = quantidade - %s
+            WHERE item_id = %s AND id IN (
+                SELECT armazenamento_id 
+                FROM sub_regiao 
+                WHERE id = (
+                    SELECT sub_regiao_id 
+                    FROM personagem 
+                    WHERE id = %s
+                )
+            );
+            """,
+            (quantidade, item_id, character_id)
+        )
+        
+        cur.execute(
+            """
+            INSERT INTO item_instancia (item_id, mochila_id)
+            SELECT %s, m.id
+            FROM mochila m
+            JOIN inventario inv ON m.id = inv.id
+            WHERE inv.personagem_id = %s;
+            """,
+            (item_id, character_id)
+        )
+        conn.commit()
