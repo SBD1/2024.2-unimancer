@@ -202,12 +202,41 @@ BEGIN
     FROM inimigo_instancia
     WHERE sub_regiao_id = NEW.sub_regiao_id AND vida > 0;
 
+    -- AFTER atualizar uma "instancia de inimigo" WHEN "valor de vida" igual a 0;
+    -- subregiao -> FROM personagem JOIN instâncias de quests JOIN quest JOIN quest_subregiao;
+    -- SE NÃO tiver subregiao, sair;
+    -- COUNT toda as "instancias de inimigos" da subregiao;
+    -- SE for 0, então completa instância de quest;
+    -- recompensa + xp + items;
+
     -- If there are no enemies remaining, mark the quest as completed
     IF v_inimigos_restantes = 0 THEN
-        -- Mark the quest as completed
+--CREATE TABLE quest (
+--    id SERIAL PRIMARY KEY,
+--    quester_id INT NOT NULL REFERENCES quester(id),
+--    armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+--    sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
+--    titulo VARCHAR(200) NOT NULL,
+--    descricao TEXT NOT NULL,
+--    recompensa TEXT NOT NULL,
+--    dificuldade TIPO_DIFICULDADE NOT NULL
+--);
+--
+--CREATE TABLE quest_instancia (
+--    id SERIAL PRIMARY KEY,
+--    quest_id INT NOT NULL REFERENCES quest(id),
+--    personagem_id INT NOT NULL REFERENCES personagem(id),
+--    completed BOOLEAN NOT NULL
+--);
+        -- Mark all instances of quests that have quests that are in this sub_region complete.
         UPDATE quest_instancia
         SET completed = TRUE
-        WHERE sub_regiao_id = NEW.sub_regiao_id;
+        WHERE quest_id IN (
+            SELECT id
+            FROM quest
+            WHERE sub_regiao_id = NEW.sub_regiao_id
+        );
+
 
         -- Retrieve the personagem_id associated with the quest
         SELECT personagem_id
