@@ -34,7 +34,7 @@ CREATE TABLE sub_regiao_conexao (
 CREATE TABLE personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-	nome VARCHAR(20) NOT NULL,
+	nome VARCHAR(50) NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
     vida INT NOT NULL CHECK (vida >= 0),
@@ -117,7 +117,8 @@ CREATE TABLE mochila (
 CREATE TABLE item_instancia (
     id SERIAL PRIMARY KEY,
     item_id INT NOT NULL REFERENCES item(id),
-    mochila_id INT NOT NULL REFERENCES mochila(id)
+    mochila_id INT NOT NULL REFERENCES mochila(id),
+    usado BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE feitico (
@@ -194,14 +195,9 @@ CREATE TABLE efeito (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
-    defesa DECIMAL(4, 3) NOT NULL, CHECK (defesa >= 0),
     inteligencia DECIMAL(4, 3) NOT NULL, CHECK (inteligencia >= 0),
-    critico DECIMAL(4, 3) NOT NULL, CHECK (critico >= 0),
     vida DECIMAL(4, 3) NOT NULL, CHECK (vida >= 0),
-    energia_arcana DECIMAL(4, 3) NOT NULL, CHECK (energia_arcana >= 0),
-    sorte DECIMAL(4, 3) NOT NULL, CHECK (sorte >= 0),
-    xp DECIMAL(4, 3) NOT NULL, CHECK (xp >= 0),
-    moedas DECIMAL(4, 3) NOT NULL CHECK (moedas >= 0)
+    energia_arcana DECIMAL(4, 3) NOT NULL, CHECK (energia_arcana >= 0)
 );
 
 CREATE TABLE acessorio (
@@ -227,8 +223,6 @@ CREATE TABLE acessorio_efeito (
 
 CREATE TABLE pocao (
     id INT PRIMARY KEY REFERENCES item(id),
-    turnos INT NOT NULL CHECK (turnos >= 0),
-    usado BOOLEAN NOT NULL,
     descricao TEXT NOT NULL,
 	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
 	nome VARCHAR(200) NOT NULL,

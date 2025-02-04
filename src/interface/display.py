@@ -28,16 +28,25 @@ def clear_screen():
 # Show the title of the game
 def show_title():
     print_center("")
-    print_center(" ██╗   ██╗███╗   ██╗██╗███╗   ███╗ █████╗ ███╗   ██╗ ██████╗███████╗██████╗ ")
-    print_center(" ██║   ██║████╗  ██║██║████╗ ████║██╔══██╗████╗  ██║██╔════╝██╔════╝██╔══██╗")
-    print_center(" ██║   ██║██╔██╗ ██║██║██╔████╔██║███████║██╔██╗ ██║██║     █████╗  ██████╔╝")
-    print_center(" ██║   ██║██║╚██╗██║██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗")
-    print_center(" ╚██████╔╝██║ ╚████║██║██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗██║  ██║")
-    print_center("  ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝  ╚═╝")
+    print(Style.BRIGHT + Fore.BLUE)
+    print_center("            .:-----:.              ", reset = False)
+    print_center("           :'   |   ':             ", reset = False)
+    print_center("   :':     :  .d'b.  :     .:'.    ", reset = False)
+    print_center("  :   :   _.,d  . b,._    :   :    ", reset = False)
+    print_center("   ':.' .d''           ``b. ':.'   ", reset = False)
+    print_center("      .p'      .         `q.       ", reset = False)
+    print_center("   ..d'   .         .      'b..    ", reset = False)
+    print_center(" .d'___________________________'b. ", reset = False)
+    print_center(":::::::::::::::::::::::::::::::::::", reset = False)
+    print_center("    `p.     .pq.    .pq.    .q'    ", reset = False)
+    print_center("    `p.     .pq.    .pq.    .q'    ", reset = False)
+    print_center("     `p.     ..      ..    .q'     ", reset = False)
+    print_center("      `b.                 .d'      ", reset = False)
+    print_center("        `q..            ..,'       ", reset = False)
+    print_center("           '',,,,,,,,,,''          ", reset = False)
     print_center("")
+    print(Style.BRIGHT + Fore.YELLOW)
     print_center(
-        Style.BRIGHT +
-        Fore.YELLOW +
         "--- Bem-vindo ao Unimancer! ---"
     )
 
@@ -103,10 +112,10 @@ def enemy_perceives(enemy):
 def terminal_width() -> None:
     return os.get_terminal_size().columns
 
-def print_center(text: str, width = terminal_width()) -> None:
+def print_center(text: str, width = terminal_width(), reset = True) -> None:
     print(
         text.center(width) +
-        Style.RESET_ALL
+        (Style.RESET_ALL if reset else "")
     )
     
 def print_terminal_width(character: str) -> None:
@@ -116,42 +125,85 @@ def print_terminal_width(character: str) -> None:
     )
 
 # Displays a bar with the character's life and energy.
-def header(character) -> None:
+def header(character: Character, complete = False) -> None:
     spacing = "  "
-    
-    def label(field: str, value: str) -> str:
+    emoji_size = 10 # bytes of ASCII encoding of an emoji
+        
+    def label(field: str, value: str, column = 0, larger = False) -> str:
+        field_column = f"{field:<4}" if column else field
+        if larger:
+            field_column = f"{field:<3}" if column else field
+            
+
         return "".join([
-            field,
-            ": ",
+            field_column,
+            " : ",
             Style.BRIGHT,
             value,
             Style.NORMAL
         ])
+        
+    if complete:
+        print(Style.BRIGHT)
+        
+        elements = {
+            "Fogo": "🔥",
+            "Água": "💧",
+            "Terra": "🌿",
+            "Ar": "💨",
+            "Luz": "☀️",
+            "Trevas": "🌑"
+        }
+        
+        nome = '       ' + character.nome + '    '
+        life = label("🫀", f"{character.vida}/{character.vida_maxima}", True)
+        energy = label("🌀", f"{character.energia_arcana}/{character.energia_arcana_maxima}", True, True)
+        coins = label("🪙", f"{character.moedas}", True)
+        xp = label("✨", f"{character.xp}/{character.xp_total}", True, True)
+        element = label(elements[character.elemento], character.elemento, True, True)
+        knowledge = label("📚", f"{character.conhecimento_arcano}", True, True)
+        intelligence = label("🧠", f"{character.inteligencia}", True, True)
+        level = label("💪", f"{character.nivel}", True, True)
+        
+        print_center(f"{nome:<30}")
+        print()
+        print_center(f"{life:<30}")
+        print_center(f"{energy:<30}")
+        print_center(f"{coins:<30}")
+        print_center(f"{xp:<30}")
+        print_center(f"{element:<30}")
+        print_center(f"{knowledge:<30}")
+        print_center(f"{intelligence:<30}")
+        print_center(f"{level:<30}")
+        
+    else:
+        
+        life = label("🫀", f"{character.vida}/{character.vida_maxima}")
+        energy = label("🌀", f"{character.energia_arcana}/{character.energia_arcana_maxima}")
+        coins = label("🪙", f"{character.moedas}")
+        xp = label("✨", f"{character.xp}/{character.xp_total}")
     
-    line = (
-        Fore.BLUE +
-        spacing +
-        Style.BRIGHT +
-        f"{character.nome} {spacing}" +
-        Style.NORMAL +
-        label("🫀", f"{character.vida}/{character.vida_maxima}") +
-        spacing +
-        label("🌀", f"{character.energia_arcana}/{character.energia_arcana_maxima}") +
-        spacing +
-        label("🪙", f"{character.moedas}") +
-        spacing +
-        label("✨", f"{character.xp}/{character.xp_total}") +
-        spacing
-    )
+        line = (
+            Fore.BLUE +
+            spacing +
+            Style.BRIGHT +
+            f"{character.nome} {spacing}" +
+            Style.NORMAL +
+            life +
+            spacing +
+            energy +
+            spacing +
+            coins +
+            spacing +
+            xp +
+            spacing
+        )
+        
+        emojis_size = emoji_size * 4
+        print()
+        print_center(line, width=terminal_width() + emojis_size)
+        
     
-    separator = (
-        Back.BLACK +
-        Fore.BLUE +
-        " " * len(line)
-    )
-    
-    print()
-    print_center(line)
 
 #   Will list the NPCs available in the subregion.
 def list_npcs(npcs) -> None:
@@ -169,4 +221,6 @@ def list_spells(spells) -> None:
 # Print all enemies and their description and life.
 def interface_show_enemies(enemies: List[Enemy]) -> None:
     for idx, enemy in enumerate(enemies):
-        print(f"| {idx+1} - {enemy.emoji} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")
+        if enemy.vida > 0:
+            print(f"| {idx+1} - {enemy.emoji} - {enemy.nome} - {enemy.descricao} - {enemy.vida}/{enemy.vida_maxima} |")
+            

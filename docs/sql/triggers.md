@@ -1,3 +1,12 @@
+# TRIGGERS
+
+## Introdução
+
+Stored Procedures são blocos de código SQL armazenados no banco de dados, permitindo a execução de várias instruções em uma única unidade. Elas melhoram o desempenho ao reduzir a comunicação entre a aplicação e o banco, além de oferecerem mais segurança ao restringir o acesso direto a tabelas. Outra vantagem é a manutenção simplificada, já que a lógica pode ser centralizada no banco de dados, facilitando atualizações sem a necessidade de alterar a aplicação. 
+
+## Triggers
+
+```sql
 -- PostGreSQL:
 -- `incrementar_peso_acessorio`:
 -- when character gets a new `acessorio`, it will increment the `peso` of the `mochila`, and if it surpasses `peso_total`, do not allow.
@@ -235,3 +244,10 @@ AFTER UPDATE ON item_instancia
 FOR EACH ROW
 WHEN (NEW.usado = TRUE)
 EXECUTE FUNCTION use_potion();
+```
+
+## Histórico de Versão
+
+| Versão |     Data   | Descrição | Autor |
+| :----: | :--------: | :-------: | :---: |
+| `1.0`  | 03/02/2025 | Criação   | Grupo |

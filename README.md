@@ -29,7 +29,8 @@ Será você o herói que trará a harmonia de volta ou o vilão que mergulhará 
 ## Apresentações
 
 1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo);
-2. [Entrega do SQL](https://youtu.be/2Z54N1kAIhc).
+2. [Entrega do SQL](https://youtu.be/2Z54N1kAIhc);
+3. [Entrega dos procedures / triggers - Jogo ]();
 
 ## Screenshots
 

@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 from colorama import Fore, Style
 

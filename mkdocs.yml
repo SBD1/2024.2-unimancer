@@ -5,6 +5,10 @@ repo_name: Unimancer
 extra_css:
   - stylesheets/logo.css
 
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  
 theme:
   name: material
   logo: img/logo.png
@@ -34,5 +38,7 @@ nav:
       - DDL: sql/ddl.md
       - DML: sql/dml.md
       - DQL: sql/dql.md
+      - Triggers: sql/triggers.md
+      - Procedures: sql/procedures.md
   - Apresentações:
       - Primeira entrega: apresentacoes/1a-entrega.md

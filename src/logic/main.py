@@ -1,3 +1,4 @@
+from typing import List, Tuple
 import interface.display as display
 import interface.inventory as inventory
 import interface.world_info as world_info
@@ -62,7 +63,7 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
     enemy_perception = combat.perception(enemy.inteligencia)
     
     # To-do: remove this line of overwritting character percpetion.
-    character_perception = 1000
+    #character_perception = 1000
 
     #utils.debug(f"Values perception: {character_perception}, {enemy_perception}")
 
@@ -99,15 +100,19 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
 #
 #
 # Get all itens from a subregion
-def pick_up_items(conn, character, items):
+def pick_up_items(conn, character: Character, total_items: List[Tuple]) -> None:
+    
+    items = [item for item in total_items if item[2] > 0]
+    
     while True:
         display.clear_screen()
         print(Fore.GREEN + "Itens disponíveis no chão:" + Style.RESET_ALL)
         for idx, (item_id, tipo, quantidade, nome, descricao) in enumerate(items, start=1):
-            print(f"{idx}. {nome} - x{quantidade}")
+            if quantidade > 0:
+                print(f"{idx}. {nome} - x{quantidade}")
         print("0. Voltar")
         
-        choice = display.ask_text("Escolha um item para pegar:")
+        choice = display.ask_text("Escolha um item para pegar")
         if choice == "0":
             break
         try:
@@ -118,6 +123,7 @@ def pick_up_items(conn, character, items):
                     query.transfer_item_to_inventory(conn, character.id, item_id, 1)  # Transfere 1 unidade
                     print(Fore.GREEN + f"Você pegou {nome}." + Style.RESET_ALL)
                     items = query.get_subregion_items(conn, character.sub_regiao_id)
+                    return
                 else:
                     print(Fore.RED + "Seu inventário está cheio!" + Style.RESET_ALL)
             else:
@@ -131,7 +137,7 @@ def pick_up_items(conn, character, items):
 #   Returns:
 #       True: if the player wants to continue navigating.
 #       False: if the player died.
-def navigate(conn, character: Character):
+def navigate(conn, character: Character) -> bool:
     perceived_subregion = False
     
     while True:
@@ -140,10 +146,8 @@ def navigate(conn, character: Character):
         npcs = query.get_citizens_subregion(conn, character.sub_regiao_id)
         enemies = query.get_alive_enemies_subregion(conn, character.sub_regiao_id)
         items = query.get_subregion_items(conn, character.sub_regiao_id)
-        if items:
-            for item in items:
-                item_id, tipo, quantidade, nome, descricao = item
-                print(f"{nome} (x{quantidade}): {descricao}")
+        
+        there_is_at_least_one_item = any(item[2] > 0 for item in items)
         
         if not perceived_subregion and len(enemies) > 0:
             alive = enemies_perception(conn, character, enemies);
@@ -157,7 +161,7 @@ def navigate(conn, character: Character):
             options.append("Interagir")
         if enemies:
             options.append("Lutar")
-        if items:  
+        if items and there_is_at_least_one_item:
             options.append("Pegar itens do chão")
 
         option_i = ask(options, lambda: [
@@ -166,14 +170,14 @@ def navigate(conn, character: Character):
             world_info.display_subregion_info(subregion, subregions),
             world_info.display_npcs(npcs),
             world_info.display_enemies(enemies),
-            world_info.display_items(items) if items else None,  # Mostra os itens disponíveis
-            lambda: print("\nO que você deseja fazer agora?\n"),
+            world_info.display_items(items),
+            display.print_center("O que você deseja fazer agora?"), 
             display.list_options(options)
         ])
 
         # Go back a menu.
         if option_i == 0:
-            return False
+            return -1
 
         option = options[option_i - 1]
 
@@ -209,7 +213,11 @@ def navigate(conn, character: Character):
                 options = ["Negociar", "Conversar"]
                 option_trade = ask(options, lambda: [
                     display.clear_screen(),
-                    print(Fore.YELLOW + f"Você encontrou {npc_nome}." + Style.RESET_ALL),
+                    print(
+                        Fore.YELLOW +
+                        f"Você encontrou {npc_nome}." +
+                        Style.RESET_ALL
+                    ),
                     print("O que deseja fazer?"),
                     display.list_options(options)
                 ])
@@ -249,7 +257,7 @@ def game(conn, character: Character) -> bool:
 
     # Go back one menu.
     if option_i == 0:
-        return False
+        return 0
     
     option = options[option_i - 1]
         
@@ -259,7 +267,7 @@ def game(conn, character: Character) -> bool:
             return False
     elif option == "Ver status do personagem":
         display.clear_screen()
-        display.header(character)
+        display.header(character, complete=True)
         display.press_enter()
     elif option == "Ver inventário":
         display.clear_screen()
@@ -315,14 +323,16 @@ def main_menu(conn) -> int:
             display.press_enter()
             return 0
         else:
-            character_id = ask(characters, lambda: [
+            character_i = ask(characters, lambda: [
                 display.clear_screen(),
                 display.list_characters(characters)
             ])
             
             # If a character was not selected.
-            if character_id == 0:
+            if character_i == 0:
                 return 0
+            
+            character_id = characters[character_i - 1][0]
             
             character = Character(conn, character_id)
             utils.debug(f"Personagem {character.nome} selecionado com sucesso!")

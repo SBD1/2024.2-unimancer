@@ -52,7 +52,7 @@ class Character:
                 return
             
             id = query.add_character(self.conn, self.nome, self.elemento)
-            print(id)
+            #print(id)
             
         self.update(id)
         

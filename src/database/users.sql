@@ -1,0 +1,19 @@
+DO $$
+BEGIN
+    CREATE ROLE dba;
+    EXCEPTION WHEN duplicate_object THEN RAISE NOTICE '%, skipping', SQLERRM USING ERRCODE = SQLSTATE;
+    END
+$$;
+
+REVOKE ALL PRIVILEGES ON DATABASE postgres FROM dba;
+
+DROP USER IF EXISTS dba;
+
+CREATE USER dba WITH PASSWORD 'dba123' CREATEROLE;
+
+GRANT ALL PRIVILEGES ON SCHEMA public TO dba;
+
+-- Grant privilege to create role with CREATEROLE attribute.
+GRANT CREATE ON SCHEMA public TO dba;
+
+GRANT CONNECT ON DATABASE postgres TO dba;

@@ -202,7 +202,7 @@ BEGIN
         p_nome,
         p_elemento::TIPO_ELEMENTO,
         10,
-        1,
+        100,
         100,
         0,
         10,
@@ -289,8 +289,7 @@ CREATE OR REPLACE FUNCTION criar_pocao(
     IN p_drop_inimigos_media INT,
     IN p_nome VARCHAR(20),
     IN p_peso INT,
-    IN p_preco INT,
-    IN p_turnos INT
+    IN p_preco INT
 ) RETURNS INT AS $$
 DECLARE
     v_item_id INT;
@@ -301,8 +300,8 @@ BEGIN
     RETURNING id INTO v_item_id;
 
     -- Criar a poção
-    INSERT INTO pocao (id, turnos, usado, descricao, drop_inimigos_media, nome, peso, preco)
-    VALUES (v_item_id, p_turnos, FALSE, p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco);
+    INSERT INTO pocao (id, descricao, drop_inimigos_media, nome, peso, preco)
+    VALUES (v_item_id, p_descricao, p_drop_inimigos_media, p_nome, p_peso, p_preco);
 
     RETURN v_item_id;
 END;

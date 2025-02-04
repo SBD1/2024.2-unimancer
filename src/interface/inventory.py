@@ -82,10 +82,11 @@ def list_potions(potions):
         print(Fore.RED + "Nenhuma poção disponível." + Style.RESET_ALL)
     else:
         for idx, potion in enumerate(potions):
-            id, nome, descricao, turnos, usado = potion
+            ii_id, id, nome, descricao, usado = potion
             usado_color = Fore.GREEN if not usado else Fore.RED
+            usado_label = "Disponível" if not usado else "Usado"
             print(Fore.MAGENTA + f"{idx+1}. {nome:<30}" + Style.RESET_ALL)
             print(f"{descricao}")
-            print(f"{'Turnos:':<30} {turnos}")
-            print(f"{'Usado:':<30}" + usado_color + f"{usado}" + Style.RESET_ALL)
+            #print(f"{'Turnos:':<30} {turnos}")
+            print(f"{'Usado:':<30}" + usado_color + usado_label + Style.RESET_ALL)
             print(Fore.CYAN + "-" * 110 + Style.RESET_ALL)

@@ -79,6 +79,9 @@ def display_enemies(enemies: List[Tuple]) -> None:
 
 # Display itens
 def display_items(items):
+    if not any([item[2] > 0 for item in items]):
+        return
+    
     if items:
         print(Fore.YELLOW + "Itens no chão:" + Style.RESET_ALL)
         for item in items:

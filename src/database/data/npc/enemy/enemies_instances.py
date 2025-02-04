@@ -9,9 +9,9 @@ def create_enemy_instances(db: Database):
     try:
         enemy_instances = [
             # Floresta Eterna
-            (4, 1, 50),  # TESTE
-            (4, 1, 50),  # TESTE
-            (4, 1, 50),  # TESTE
+            #(4, 1, 50),  # TESTE
+            #(4, 1, 50),  # TESTE
+            #(4, 1, 50),  # TESTE
             (4, 5, 50),  # Lobo Sombrio - Clareira dos Espíritos
             (5, 5, 40),  # Espírito da Clareira - Clareira dos Espíritos
             (6, 6, 70),  # Ent Ancião - Bosque Sombrio

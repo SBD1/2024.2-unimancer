@@ -30,31 +30,25 @@ CREATE TYPE TIPO_ACESSORIO AS ENUM (
     'Bengala',
     'Manto'
  );
-
-CREATE TABLE IF NOT EXISTS item (
+CREATE TABLE item (
     id SERIAL PRIMARY KEY,
-    tipo TIPO_ITEM NOT NULL,
-    descricao TEXT NOT NULL,
-	chance_drop INT NOT NULL CHECK (chance_drop >= 0),
-	nome VARCHAR(20) NOT NULL,
-	peso INT NOT NULL CHECK (peso >= 0),
-	preco INT NOT NULL CHECK (preco >= 0)
+    tipo TIPO_ITEM NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS armazenamento (
+CREATE TABLE armazenamento (
     id SERIAL PRIMARY KEY,
     item_id INT NOT NULL REFERENCES item(id),
     quantidade INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS regiao (
+CREATE TABLE regiao (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS sub_regiao (
+CREATE TABLE sub_regiao (
     id SERIAL PRIMARY KEY,
     regiao_id INT NOT NULL REFERENCES regiao(id),
     armazenamento_id INT REFERENCES armazenamento(id),
@@ -62,20 +56,14 @@ CREATE TABLE IF NOT EXISTS sub_regiao (
     descricao TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS sub_regiao_conexao (
+CREATE TABLE sub_regiao_conexao (
     sub_regiao_1 INT NOT NULL REFERENCES sub_regiao(id),
     sub_regiao_2 INT NOT NULL REFERENCES sub_regiao(id),
     direcao TIPO_DIRECAO NOT NULL,
     situacao TIPO_SITUACAO NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS sub_regiao_item_conexao (
-    sub_regiao_1 INT NOT NULL REFERENCES sub_regiao(id),
-    sub_regiao_2 INT NOT NULL REFERENCES sub_regiao(id),
-    item_id INT NOT NULL REFERENCES item(id)
-);
-
-CREATE TABLE IF NOT EXISTS personagem (
+CREATE TABLE personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
 	nome VARCHAR(20) NOT NULL,
@@ -92,169 +80,197 @@ CREATE TABLE IF NOT EXISTS personagem (
     nivel INT NOT NULL CHECK (nivel >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS inventario (
+CREATE TABLE inventario (
     id SERIAL PRIMARY KEY,
     personagem_id INT NOT NULL REFERENCES personagem(id),
 	tipo TIPO_INVENTARIO NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS npc (
+CREATE TABLE npc (
     id SERIAL PRIMARY KEY,
-	nome VARCHAR(20) NOT NULL,
     tipo TIPO_NPC NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS civil (
+CREATE TABLE civil (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-    descricao TEXT NOT NULL,
-    tipo TIPO_CIVIL
+    tipo TIPO_CIVIL NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS quester (
+CREATE TABLE quester (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    dialogo TEXT NOT NULL,
-    num_quests INT NOT NULL CHECK (num_quests >= 0)
+    num_quests INT NOT NULL CHECK (num_quests >= 0),
+    dialogo TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS quest (
+CREATE TABLE quest (
     id SERIAL PRIMARY KEY,
     quester_id INT NOT NULL REFERENCES quester(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
-    item_requerimento_id INT NOT NULL REFERENCES item(id),
-    titulo VARCHAR(20) NOT NULL,
+    sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
+    titulo VARCHAR(200) NOT NULL,
     descricao TEXT NOT NULL,
     recompensa TEXT NOT NULL,
     dificuldade TIPO_DIFICULDADE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS quest_instancia (
+CREATE TABLE quest_instancia (
     id SERIAL PRIMARY KEY,
     quest_id INT NOT NULL REFERENCES quest(id),
     personagem_id INT NOT NULL REFERENCES personagem(id),
     completed BOOLEAN NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS item_instancia (
-    id SERIAL PRIMARY KEY,
-    item_id INT NOT NULL REFERENCES item(id),
-    inventario_id INT NOT NULL REFERENCES inventario(id)
-);
-
-CREATE TABLE IF NOT EXISTS mercador (
+CREATE TABLE mercador (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
     dialogo TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS armazenamento_mercador (
+CREATE TABLE armazenamento_mercador (
     mercador_id INT NOT NULL REFERENCES mercador(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id)
 );
 
-CREATE TABLE IF NOT EXISTS transacao (
+CREATE TABLE transacao (
     id SERIAL PRIMARY KEY,
     mercador_id INT NOT NULL REFERENCES mercador(id),
     personagem_id INT NOT NULL REFERENCES personagem(id),
     item_id INT NOT NULL REFERENCES item(id)
 );
 
-CREATE TABLE IF NOT EXISTS mochila (
+CREATE TABLE mochila (
 	id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
 	peso INT NOT NULL CHECK (peso <= peso_total AND peso >= 0),
 	peso_total INT NOT NULL CHECK (peso_total >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS feitico (
+CREATE TABLE item_instancia (
     id SERIAL PRIMARY KEY,
+    item_id INT NOT NULL REFERENCES item(id),
+    mochila_id INT NOT NULL REFERENCES mochila(id),
+    usado BOOLEAN NOT NULL
+);
+
+CREATE TABLE feitico (
+    id SERIAL PRIMARY KEY,
+    tipo TIPO_FEITICO NOT NULL
+);
+
+CREATE TABLE feitico_requerimento (
+    de_id INT NOT NULL REFERENCES feitico(id),
+    para_id INT NOT NULL REFERENCES feitico(id)
+);
+
+CREATE TABLE feitico_dano (
+    id INT PRIMARY KEY REFERENCES feitico(id),
+    dano_total INT NOT NULL CHECK (dano_total >= 0),
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     countdown INT NOT NULL CHECK (countdown >= 0),
     conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
     energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
-    tipo TIPO_FEITICO NOT NULL
+    nome VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS feitico_requerimento (
-    de_id INT NOT NULL REFERENCES feitico(id),
-    para_id INT NOT NULL REFERENCES feitico(id)
-);
-
-CREATE TABLE IF NOT EXISTS feitico_dano (
-    id INT PRIMARY KEY REFERENCES feitico(id),
-    dano_total INT NOT NULL CHECK (dano_total >= 0)
-);
-
-CREATE TABLE IF NOT EXISTS feitico_dano_area (
+CREATE TABLE feitico_dano_area (
     id INT PRIMARY KEY REFERENCES feitico(id),
     dano INT NOT NULL CHECK (dano >= 0),
-    qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0)
+    qtd_inimigos_afetados INT NOT NULL CHECK (qtd_inimigos_afetados >= 0),
+    descricao TEXT NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
+    countdown INT NOT NULL CHECK (countdown >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
+    nome VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS feitico_cura (
+CREATE TABLE feitico_cura (
     id INT PRIMARY KEY REFERENCES feitico(id),
-    qtd_cura INT NOT NULL CHECK (qtd_cura >= 0)
+    qtd_cura INT NOT NULL CHECK (qtd_cura >= 0),
+    descricao TEXT NOT NULL,
+    elemento TIPO_ELEMENTO NOT NULL,
+    countdown INT NOT NULL CHECK (countdown >= 0),
+    conhecimento_arcano_necessario INT NOT NULL CHECK (conhecimento_arcano_necessario >= 0),
+    energia_arcana INT NOT NULL CHECK (energia_arcana >= 0),
+    nome VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS grimorio (
+CREATE TABLE grimorio (
     id INT NOT NULL PRIMARY KEY REFERENCES inventario(id),
 	num_pag INT NOT NULL CHECK (num_pag <= num_pag_maximo AND num_pag >= 0),
     num_pag_maximo INT NOT NULL CHECK (num_pag_maximo >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS feitico_aprendido (
-    inventario_id INT NOT NULL REFERENCES inventario(id),
+CREATE TABLE feitico_aprendido (
+    grimorio_id INT NOT NULL REFERENCES grimorio(id),
     feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 
-CREATE TABLE IF NOT EXISTS pergaminho (
+CREATE TABLE pergaminho (
     id INT PRIMARY KEY REFERENCES item(id),
-    cor VARCHAR(10) NOT NULL
+    cor VARCHAR(10) NOT NULL,
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS feitico_escrito (
-	item_id INT NOT NULL REFERENCES item(id),
+CREATE TABLE feitico_escrito (
+	item_id INT NOT NULL REFERENCES pergaminho(id),
 	feitico_id INT NOT NULL REFERENCES feitico(id)
 );
 
-CREATE TABLE IF NOT EXISTS efeito (
+CREATE TABLE efeito (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(20) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
-    defesa DECIMAL(1, 3) NOT NULL CHECK (defesa >= 0),
-    inteligencia DECIMAL(1, 3) NOT NULL CHECK (inteligencia >= 0),
-    critico DECIMAL(1, 3) NOT NULL CHECK (critico >= 0),
-    vida DECIMAL(1, 3) NOT NULL CHECK (vida >= 0),
-    energia_arcana DECIMAL(1, 3) NOT NULL CHECK (energia_arcana >= 0),
-    sorte DECIMAL(1, 3) NOT NULL CHECK (sorte >= 0),
-    xp DECIMAL(1, 3) NOT NULL CHECK (xp >= 0),
-    moedas DECIMAL(1, 3) NOT NULL CHECK (moedas >= 0)
+    inteligencia DECIMAL(4, 3) NOT NULL, CHECK (inteligencia >= 0),
+    vida DECIMAL(4, 3) NOT NULL, CHECK (vida >= 0),
+    energia_arcana DECIMAL(4, 3) NOT NULL, CHECK (energia_arcana >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS acessorio (
+CREATE TABLE acessorio (
     id INT PRIMARY KEY REFERENCES item(id),
-    tipo TIPO_ACESSORIO NOT NULL
+    tipo TIPO_ACESSORIO NOT NULL,
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS acessorio_efeito (
+CREATE TABLE sub_regiao_acessorio_conexao (
+    sub_regiao1_id INT NOT NULL REFERENCES sub_regiao(id),
+    sub_regiao2_id INT NOT NULL REFERENCES sub_regiao(id),
+    acessorio_id INT NOT NULL REFERENCES acessorio(id)
+);
+
+CREATE TABLE acessorio_efeito (
     acessorio_id INT NOT NULL REFERENCES acessorio(id),
     efeito_id INT NOT NULL REFERENCES efeito(id)
 );
 
-CREATE TABLE IF NOT EXISTS pocao (
+CREATE TABLE pocao (
     id INT PRIMARY KEY REFERENCES item(id),
-    turnos INT NOT NULL CHECK (turnos >= 0),
-    usado BOOLEAN NOT NULL
+    descricao TEXT NOT NULL,
+	drop_inimigos_media INT NOT NULL CHECK (drop_inimigos_media >= 0),
+	nome VARCHAR(200) NOT NULL,
+	peso INT NOT NULL CHECK (peso >= 0),
+	preco INT NOT NULL CHECK (preco >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS pocao_efeito (
+CREATE TABLE pocao_efeito (
     pocao_id INT NOT NULL REFERENCES pocao(id),
     efeito_id INT NOT NULL REFERENCES efeito(id)
 );
 
-CREATE TABLE IF NOT EXISTS inimigo (
+CREATE TABLE inimigo (
     id INT NOT NULL PRIMARY KEY REFERENCES npc(id),
-    armazenamento_id INT NOT NULL REFERENCES armazenamento(id),
+    emoji TEXT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     vida_maxima INT NOT NULL CHECK (vida_maxima >= 0),
@@ -263,22 +279,22 @@ CREATE TABLE IF NOT EXISTS inimigo (
     moedas_obtidas INT NOT NULL CHECK (moedas_obtidas >= 0),
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
     energia_arcana_maxima INT NOT NULL CHECK (energia_arcana_maxima >= 0),
-    dialogo TEXT NOT NULL
+    dialogo TEXT -- To-do: change to not null
 );
 
-CREATE TABLE IF NOT EXISTS armazenamento_inimigo (
+CREATE TABLE armazenamento_inimigo (
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
     armazenamento_id INT NOT NULL REFERENCES armazenamento(id)
 );
 
-CREATE TABLE IF NOT EXISTS inimigo_instancia (
+CREATE TABLE inimigo_instancia (
     id SERIAL PRIMARY KEY,
     inimigo_id INT NOT NULL REFERENCES inimigo(id),
     sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
     vida INT NOT NULL CHECK (vida >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS combate (
+CREATE TABLE combate (
     inimigo_instancia_id INT NOT NULL REFERENCES inimigo_instancia(id),
     personagem_id INT NOT NULL REFERENCES personagem(id),
     dano_causado INT NOT NULL CHECK (dano_causado >= 0),

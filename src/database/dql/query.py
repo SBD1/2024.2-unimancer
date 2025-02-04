@@ -3,6 +3,8 @@ from logic.enemy import Enemy
 from logic.character import Character
 from typing import List, Tuple
 
+from interface import display
+
 # Create a character.
 def add_character(conn, nome: str, elemento: str) -> None:
     with conn.cursor() as cur:
@@ -345,7 +347,12 @@ def get_healing_spells(conn, character_id: int) -> List[Tuple]:
 def get_potions(conn, character_id: int) -> List[Tuple]:
     with conn.cursor() as cur:
         cur.execute("""
-            SELECT p.id, p.nome, p.descricao, p.turnos, p.usado
+            SELECT
+                ii.id,
+                p.id,
+                p.nome,
+                p.descricao,
+                ii.usado
             FROM pocao p
             JOIN item_instancia ii ON p.id = ii.item_id
             JOIN inventario inv ON ii.mochila_id = inv.id
@@ -353,18 +360,31 @@ def get_potions(conn, character_id: int) -> List[Tuple]:
         """, (character_id,))
         return cur.fetchall()
 
-# function to set potion as used
-def apply_potion_effect(conn, potion_id: int) -> int:
+# Delete a item instance from a character inventory.
+def delete_item_instance(conn, id: int) -> None:
     with conn.cursor() as cur:
-        cur.execute(f"""
-            UPDATE pocao
-            SET usado = TRUE
-            WHERE id = {potion_id};
-        """)
+        cur.execute(
+            f"""
+            DELETE FROM item_instancia
+            WHERE id = {id};
+            """
+        )
+        conn.commit()
+
+# Activate an instance of item (potion).
+def update_item_instance(conn, id: int, used: bool) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            UPDATE item_instancia
+            SET usado = {used}
+            WHERE id = {id};
+            """
+        )
         conn.commit()
 
 # Update `energia_arcana` after using spell.
-def get_character_mp(conn, character_id: int, spell_value: int) -> int:
+def get_update_character_mp(conn, character_id: int, spell_value: int) -> int:
     with conn.cursor() as cur:
         cur.execute(f"""
             UPDATE personagem
@@ -418,7 +438,7 @@ def update_combat(conn , enemies: List[Enemy], character: Character) -> None:
                     {character.id},
                     {enemy.id},
                     {int(character.vida)},
-                    {enemy.vida}
+                    {int(enemy.vida)}
                 );
                 """
             )
@@ -473,8 +493,8 @@ def add_items_instance(conn, backpack_id: int, item_ids: List[int]) -> None:
         for item_id in item_ids:
             cur.execute(
                 f"""
-                INSERT INTO item_instancia (item_id, mochila_id)
-                VALUES ({item_id}, {backpack_id})
+                INSERT INTO item_instancia (item_id, mochila_id, usado)
+                VALUES ({item_id}, {backpack_id}, FALSE)
                 RETURNING item_id;
                 """
             )

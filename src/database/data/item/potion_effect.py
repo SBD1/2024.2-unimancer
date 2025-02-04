@@ -16,9 +16,9 @@ def potion_effect(db: Database):
             # Poção do Vento Celeste
             (136, 3), # "Agilidade das Marés" (Aumenta a velocidade em terrenos aquáticos)
             # Poção da Pele de Pedra
-            (137, 2), # "Proteção Dracônica" (Concede resistência moderada a ataques físicos)
+            (137, 2), # "Proteção Dracônica"
             # Lágrima do Dragão
-            (138, 8), # "Congelamento Ártico" (Reduz dano recebido de ataques de fogo)
+            (138, 8), # "Congelamento Ártico"
             # Sangue do Fênix
             (139, 10), # "Presença Real" (Bônus em batalhas e ganho de XP)
             # Poção do Tempo Congelado
@@ -26,7 +26,7 @@ def potion_effect(db: Database):
             # Elixir da Perdição
             (141, 6), # "Passos Trovejantes" (Causa dano em área ao pular em combate)
             # Néctar do Destino
-            (142, 1), # "Passos Silenciosos" (Reduz o ruído ao caminhar)
+            (142, 1), # "Passos Silenciosos"
         ]
         db.cur.executemany(
             """

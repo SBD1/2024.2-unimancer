@@ -31,7 +31,7 @@ def storage(item_name: str, quantity: int, db: Database) -> int:
 
 def populate_storage(db: Database):
     
-    default_quantity = 9999
+    default_quantity = 1
     
     table_name = Style.BRIGHT + "ARMAZENAMENTO" + Style.NORMAL
    

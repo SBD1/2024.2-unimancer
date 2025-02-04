@@ -11,9 +11,9 @@ def effects(db: Database):
             ("Proteção Dracônica", "Concede resistência moderada a ataques físicos.", 1.3, 1.0, 1.0, 1.0, 1.0, 1.0, 1.1, 1.0),  # Botas de dragão
             ("Agilidade das Marés", "Aumenta a velocidade em terrenos aquáticos.", 1.0, 1.1, 1.0, 1.0, 1.1, 1.0, 1.0, 1.0),  # Botas de água
             ("Sombras Protetoras", "Diminui a chance de ser detectado por inimigos.", 1.2, 1.0, 1.1, 1.0, 1.0, 1.2, 1.0, 1.0),  # Botas do crepúsculo
-            ("Caminhos Luminosos", "Aumenta a regeneração de energia arcana ao caminhar.", 1.0, 1.0, 1.0, 1.0, 1.3, 1.0, 1.1, 1.0),  # Botas de cristal
+            ("Caminhos Luminosos", "Aumenta a regeneração de energia arcana ao caminhar.", 1.0, 1.0, 1.25, 1.0, 1.3, 1.0, 1.1, 1.0),  # Botas de cristal
             ("Congelamento Ártico", "Reduz o dano recebido de ataques de fogo.", 1.3, 1.0, 1.0, 1.1, 1.0, 1.0, 1.0, 1.0),  # Botas de gelo
-            ("Raízes da Vida", "Aumenta a recuperação de vida em terrenos florestais.", 1.0, 1.0, 1.0, 1.3, 1.0, 1.0, 1.1, 1.0),  # Botas de madeira
+            ("Raízes da Vida", "Aumenta a recuperação de vida em terrenos florestais.", 1.2, 1.0, 1.0, 1.3, 1.0, 1.0, 1.1, 1.0),  # Botas de madeira
             ("Passos Trovejantes", "Causa dano em área ao pular em combate.", 1.0, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1.1),  # Botas do trovão
             ("Força Óssea", "Aumenta a resistência física e o dano crítico.", 1.4, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1.0),  # Botas de ossos
             ("Presença Real", "Concede bônus em todas as batalhas e aumenta o ganho de XP.", 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.5, 1.0),  # Botas da Realeza
@@ -128,13 +128,13 @@ def effects(db: Database):
             ('Lâmina Invisível', 'Proporciona ataques cortantes com vento.', 1.2, 1.1, 1.01, 1.3, 1.0, 1.065, 1.0, 1.0),
         ]
 
-        db.cur.executemany(
-            """
-            INSERT INTO efeito (nome, descricao, defesa, inteligencia, critico, vida, energia_arcana, sorte, xp, moedas)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-            """, 
-            default
-        )
+        for (name, description, intelligence, life, arcana, *_) in default:
+            db.cur.execute(
+                f"""
+                INSERT INTO efeito (nome, descricao, inteligencia, vida, energia_arcana)
+                VALUES ('{name}', '{description}', {intelligence}, {life}, {arcana});
+                """
+            )
         db.conn.commit()
 
         debug(f"default: {len(default)} {table_name} added successfully!")

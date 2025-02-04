@@ -2,8 +2,7 @@ from colorama import Fore, Style
 import database.dql.query as query
 import interface.display as display
 import interface.inventory as inventory
-import logic.main as display
-import interface.display
+import logic.main as logic
 from database.dql.query import get_merchants_subregion, get_merchant_items, list_item_inventory
 
 def trade_with_merchant(conn, character):
@@ -13,10 +12,10 @@ def trade_with_merchant(conn, character):
         return
 
     merchant_names = [m[1] for m in merchants]
-    merchant_index = display.ask(merchant_names, lambda: [
-        interface.display.clear_screen(),
+    merchant_index = logic.ask(merchant_names, lambda: [
+        display.clear_screen(),
         print(Fore.YELLOW + "Escolha um mercador para negociar:" + Style.RESET_ALL),
-        interface.display.list_options(merchant_names)  
+        display.list_options(merchant_names)  
     ])
 
     if merchant_index == 0:
@@ -24,14 +23,14 @@ def trade_with_merchant(conn, character):
     merchant_id, merchant_name = merchants[merchant_index - 1]
 
     while True:
-        interface.display.clear_screen()
+        display.clear_screen()
         print(Fore.YELLOW + f"Negociação com {merchant_name}" + Style.RESET_ALL)
         options = ["Comprar", "Vender", "Sair"]
-        option_index = display.ask(options, lambda: [
-        interface.display.clear_screen(),
-        print(Fore.YELLOW + "Negociação com " + merchant_name + Style.RESET_ALL),
-        interface.display.list_options(options)  
-    ])
+        option_index = logic.ask(options, lambda: [
+            display.clear_screen(),
+            print(Fore.YELLOW + "Negociação com " + merchant_name + Style.RESET_ALL),
+            display.list_options(options)  
+        ])
         if option_index == 0 or options[option_index - 1] == "Sair":
             break
         elif options[option_index - 1] == "Comprar":
@@ -43,17 +42,18 @@ def buy_items(conn, character, merchant_id):
     items = get_merchant_items(conn, merchant_id)
     if not items:
         print(Fore.RED + "Este mercador não tem itens disponíveis." + Style.RESET_ALL)
+        display.press_enter()
         return
 
     while True:
-        interface.display.clear_screen()
+        display.clear_screen()
         print(Fore.GREEN + "Itens disponíveis para compra:" + Style.RESET_ALL)
         for idx, (item_id, nome, preco, quantidade) in enumerate(items, start=1):
             print(f"{idx}. {nome} - {preco} moedas (x{quantidade})")
         print("0. Sair")
         
-        choice = display.ask("Escolha um item para comprar:")
-        if choice == "0":
+        choice = logic.ask("Escolha um item para comprar")
+        if choice == 0:
             break
         try:
             choice = int(choice)
@@ -69,7 +69,7 @@ def buy_items(conn, character, merchant_id):
                 print(Fore.RED + "Escolha inválida." + Style.RESET_ALL)
         except ValueError:
             print(Fore.RED + "Digite um número válido!" + Style.RESET_ALL)
-        interface.display.press_enter()
+        display.press_enter()
 
 def sell_items(conn, character, merchant_id):
     items = list_item_inventory(conn, character.id)
@@ -78,14 +78,14 @@ def sell_items(conn, character, merchant_id):
         return
     
     while True:
-        interface.display.clear_screen()
+        display.clear_screen()
         print(Fore.BLUE + "Seus itens disponíveis para venda:" + Style.RESET_ALL)
         for idx, (item_id, tipo, nome, descricao, quantidade) in enumerate(items, start=1):
             print(f"{idx}. {nome} - x{quantidade}")
         print("0. Sair")
         
-        choice = display.ask("Escolha um item para vender:")
-        if choice == "0":
+        choice = logic.ask("Escolha um item para vender")
+        if choice == 0:
             break
         try:
             choice = int(choice)
@@ -106,4 +106,4 @@ def sell_items(conn, character, merchant_id):
                 print(Fore.RED + "Escolha inválida." + Style.RESET_ALL)
         except ValueError:
             print(Fore.RED + "Digite um número válido!" + Style.RESET_ALL)
-        interface.display.press_enter()
+        display.press_enter()

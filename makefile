@@ -11,10 +11,10 @@ config:
 	@echo "Dependencias instaladas com sucesso."
 
 build:
-	@sudo docker compose up --build
+	@sudo docker compose up --build 
 
 start:
-	@sudo docker compose up
+	@sudo docker compose up 
 
 stop:
 	@sudo docker compose down

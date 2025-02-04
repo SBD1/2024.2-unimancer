@@ -28,6 +28,9 @@ class Database:
 
             # Delete all tables, types and procedures.
             self.cur.execute("DROP SCHEMA public CASCADE ; CREATE SCHEMA public;")
+            
+            # set to public schema.
+            self.cur.execute("SET search_path TO public")
             self.conn.commit()
 
         except Exception as e:
