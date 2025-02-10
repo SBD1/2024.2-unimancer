@@ -339,6 +339,7 @@ class Combat:
             
             # Character killed all enemies.
             if result_combat:
+                query.end_combat(self.conn, self.character.id)
                 return True
             
             # Character has died.

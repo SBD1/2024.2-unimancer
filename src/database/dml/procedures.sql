@@ -593,3 +593,75 @@ BEGIN
     RETURN v_quest_instancia_id;
 END;
 $$ LANGUAGE plpgsql;
+;
+
+-- Remove potion effects and return potion IDs.
+CREATE OR REPLACE FUNCTION end_combat(
+    IN p_personagem_id INT
+) RETURNS VOID AS $$
+BEGIN
+    -- If there are no instances of items with the attribute "usado" as true for the given personagem, return immediately.
+    IF NOT EXISTS (
+        SELECT 1 FROM item_instancia
+        WHERE usado = TRUE 
+          AND inventario_id IN (
+              SELECT id FROM z WHERE personagem_id = p_personagem_id
+          )
+    ) THEN
+        RETURN;
+    END IF;
+    
+    -- Remove potion effects of instances of items that have the attribute "usado" as true.
+    UPDATE personagem
+    SET
+        inteligencia = inteligencia / (
+            SELECT inteligencia 
+            FROM efeito 
+            WHERE id IN (
+                SELECT efeito_id 
+                FROM pocao_efeito 
+                WHERE pocao_id IN (
+                    SELECT item_id 
+                    FROM item_instancia 
+                    WHERE usado = TRUE
+                      AND inventario_id IN (
+                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
+                      )
+                )
+            )
+        ),
+        vida_maxima = vida_maxima / (
+            SELECT vida 
+            FROM efeito 
+            WHERE id IN (
+                SELECT efeito_id 
+                FROM pocao_efeito 
+                WHERE pocao_id IN (
+                    SELECT item_id 
+                    FROM item_instancia 
+                    WHERE usado = TRUE
+                      AND inventario_id IN (
+                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
+                      )
+                )
+            )
+        ),
+        energia_arcana = energia_arcana / (
+            SELECT energia_arcana 
+            FROM efeito 
+            WHERE id IN (
+                SELECT efeito_id 
+                FROM pocao_efeito 
+                WHERE pocao_id IN (
+                    SELECT item_id 
+                    FROM item_instancia 
+                    WHERE usado = TRUE
+                      AND inventario_id IN (
+                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
+                      )
+                )
+            )
+        )
+    WHERE id = p_personagem_id;
+END;
+$$ LANGUAGE plpgsql;

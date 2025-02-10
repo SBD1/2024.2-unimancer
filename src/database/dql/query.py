@@ -5,6 +5,16 @@ from typing import List, Tuple
 
 from interface import display
 
+def end_combat(conn, character_id: int) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT end_combat({character_id});
+            """
+        )
+        result = cur.fetchone()[0]
+        return result
+
 # Create a character.
 def add_character(conn, nome: str, elemento: str) -> None:
     with conn.cursor() as cur:

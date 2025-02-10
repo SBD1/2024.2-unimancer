@@ -214,8 +214,10 @@ BEGIN
         JOIN inventario ON inventario.id = mochila.id
     WHERE item_instancia.id = NEW.id;
     
+    UPDATE item_instancia
+        SET usado = TRUE
+    WHERE id = NEW.id;    
 
-    -- Update character's fields multiplying by each potion's effect field multiplier
     UPDATE personagem
     SET
         inteligencia = inteligencia * (SELECT inteligencia FROM efeito WHERE id IN (SELECT efeito_id FROM pocao_efeito WHERE pocao_id = NEW.item_id)),
