@@ -68,6 +68,7 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
     #utils.debug(f"Values perception: {character_perception}, {enemy_perception}")
 
     if (character_perception < enemy_perception):
+        perceived_subregion = True
         print(
             Style.BRIGHT +
             Fore.RED +
@@ -153,6 +154,7 @@ def navigate(conn, character: Character) -> bool:
             alive = enemies_perception(conn, character, enemies);
             if not alive:
                 return False
+            continue
 
         options = []
         if subregions:
