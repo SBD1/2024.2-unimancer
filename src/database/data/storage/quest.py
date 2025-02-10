@@ -6,11 +6,12 @@ from colorama import Style
 def storage(item_name: str, quantity: int, db: Database) -> int:
     try:
         db.cur.execute(
-            """
+            f"""
             SELECT item.id 
             FROM item 
             INNER JOIN acessorio on acessorio.id = item.id
-            WHERE nome = %s;""", (item_name,)
+            WHERE nome = '{item_name}';
+            """
         )
         item_id = db.cur.fetchone()
 
@@ -19,11 +20,11 @@ def storage(item_name: str, quantity: int, db: Database) -> int:
             return None
 
         db.cur.execute(
-            """
+            f"""
             INSERT INTO armazenamento(item_id, quantidade) 
-            VALUES (%s, %s)
+            VALUES ({item_id[0]}, {quantity})
             RETURNING id;
-            """, (item_id[0], quantity)
+            """
         )
         storage_id = db.cur.fetchone()[0]
         db.conn.commit()

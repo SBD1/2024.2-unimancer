@@ -10,6 +10,7 @@ from logic.character import Character
 import utils
 
 global perceived_subregion
+perceived_subregion = False
 
 # Interface/Logic:
 #   Ask from the input options and validate it, while running auxiliary function before asking every time.
@@ -61,14 +62,10 @@ def enemies_perception(conn, character : Character, enemies) -> bool:
     # Calculate the perception of the character and the enemy.
     character_perception = combat.perception(character.inteligencia)
     enemy_perception = combat.perception(enemy.inteligencia)
-    
-    # To-do: remove this line of overwritting character percpetion.
-    #character_perception = 1000
-
-    #utils.debug(f"Values perception: {character_perception}, {enemy_perception}")
 
     if (character_perception < enemy_perception):
-        perceived_subregion = True
+        global perceived_subregion
+        perceived_subregion= True
         print(
             Style.BRIGHT +
             Fore.RED +
@@ -139,7 +136,7 @@ def pick_up_items(conn, character: Character, total_items: List[Tuple]) -> None:
 #       True: if the player wants to continue navigating.
 #       False: if the player died.
 def navigate(conn, character: Character) -> bool:
-    perceived_subregion = False
+    global perceived_subregion
     
     while True:
         subregion = query.get_subregion_info(conn, character.sub_regiao_id)
