@@ -593,75 +593,87 @@ BEGIN
     RETURN v_quest_instancia_id;
 END;
 $$ LANGUAGE plpgsql;
-;
 
 -- Remove potion effects and return potion IDs.
 CREATE OR REPLACE FUNCTION end_combat(
+    --IN enemies_id INT[], -- The IDs of enemies that were killed.
     IN p_personagem_id INT
-) RETURNS VOID AS $$
+) RETURNS INT[] AS $$
+DECLARE
+    v_potions_id INT[];
+    --v_armazenamentos RECORD;
+    potion_id INT;
 BEGIN
-    -- If there are no instances of items with the attribute "usado" as true for the given personagem, return immediately.
-    IF NOT EXISTS (
-        SELECT 1 FROM item_instancia
-        WHERE usado = TRUE 
-          AND inventario_id IN (
-              SELECT id FROM z WHERE personagem_id = p_personagem_id
-          )
-    ) THEN
-        RETURN;
-    END IF;
-    
-    -- Remove potion effects of instances of items that have the attribute "usado" as true.
-    UPDATE personagem
-    SET
-        inteligencia = inteligencia / (
-            SELECT inteligencia 
-            FROM efeito 
-            WHERE id IN (
-                SELECT efeito_id 
-                FROM pocao_efeito 
-                WHERE pocao_id IN (
-                    SELECT item_id 
-                    FROM item_instancia 
-                    WHERE usado = TRUE
-                      AND inventario_id IN (
-                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
-                      )
-                )
-            )
-        ),
-        vida_maxima = vida_maxima / (
-            SELECT vida 
-            FROM efeito 
-            WHERE id IN (
-                SELECT efeito_id 
-                FROM pocao_efeito 
-                WHERE pocao_id IN (
-                    SELECT item_id 
-                    FROM item_instancia 
-                    WHERE usado = TRUE
-                      AND inventario_id IN (
-                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
-                      )
-                )
-            )
-        ),
-        energia_arcana = energia_arcana / (
-            SELECT energia_arcana 
-            FROM efeito 
-            WHERE id IN (
-                SELECT efeito_id 
-                FROM pocao_efeito 
-                WHERE pocao_id IN (
-                    SELECT item_id 
-                    FROM item_instancia 
-                    WHERE usado = TRUE
-                      AND inventario_id IN (
-                          SELECT id FROM inventario WHERE personagem_id = p_personagem_id
-                      )
-                )
-            )
+    -- Get potion IDs that were marked as used.
+    SELECT ARRAY(
+        SELECT item_id
+        FROM item_instancia
+        WHERE usado = TRUE
+          AND mochila_id IN (
+            SELECT id FROM inventario WHERE personagem_id = p_personagem_id
         )
-    WHERE id = p_personagem_id;
+    ) INTO v_potions_id;
+
+    -- If v_potions_id is empty, return.
+    IF v_potions_id IS NULL THEN
+        RETURN v_potions_id;
+    END IF;
+
+    -- Loop through each potion's id in v_potions_id and remove their effect from personagem.
+    FOREACH potion_id IN ARRAY v_potions_id LOOP
+        UPDATE personagem
+        SET
+            inteligencia = inteligencia / (
+                SELECT inteligencia 
+                FROM efeito 
+                WHERE id IN (
+                    SELECT efeito_id 
+                    FROM pocao_efeito 
+                    WHERE pocao_id = potion_id
+                )
+            ),
+            vida_maxima = vida_maxima / (
+                SELECT vida 
+                FROM efeito 
+                WHERE id IN (
+                    SELECT efeito_id 
+                    FROM pocao_efeito 
+                    WHERE pocao_id = potion_id
+                )
+            ),
+            energia_arcana_maxima = energia_arcana_maxima / (
+                SELECT energia_arcana 
+                FROM efeito 
+                WHERE id IN (
+                    SELECT efeito_id 
+                    FROM pocao_efeito 
+                    WHERE pocao_id = potion_id
+                )
+            )
+        WHERE id = p_personagem_id;
+    END LOOP;
+
+    DELETE FROM item_instancia
+    WHERE usado = TRUE
+      AND mochila_id IN (
+        SELECT id FROM inventario WHERE personagem_id = p_personagem_id
+    );
+ 
+    --v_items_id
+
+    -- Get items that can be dropped from this enemy.
+    -- SELECT
+    --     a.item_id,
+    --     a.quantidade,
+    --     i.drop_inimigos_media
+    -- INTO v_armazenamentos
+    -- FROM armazenamento_inimigo AS ai
+    -- JOIN armazenamento AS a ON ai.armazenamento_id = a.id
+    -- JOIN item AS i ON a.item_id = i.id
+    -- WHERE ai.inimigo_id = ei_id;
+
+    -- To-do: use drop_average and random to generate items_ids that will be dropped, then return them.
+
+    RETURN v_potions_id;
 END;
 $$ LANGUAGE plpgsql;

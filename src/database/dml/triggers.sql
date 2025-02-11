@@ -205,7 +205,6 @@ BEGIN
         RETURN NEW;
     END IF;
 
-
     -- Get `´personagem_id` from the `item_instancia` table.
     SELECT
         inventario.personagem_id INTO v_personagem_id
@@ -213,10 +212,6 @@ BEGIN
         JOIN mochila ON mochila.id = item_instancia.mochila_id
         JOIN inventario ON inventario.id = mochila.id
     WHERE item_instancia.id = NEW.id;
-    
-    UPDATE item_instancia
-        SET usado = TRUE
-    WHERE id = NEW.id;    
 
     UPDATE personagem
     SET
