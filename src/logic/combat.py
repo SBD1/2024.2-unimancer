@@ -310,7 +310,7 @@ class Combat:
                     print("Você conseguiu escapar do combate!")
                     display.press_enter()
                     display.clear_screen()
-                    item_ids = query.end_combat(self.conn, self.character.id)
+                    item_ids = query.end_combat(self.conn, self.character.id, [])
                     self.character.update(self.character.id)
                     return True
                 

@@ -8,28 +8,6 @@ DDL é um conjunto de comandos usados em sistemas de gerenciamento de banco de d
 ## DDL
 
 ```sql
-CREATE TYPE TIPO_INVENTARIO AS ENUM ('Mochila', 'Grimório');
-CREATE TYPE TIPO_ELEMENTO AS ENUM ('Fogo', 'Água', 'Terra', 'Ar', 'Trevas', 'Luz');
-CREATE TYPE TIPO_DIFICULDADE AS ENUM ('Iniciante', 'Fácil', 'Médio', 'Difícil', 'Legendário');
-CREATE TYPE TIPO_ITEM AS ENUM ('Poção', 'Acessório');
-CREATE TYPE TIPO_FEITICO AS ENUM ('Dano', 'Dano de área', 'Cura');
-CREATE TYPE TIPO_NPC AS ENUM ('Civil', 'Inimigo');
-CREATE TYPE TIPO_CIVIL AS ENUM ('Mercador', 'Quester');
-CREATE TYPE TIPO_DIRECAO AS ENUM ('Norte', 'Sul', 'Leste', 'Oeste');
-CREATE TYPE TIPO_SITUACAO AS ENUM ('Passável', 'Não Passável');
-CREATE TYPE TIPO_ACESSORIO AS ENUM (
-    'Anel',
-    'Chapéu',
-    'Colar',
-    'Bracelete',
-    'Fivela',
-    'Luvas',
-    'Botas',
-    'Calça',
-    'Meias',
-    'Bengala',
-    'Manto'
- );
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
     tipo TIPO_ITEM NOT NULL
@@ -66,7 +44,7 @@ CREATE TABLE sub_regiao_conexao (
 CREATE TABLE personagem (
     id SERIAL PRIMARY KEY,
 	sub_regiao_id INT NOT NULL REFERENCES sub_regiao(id),
-	nome VARCHAR(20) NOT NULL,
+	nome VARCHAR(50) NOT NULL,
     elemento TIPO_ELEMENTO NOT NULL,
     conhecimento_arcano INT NOT NULL CHECK (conhecimento_arcano >= 0),
     vida INT NOT NULL CHECK (vida >= 0),
@@ -150,7 +128,7 @@ CREATE TABLE item_instancia (
     id SERIAL PRIMARY KEY,
     item_id INT NOT NULL REFERENCES item(id),
     mochila_id INT NOT NULL REFERENCES mochila(id),
-    usado BOOLEAN NOT NULL
+    usado BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE feitico (
@@ -308,3 +286,4 @@ CREATE TABLE combate (
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 13/01/2024 | Criação   | Grupo |
+| `2.0`  | 10/02/2025 | Atualização   | Grupo |

@@ -214,7 +214,6 @@ BEGIN
         RETURN NEW;
     END IF;
 
-
     -- Get `´personagem_id` from the `item_instancia` table.
     SELECT
         inventario.personagem_id INTO v_personagem_id
@@ -222,9 +221,7 @@ BEGIN
         JOIN mochila ON mochila.id = item_instancia.mochila_id
         JOIN inventario ON inventario.id = mochila.id
     WHERE item_instancia.id = NEW.id;
-    
 
-    -- Update character's fields multiplying by each potion's effect field multiplier
     UPDATE personagem
     SET
         inteligencia = inteligencia * (SELECT inteligencia FROM efeito WHERE id IN (SELECT efeito_id FROM pocao_efeito WHERE pocao_id = NEW.item_id)),
@@ -251,3 +248,4 @@ EXECUTE FUNCTION use_potion();
 | Versão |     Data   | Descrição | Autor |
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 03/02/2025 | Criação   | Grupo |
+| `2.0`  | 10/02/2025 | Atualização   | Grupo |

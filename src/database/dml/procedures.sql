@@ -696,6 +696,6 @@ BEGIN
         END LOOP;
     END LOOP;
 
-    RETURN v_potions_id;
+    RETURN v_dropped_items_id;
 END;
 $$ LANGUAGE plpgsql;

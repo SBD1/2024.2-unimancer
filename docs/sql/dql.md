@@ -7,229 +7,504 @@ DQL é um conjunto de comandos que permitem consultar e recuperar dados de um ba
 
 ## DQL
 
-### 1. Itens e Armazenamento
+```py
+# Function to get all items in a subregion
+def get_subregion_items(conn, subregion_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT i.id, i.tipo, arm.quantidade, 
+                   COALESCE(p.nome, ac.nome, po.nome) AS nome, 
+                   COALESCE(p.descricao, ac.descricao, po.descricao) AS descricao
+            FROM armazenamento arm
+            JOIN item i ON arm.item_id = i.id
+            LEFT JOIN pergaminho p ON i.id = p.id
+            LEFT JOIN acessorio ac ON i.id = ac.id
+            LEFT JOIN pocao po ON i.id = po.id
+            WHERE arm.id IN (
+                SELECT armazenamento_id 
+                FROM sub_regiao 
+                WHERE id = %s
+            );
+            """,
+            (subregion_id,)
+        )
+        return cur.fetchall()
 
-#### Listar todos os itens disponíveis no jogo
-```sql
-SELECT * FROM item;
-```
-
-#### Consultar itens armazenados em um local específico
-```sql
-SELECT a.id, i.nome, a.quantidade 
-FROM armazenamento a
-JOIN item i ON a.item_id = i.id;
-```
-
-#### Verificar itens no inventário de um personagem
-```sql
-SELECT ii.id, i.nome, i.tipo 
-FROM item_instancia ii
-JOIN item i ON ii.item_id = i.id
-WHERE ii.inventario_id = (SELECT id FROM inventario WHERE personagem_id = $1);
-```
-
----
-
-### 2. Regiões e Sub-regiões
-
-#### Listar todas as regiões e seus elementos
-```sql
-SELECT * FROM regiao;
-```
-
-#### Listar sub-regiões de uma região específica
-```sql
-SELECT sr.id, sr.nome, sr.descricao 
-FROM sub_regiao sr
-WHERE sr.regiao_id = $1;
-```
-
-#### Consultar conexões entre sub-regiões
-```sql
-SELECT src.sub_regiao_1, src.sub_regiao_2, src.direcao, src.situacao 
-FROM sub_regiao_conexao src;
-```
-
----
-
-### 3. Personagens e Inventários
-
-#### Detalhes de um personagem
-```sql
-SELECT * FROM personagem WHERE id = $1;
-```
-
-#### Consultar a mochila e o peso da mochila de um personagem
-``` sql
-SELECT m.id, m.peso, m.peso_total
-FROM mochila m
-JOIN inventario inv ON m.id = inv.id
-WHERE inv.personagem_id = $1;
-```
-
-#### Consultar itens de um personagem
-```sql
-SELECT i.nome, i.descricao, ii.quantidade
-FROM inventario inv
-JOIN item_instancia ii ON inv.id = ii.inventario_id
-JOIN item i ON ii.item_id = i.id
-WHERE inv.personagem_id = $1;
-```
-
-#### Consultar poções do inventário de um personagem
-```sql
-SELECT p.id, p.turnos, p.usado, i.nome AS item_nome
-FROM pocao p
-JOIN item i ON p.id = i.id
-JOIN item_instancia ii ON i.id - ii.item_id
-JOIN inventario inv ON ii.inventario_id = inv.id
-WHERE inv.personagem_id = $1;
-```
-
-#### Consultar os feitiços aprendidos
-```sql
-SELECT f.descricao, f.elemento, f.tipo
-FROM feitico f
-JOIN feitico_aprendido fa ON f.id = fa.feitico_id
-WHERE fa.inventario_id = $1; -- $1 is iventory id's
-```
-
-#### Consultar os efeitos de um acessório
-```sql
-SELECT e.nome, e.descricao, e.defesa, e.inteligencia, e.critico
-FROM efeito e
-JOIN acessorio_efeito ae ON e.id = ae.efeito_id
-JOIN acessorio a ON ae.acessorio_id = a.id
-JOIN item_instancia ii ON a.id = ii.item_id
-JOIN inventario inv ON ii.inventario_id = inv.id
-WHERE inv.personagem_id = $1;
-```
-
-#### Consultar todas as subregiões que um personagem pode ir
-``` sql
-SELECT sr2.nome AS sub_regiao_destino, src.direcao, src.situacao
-FROM sub_regiao_conexao src
-JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
-JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
-WHERE sr1.id = %s;
-```
-
----
-
-### 4. NPCs e Interações
-
-#### Listar NPCs em uma sub-região
-```sql
-SELECT n.id, , n.tipo 
-FROM npc n
-JOIN civil c ON c.id = n.id
-WHERE c.sub_regiao_id = $1;
-```
-
-#### Listar mercador e seus itens disponíveis
-```sql
-SELECT m.id, m.dialogo, i.nome, a.quantidade 
-FROM mercador m
-JOIN armazenamento_mercador am ON am.mercador_id = m.id
-JOIN armazenamento a ON a.id = am.armazenamento_id
-JOIN item i ON i.id = a.item_id
-WHERE m.id = $1;
-```
-
-#### Listar diálogos dos mercadores
-```sql
-SELECT m.id, m.dialogo
-FROM mercador m;
-```
-
-#### Consultar transações entre mercador e personagem
-```sql
-SELECT t.id, m.dialogo AS mercador, p.nome AS personagem, i.nome AS item
-FROM transcoes t
-JOIN mercador m ON t.mercador_id = m.id
-JOIN personagem p ON t.personagem_id = p.id
-JOIN item i ON t.item_id = i.id;
-```
-
----
-
-### 5. Feitiços e Grimórios
-
-#### Listar feitiços aprendidos por um personagem
-```sql
-SELECT f.id, f.descricao, f.elemento, f.tipo 
-FROM feitico_aprendido fa
-JOIN feitico f ON fa.feitico_id = f.id
-WHERE fa.inventario_id = (SELECT id FROM inventario WHERE personagem_id = $1);
-```
-
-#### Consultar feitiços em pergaminhos
-```sql
-SELECT p.id, p.cor, f.descricao, f.elemento 
-FROM pergaminho p
-JOIN feitico_escrito fe ON fe.item_id = p.id
-JOIN feitico f ON fe.feitico_id = f.id;
-```
+# Check if can pickup itens
+def can_pick_up_item(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT COUNT(*) 
+            FROM item_instancia ii
+            JOIN mochila m ON ii.mochila_id = m.id
+            JOIN inventario inv ON m.id = inv.id
+            WHERE inv.personagem_id = %s;
+            """,
+            (character_id,)
+        )
+        count = cur.fetchone()[0]
+        # verify is has enough space
+        cur.execute(
+            """
+            SELECT peso_total 
+            FROM mochila m
+            JOIN inventario inv ON m.id = inv.id
+            WHERE inv.personagem_id = %s;
+            """,
+            (character_id,)
+        )
+        peso_total = cur.fetchone()[0]
+        return count < peso_total 
 
 
-#### Listar feitiços de Dano em área
-```sql
-SELECT f.descricao, f.elemento, f.energia_arcana, fda.qtd_inimigos_afetados
-FROM feitico f
-JOIN feitico_dano_area fda ON f.id = fta.id;
-```
+def get_item_sell_price(conn, item_id):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT preco FROM (
+            SELECT id, preco FROM pergaminho
+            UNION ALL
+            SELECT id, preco FROM acessorio
+            UNION ALL
+            SELECT id, preco FROM pocao
+        ) AS items
+        WHERE id = %s
+    """, (item_id,))
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0] if result else 0
 
-#### Listar feitiços de Dano
-```sql
-SELECT f.descricao, f.elemento, f.energia_arcana, fd.dano_total
-FROM feitico f
-JOIN feitico_dano fd ON f.id = fd.id;
-```
+# function to get all merchant items
+def get_merchant_items(conn, mercador_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT 
+                i.id AS item_id,
+                COALESCE(p.nome, ac.nome, po.nome) AS nome,  -- Nome do item
+                COALESCE(p.preco, ac.preco, po.preco) AS preco,  -- Preço do item
+                ar.quantidade  -- Quantidade disponível
+            FROM armazenamento_mercador am
+            JOIN armazenamento ar ON am.armazenamento_id = ar.id
+            JOIN item i ON ar.item_id = i.id
+            LEFT JOIN pergaminho p ON i.id = p.id
+            LEFT JOIN acessorio ac ON i.id = ac.id
+            LEFT JOIN pocao po ON i.id = po.id
+            WHERE am.mercador_id = %s;
+        """, (mercador_id,))
+        return cur.fetchall()
 
-#### Listar feitiços de Cura
-```sql
-SELECT f.descricao, f.elemento, f.energia_arcana, fc.qtd_cura
-FROM feitico f
-JOIN feitico_dano fc ON f.id = fc.id;
-```
+# function to get all merchant in a subregion
+def get_merchants_subregion(conn, sub_regiao_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+                SELECT m.id, c.nome
+                FROM mercador m
+                JOIN civil c ON m.id = c.id
+                WHERE c.sub_regiao_id = {sub_regiao_id} 
+            """
+        )
+        return cur.fetchall()
 
----
 
-### 6. Quests
+# Get character's info.
+def get_character_info(conn, id: int) -> Tuple:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT *
+            FROM personagem
+            WHERE id = {id};
+            """)
+        result = cur.fetchone()
 
-#### Listar quests disponíveis por um Quester
-```sql
-SELECT q.id, q.titulo, q.descricao, q.dificuldade, q.recompensa 
-FROM quest q
-WHERE q.quester_id = $1;
-```
+        return result
 
-#### Consultar progresso de quests de um personagem
-```sql
-SELECT qi.id, q.titulo, qi.completed 
-FROM quest_instancia qi
-JOIN quest q ON qi.quest_id = q.id
-WHERE qi.personagem_id = $1;
-```
+# Get the inventory id of a character.
+def get_inventory(conn, type: str, character_id: int) -> int:
 
----
+    if type != 'mochila' and type != 'grimorio':
+        raise ValueError("Invalid type. Must be 'mochila' or 'grimorio'.")
+    
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT
+                inventario.id
+            FROM {type}
+            JOIN inventario ON personagem_id = {character_id} AND {type}.id = inventario.id;
+            """
+        )
+        result = cur.fetchone()[0]
+        return result
 
-### 7. Combates
 
-#### Consultar histórico de combates de um personagem
-```sql
-SELECT c.inimigo_instancia_id, c.dano_causado, c.dano_recebido 
-FROM combate c
-WHERE c.personagem_id = $1;
-```
+def end_combat(conn, character_id: int, enemies_ids: List[int] = []) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT end_combat({character_id}, ARRAY{enemies_ids}::integer[]);
+            """
+        )
+        result = cur.fetchall()
+        return result
 
-#### Listar inimigos em uma sub-região
-```sql
-SELECT ii.id, i.nome, ii.vida 
-FROM inimigo_instancia ii
-JOIN inimigo i ON ii.inimigo_id = i.id
-WHERE ii.sub_regiao_id = $1;
+# Create a character.
+def add_character(conn, nome: str, elemento: str) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT criar_personagem(
+                '{nome}',
+                '{elemento}'
+            )"""
+        )
+        result = cur.fetchone()
+        conn.commit()
+        return result[0]
+
+# get regions and respective elements
+def regions(conn):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT r.nome, r.elemento, r.descricao
+            FROM regiao r; 
+            """
+        )
+        result = cur.fetchall()
+        return result
+
+# get subregions from a region
+def subregions(conn, region_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT sr.nome, sr.descricao
+            FROM sub_regiao sr
+            WHERE sr.regiao_id = %s;
+            """, (region_id,)
+        )
+        result = cur.fetchall()
+        return result
+
+# get subregions where character can go
+def get_subregions_character(conn, sub_regiao_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT
+                sr2.id,
+                sr2.nome,
+                src.direcao,
+                src.situacao
+            FROM sub_regiao_conexao src
+            JOIN sub_regiao sr1 ON src.sub_regiao_1 = sr1.id
+            JOIN sub_regiao sr2 ON src.sub_regiao_2 = sr2.id
+            WHERE sr1.id = {sub_regiao_id};
+            """
+        )
+        result = cur.fetchall()
+        return result
+
+# List enemys from a subregion
+def get_alive_enemies_subregion(conn, sub_region_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT
+                ii.id,
+                i.nome,
+                i.descricao,
+                i.elemento,
+                ii.vida,
+                i.vida_maxima,
+                i.xp_obtido,
+                i.inteligencia,
+                i.moedas_obtidas,
+                i.conhecimento_arcano,
+                i.energia_arcana_maxima,
+                i.dialogo,
+                i.emoji
+            FROM inimigo i
+            JOIN inimigo_instancia ii ON i.id = ii.inimigo_id
+            JOIN sub_regiao sr ON ii.sub_regiao_id = sr.id
+            WHERE ii.sub_regiao_id = {sub_region_id} AND ii.vida > 0;
+            """
+        )
+        result = cur.fetchall()
+    
+    return result
+
+# get enemy info 
+#def get_enemy_info(conn, enemy_id):
+#    with conn.cursor() as cur:
+#        cur.execute(
+#            f"""
+#            SELECT
+#                i.nome,
+#                ii.id,
+#                i.descricao,
+#                i.elemento,
+#                ii.vida,
+#                i.vida_maxima,
+#                i.xp_obtido,
+#                i.inteligencia,
+#                i.moedas_obtidas,
+#                i.conhecimento_arcano,
+#                i.energia_arcana_maxima,
+#                i.emoji
+#            FROM inimigo i
+#            JOIN inimigo_instancia ii ON ii.inimigo_id = i.id
+#            WHERE n.id = {enemy_id};
+#            """
+#        )
+#        result = cur.fetchone()
+#        return result
+
+# Function to get subregion description
+def get_subregion_info(conn, sub_region_id: int):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT
+                descricao,
+                nome
+            FROM sub_regiao WHERE id = {sub_region_id}
+            """
+        )
+        result = cur.fetchone()
+        return result
+
+# List all citizens from a subregion.
+def get_citizens_subregion(conn, sub_regiao_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT 
+                c.nome,
+                c.descricao,
+                COALESCE(
+                    CASE 
+                        WHEN q.id IS NOT NULL THEN 'Quester'
+                        WHEN m.id IS NOT NULL THEN 'Mercador'
+                        ELSE 'Civil'
+                    END, 
+                    c.tipo::TEXT
+                ) AS tipo
+            FROM civil c
+            LEFT JOIN quester q ON c.id = q.id
+            LEFT JOIN mercador m ON c.id = m.id
+            WHERE c.sub_regiao_id = {sub_regiao_id};
+            """
+        )
+        result = cur.fetchall()
+        return result
+
+
+def get_npc_details(conn, type):
+    with conn.cursor() as cur:
+
+        result = cur.fetchall()
+        return result
+
+    
+# List all characters 
+def list_all_characters(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT id, nome, elemento FROM personagem WHERE vida > 0")
+        result = cur.fetchall()
+        return result
+    
+# Get all information of a character.
+def get_character_info(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(f"SELECT * FROM personagem WHERE id = {character_id}")
+        result = cur.fetchone()
+        return result
+    
+def list_item_inventory(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT id FROM inventario WHERE personagem_id = %s AND tipo = 'Mochila'
+        """, (character_id,))
+
+        inventarios = cur.fetchall()
+
+        items = []
+        for inventario in inventarios:
+            inventario_id = inventario[0]
+            cur.execute("""
+                SELECT 
+                    i.id AS item_id,  -- Adicione esta linha
+                    i.tipo,
+                    CASE 
+                        WHEN i.tipo = 'Poção' THEN p.nome
+                        WHEN i.tipo = 'Pergaminho' THEN pe.nome
+                        WHEN i.tipo = 'Acessório' THEN a.nome
+                        ELSE 'Desconhecido'
+                    END AS nome,
+                    CASE 
+                        WHEN i.tipo = 'Poção' THEN p.descricao
+                        WHEN i.tipo = 'Pergaminho' THEN pe.descricao
+                        WHEN i.tipo = 'Acessório' THEN a.descricao
+                        ELSE 'Sem descrição'
+                    END AS descricao,
+                    COUNT(ii.id) AS quantidade
+                FROM item_instancia ii
+                JOIN item i ON ii.item_id = i.id
+                LEFT JOIN pocao p ON i.id = p.id
+                LEFT JOIN pergaminho pe ON i.id = pe.id
+                LEFT JOIN acessorio a ON i.id = a.id
+                WHERE ii.mochila_id = %s
+                GROUP BY 
+                    i.id,  -- Agrupe por item_id para garantir a unicidade
+                    i.tipo, 
+                    p.nome, 
+                    pe.nome, 
+                    a.nome, 
+                    p.descricao, 
+                    pe.descricao, 
+                    a.descricao
+            """, (inventario_id,))
+
+            items.extend(cur.fetchall())
+
+    return items  # return: (item_id, tipo, nome, descricao, quantidade)
+
+def get_civilian_info(conn, npc_name):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT c.nome, c.descricao, c.id
+            FROM civil c
+            WHERE c.nome = %s;
+            """, (npc_name,)
+        )
+        result = cur.fetchone()
+        return {
+            'nome': result[0],
+            'descricao': result[1],
+            'npc_id': result[2]
+        }
+
+# get quest given a quester id 
+def get_quest(conn, quester_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT q.titulo, q.descricao, qu.dialogo, q.id, q.recompensa
+            FROM quest q 
+            LEFT JOIN quester qu ON qu.id = q.quester_id
+            WHERE q.quester_id = %s;
+            """, (quester_id,)
+        )
+        result = cur.fetchall()
+        return {
+            'title': result[0][0],
+            'description': result[0][1],
+            'dialog': result[0][2],
+            'quest_id': result[0][3],
+            'reward': result[0][4]
+        }
+
+
+
+## function to get all LERNED spells from player
+#def get_learned_spells(conn, character_id):
+#    with conn.cursor() as cursor:
+#        cursor.execute(
+#            f"""
+#                SELECT
+#                    *
+#                FROM feitico_aprendido fa
+#                WHERE fa.inventario_id = {character_id}
+#            """
+#    )
+#        return cursor.fetchall()
+
+# function to get all Character damage spells
+def get_damage_spells(conn, character_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+                SELECT
+                    fd.nome,
+                    f.tipo,
+                    fd.descricao, 
+                    fd.energia_arcana,
+                    fd.dano_total
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
+                JOIN feitico f ON f.id = fa.feitico_id
+                JOIN feitico_dano fd ON f.id = fd.id
+                WHERE i.personagem_id = {character_id};
+            """
+        )
+        return cur.fetchall()
+
+# function to get all Character area damage spells
+def get_damage_area_spells(conn, character_id):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+                SELECT
+                    fda.nome,
+                    f.tipo,
+                    fda.descricao, 
+                    fda.energia_arcana,
+                    fda.dano,
+                    fda.qtd_inimigos_afetados
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
+                JOIN feitico f ON f.id = fa.feitico_id
+                JOIN feitico_dano_area fda ON f.id = fda.id
+                WHERE i.personagem_id = {character_id};
+            """
+        )
+        return cur.fetchall()
+
+# function to get all Character healing spells
+def get_healing_spells(conn, character_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+                SELECT
+                    fc.nome,
+                    f.tipo,
+                    fc.descricao,
+                    fc.energia_arcana,
+                    fc.qtd_cura
+                FROM inventario i 
+                JOIN grimorio g ON i.id = g.id
+                JOIN feitico_aprendido fa ON g.id = fa.grimorio_id
+                JOIN feitico f ON f.id = fa.feitico_id
+                JOIN feitico_cura fc ON f.id = fc.id
+                WHERE i.personagem_id = {character_id};
+            """
+        )
+        return cur.fetchall()
+
+# function to get all Character potions
+def get_potions(conn, character_id: int) -> List[Tuple]:
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT
+                ii.id,
+                p.id,
+                p.nome,
+                p.descricao,
+                ii.usado
+            FROM pocao p
+            JOIN item_instancia ii ON p.id = ii.item_id
+            JOIN inventario inv ON ii.mochila_id = inv.id
+            WHERE inv.personagem_id = %s;
+        """, (character_id,))
+        return cur.fetchall()
+
 ```
 
 ## Histórico de Versão
@@ -238,3 +513,4 @@ WHERE ii.sub_regiao_id = $1;
 | :----: | :--------: | :-------: | :---: |
 | `1.0`  | 13/01/2024 | Criação   | Grupo |
 | `1.1`  | 13/01/2024 | Correções e Adições | Grupo |
+| `2.0`  | 10/02/2025 | Atualização   | Grupo |

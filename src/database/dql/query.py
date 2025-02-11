@@ -10,7 +10,7 @@ def end_combat(conn, character_id: int, enemies_ids: List[int] = []) -> None:
     with conn.cursor() as cur:
         cur.execute(
             f"""
-            SELECT end_combat({character_id}, ARRAY{enemies_ids});
+            SELECT end_combat({character_id}, ARRAY{enemies_ids}::integer[]);
             """
         )
         result = cur.fetchall()
