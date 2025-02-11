@@ -1,3 +1,4 @@
+from charset_normalizer import CharsetMatch
 from numpy import character
 from logic.enemy import Enemy
 from logic.character import Character

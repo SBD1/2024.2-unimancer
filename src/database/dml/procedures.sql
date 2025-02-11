@@ -579,7 +579,13 @@ DECLARE
 BEGIN
 
     -- Check if a quest with the same id and personagem_id already exists.
-
+    IF EXISTS (
+        SELECT 1
+        FROM quest_instancia
+        WHERE quest_id = p_quest_id AND personagem_id = p_personagem_id
+    ) THEN
+        RAISE EXCEPTION 'Quest instance already exists for this character and quest.';
+    END IF;
     
     INSERT INTO quest_instancia (quest_id, personagem_id, completed)
     VALUES (p_quest_id, p_personagem_id, FALSE)
@@ -600,12 +606,14 @@ $$ LANGUAGE plpgsql;
 
 -- Remove potion effects and return potion IDs.
 CREATE OR REPLACE FUNCTION end_combat(
-    IN enemies_id INT[],
-    IN p_personagem_id INT
+    IN p_personagem_id INT,
+    IN enemies_id INT[]
 ) RETURNS INT[] AS $$
 DECLARE
     v_potions_id INT[];
-    --v_armazenamentos RECORD;
+    item_rec INT[];
+    v_dropped_items_id INT[];
+    enemy_id INT;
     potion_id INT;
 BEGIN
     -- Get potion IDs that were marked as used.
@@ -662,21 +670,31 @@ BEGIN
       AND mochila_id IN (
         SELECT id FROM inventario WHERE personagem_id = p_personagem_id
     );
- 
-    --v_items_id
 
-    -- Get items that can be dropped from this enemy.
-    -- SELECT
-    --     a.item_id,
-    --     a.quantidade,
-    --     i.drop_inimigos_media
-    -- INTO v_armazenamentos
-    -- FROM armazenamento_inimigo AS ai
-    -- JOIN armazenamento AS a ON ai.armazenamento_id = a.id
-    -- JOIN item AS i ON a.item_id = i.id
-    -- WHERE ai.inimigo_id = ei_id;
+    v_dropped_items_id := '{}';
 
-    -- To-do: use drop_average and random to generate items_ids that will be dropped, then return them.
+    -- For each enemy, append all of its drop items to v_dropped_items_id.
+    FOREACH enemy_id IN ARRAY enemies_id LOOP
+        FOR item_rec IN
+            SELECT
+                a.item_id,
+                a.quantidade,
+                COALESCE(p.drop_inimigos_media, ac.drop_inimigos_media, po.drop_inimigos_media)
+            FROM armazenamento_inimigo ai
+            JOIN armazenamento a ON ai.armazenamento_id = a.id
+            JOIN item i ON a.item_id = i.id
+            JOIN acessorio ac ON i.id = ac.id
+            JOIN pergaminho p ON i.id = p.id
+            JOIN pocao po ON i.id = po.id
+            WHERE ai.inimigo_id = enemy_id
+        LOOP
+            FOR counter IN 1..item_rec.quantidade LOOP
+                IF random() < 1.0 / item_rec.drop_inimigos_media THEN
+                    v_dropped_items_id := array_append(v_dropped_items_id, item_rec.item_id);
+                END IF;
+            END LOOP;
+        END LOOP;
+    END LOOP;
 
     RETURN v_potions_id;
 END;
