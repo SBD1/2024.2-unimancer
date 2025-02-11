@@ -265,6 +265,8 @@ class Combat:
                 "Fugir"
             ]
             
+            self.character.update(self.character.id)
+            
             spells = query.get_damage_spells(self.conn, self.character.id) + query.get_damage_area_spells(self.conn, self.character.id) + query.get_healing_spells(self.conn, self.character.id)
             usable_spells = [
                 spell for spell in spells if spell[3] <= self.character.energia_arcana
@@ -308,6 +310,8 @@ class Combat:
                     print("Você conseguiu escapar do combate!")
                     display.press_enter()
                     display.clear_screen()
+                    item_ids = query.end_combat(self.conn, self.character.id)
+                    self.character.update(self.character.id)
                     return True
                 
                 print("Você não conseguiu escapar do combate!")
@@ -339,7 +343,8 @@ class Combat:
             
             # Character killed all enemies.
             if result_combat:
-                query.end_combat(self.conn, self.character.id)
+                item_ids = query.end_combat(self.conn, self.character.id)
+                self.character.update(self.character.id)
                 return True
             
             # Character has died.

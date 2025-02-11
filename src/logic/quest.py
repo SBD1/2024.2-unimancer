@@ -1,4 +1,5 @@
 from colorama import Fore, Style
+import interface.display as display
 import time
 
 from numpy import add
@@ -16,13 +17,14 @@ class Quest:
 
     def show_quest(self, npc_name, npc_id, character_id):
         quest = get_quest(self.conn, npc_id)
-        print(Fore.CYAN + f"\n Missão: {quest['title']}" + Style.RESET_ALL)
-        print(Fore.CYAN + f"{quest['description']}" + Style.RESET_ALL)
-        print('..')
+        display.print_center(Fore.CYAN + f"\n Missão: {quest['title']}" + Style.RESET_ALL)
+        display.print_center(Fore.CYAN + f"{quest['description']}" + Style.RESET_ALL)
+        display.print_center('..')
         time.sleep(1)
         for line in quest['dialog'].split('\n'):
-            print(f"{npc_name} diz: {line}")
-            input("Pressione Enter para continuar...")
+            display.print_center(Fore.YELLOW + f"{npc_name} diz:" + Style.RESET_ALL)
+            display.print_center(f"{line}")
+            input("...")
         self.add_quest(quest['quest_id'], character_id, quest['title'])
 
     def add_quest(self, quest_id, character_id, quest_title):

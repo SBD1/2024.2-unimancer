@@ -12,7 +12,7 @@ def end_combat(conn, character_id: int) -> None:
             SELECT end_combat({character_id});
             """
         )
-        result = cur.fetchone()[0]
+        result = cur.fetchall()
         return result
 
 # Create a character.
