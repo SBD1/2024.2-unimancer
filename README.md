@@ -55,11 +55,25 @@ Será você o herói que trará a harmonia de volta ou o vilão que mergulhará 
 
 <img alt="Modelo Relacionamento" src="./docs/modulo 2/v2_MR.drawio.png"/>
 
+### Módulo 3
+
+**Triggers**
+
+<img alt="Triggers" src="./docs/modulo 3/triggers.png"/>
+
+**Tela inicial do jogo**
+
+<img alt="Triggers" src="./docs/modulo 3/procedures_inicial.png"/>
+
+**Tela de navegação do jogo**
+
+<img alt="Triggers" src="./docs/modulo 3/procedures_navegacao.png"/>
+
 ## Instalação
 
 **Tecnologia:** PostgreSQL, python;
 
-**Modelo do Banco:** [draw.io](https://drive.google.com/file/d/14wc0GC0F9QGjhKfZOi1-kghpwYJfIDvr/view?usp=drive_link);
+**Modelo do Banco:** [draw.io](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=MREL%204.5.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1pwDS_7oYXVxzyN4hE3IEnMRV8j6W4QfA%26export%3Ddownload);
 
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 

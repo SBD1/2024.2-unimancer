@@ -38,54 +38,101 @@ Será você o herói que trará a harmonia de volta ou o vilão que mergulhará 
 
 [**Dicionário de dados**](https://sbd1.github.io/2024.2-unimancer/modelagem/dd/)
 
-## Apresentações (Melhorar essa parte antes da entrega final)
+## Apresentações
 
 1. [Entrega de DER, MER, MR e DD](https://youtu.be/rYFDGP1GFUo);
 2. [Entrega do SQL](https://youtu.be/2Z54N1kAIhc);
-3. [Entrega dos procedures / triggers - Jogo ]();
+3. [Entrega dos procedures / triggers - Jogo ](https://youtu.be/bLv0QaH3tVg);
+4. [Refinações finais de procedures e visualização do PGAdmin.](https://www.youtube.com/watch?v=PiP170tQbnU).
 
-## Screenshots (Melhorar essa parte antes da entrega final)
+## Screenshots
 
 ### Módulo 1
 
 **Diagrama de Entidade-Relacionamento**
 
-<img alt="Diagrama de Entidade-Relacionamento" src="./docs/modulo 1/v2_der.drawio.png"/>
+<img alt="Diagrama de Entidade-Relacionamento" src="./modulo 1/v2_der.drawio.png"/>
 
 **Modelo Relacionamento**
 
-<img alt="Modelo Relacionamento" src="./docs/modulo 1/v1_mr.drawio.png"/>
+<img alt="Modelo Relacionamento" src="./modulo 1/v1_mr.drawio.png"/>
 
 ### Módulo 2
 
 **Diagrama de Entidade-Relacionamento**
 
-<img alt="Diagrama de Entidade-Relacionamento" src="./docs/modulo 1/v1_mr.drawio.png"/>
+<img alt="Diagrama de Entidade-Relacionamento" src="./modulo 1/v1_mr.drawio.png"/>
 
-## Instalação (Melhorar essa parte antes da entrega final)
+**Modelo Relacionamento**
 
-**Tecnologia:** PostgreSQL;
+<img alt="Modelo Relacionamento" src="./modulo 2/v2_MR.drawio.png"/>
 
-**Modelo do Banco:** [draw.io](https://drive.google.com/file/d/14wc0GC0F9QGjhKfZOi1-kghpwYJfIDvr/view?usp=drive_link);
+### Módulo 3
+
+**Triggers**
+
+<img alt="Triggers" src="./modulo 3/triggers.png"/>
+
+**Tela inicial do jogo**
+
+<img alt="Triggers" src="./modulo 3/procedures_inicial.png"/>
+
+**Tela de navegação do jogo**
+
+<img alt="Triggers" src="./modulo 3/procedures_navegacao.png"/>
+
+## Instalação
+
+**Tecnologia:** PostgreSQL, python;
+
+**Modelo do Banco:** [draw.io](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=MREL%204.5.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1pwDS_7oYXVxzyN4hE3IEnMRV8j6W4QfA%26export%3Ddownload);
 
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 
-## Uso (Melhorar essa parte antes da entrega final)
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+## Uso 
+
+Para executar o projeto, inicialmente clone o repositório usando
+
+    > git clone https://github.com/SBD1/2024.2-unimancer
+
+Após clonar seu repositório, certifique-se de estar com o docker e o python instalado, para verificar basta utilizar
+
+    > python --version
+
+    > docker --version
+
+Caso não tenha, acesse a documentação para instalar [docker](https://docs.docker.com/) [python](https://www.python.org/)
+
+Entrando no diretório do projeto, primeiro precisamos configurar o ambiente para roda-lo. Para isso, execute o comando a seguir:
+
+    > make config
+
+Após isso, será necessário subir os containers, onde temos o banco de dados por trás do projeto e o PgAdmin, que é uma interface para visualizar o banco
+
+    > make build
+
+para gerar o docker, o arquivo está configurado para utilizar a porta **5432** para o banco de dados e a porta **5050** para a interface do pg admin, certifique-se de estar com essas portas livres ou edite-as no arquivo `docker-compose.yml`
+
+Agora para definitivamente embarcar nessa jornada, basta executar o programa em seu terminal utilizando
+
+    > make int reset
+    > make int
 
 ## Outros
 ### **Mecânicas do Jogo**
+- Atacar inimigo;
+- Comprar e/ou vender itens;
 
 #### **Criação de Personagem**
 
 - Personalize seu personagem escolhendo seu nome e especialização mágica.
 - Escolha entre os quatro elementos disponíveis:
-    - **Água**: Magias de cura e manipulação de fluxo.
-    - **Fogo**: Magias destrutivas e agressivas.
-    - **Terra**: Defesa e resistência inigualáveis.
-    - **Vento**: Velocidade e controle estratégico.
-	- **Luz**: Magia arcana antiga, garante bençãos ao usuário.
-	- **Trevas**: Magia condenada, utilizada por magos corrompidos.
+    - **Água**: Magias de líquidos e manipulação de fluxo;
+    - **Fogo**: Magias destrutivas e agressivas;
+    - **Terra**: Defesa e resistência inigualáveis;
+    - **Vento**: Velocidade e controle estratégico;
+    - **Luz**: Magia arcana antiga, garante bençãos ao usuário;
+    - **Trevas**: Magia condenada, utilizada por magos corrompidos;
 
 ---
 
