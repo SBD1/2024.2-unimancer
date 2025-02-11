@@ -5,11 +5,11 @@ from typing import List, Tuple
 
 from interface import display
 
-def end_combat(conn, character_id: int) -> None:
+def end_combat(conn, character_id: int, enemies_ids: List[int] = []) -> None:
     with conn.cursor() as cur:
         cur.execute(
             f"""
-            SELECT end_combat({character_id});
+            SELECT end_combat({character_id}, ARRAY{enemies_ids});
             """
         )
         result = cur.fetchall()

@@ -577,6 +577,10 @@ CREATE OR REPLACE FUNCTION create_new_instance_quest(
 DECLARE
     v_quest_instancia_id INT;
 BEGIN
+
+    -- Check if a quest with the same id and personagem_id already exists.
+
+    
     INSERT INTO quest_instancia (quest_id, personagem_id, completed)
     VALUES (p_quest_id, p_personagem_id, FALSE)
     RETURNING id INTO v_quest_instancia_id;
@@ -596,7 +600,7 @@ $$ LANGUAGE plpgsql;
 
 -- Remove potion effects and return potion IDs.
 CREATE OR REPLACE FUNCTION end_combat(
-    --IN enemies_id INT[], -- The IDs of enemies that were killed.
+    IN enemies_id INT[],
     IN p_personagem_id INT
 ) RETURNS INT[] AS $$
 DECLARE

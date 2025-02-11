@@ -343,7 +343,7 @@ class Combat:
             
             # Character killed all enemies.
             if result_combat:
-                item_ids = query.end_combat(self.conn, self.character.id)
+                item_ids = query.end_combat(self.conn, self.character.id, [enemy.id for enemy in self.enemies])
                 self.character.update(self.character.id)
                 return True
             
